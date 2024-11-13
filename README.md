@@ -5,11 +5,11 @@ This is the CMPM121 final project repository
 Initial Setup
 
 ## Introducing the team
-Rozy Dixon - Tools
-Phoebe Royer - Design/Engine
-Jackson Mclane - Engine
-Jack Sims - Tools/Design
-James Milestone - Engine/Tools
+Rozy Dixon - Tools\
+Phoebe Royer - Design/Engine\
+Jackson Mclane - Engine\
+Jack Sims - Tools/Design\
+James Milestone - Engine/Tools\
 
 ## Tools and materials
   1.  The library we're using is phaser, since as a group we have more experience working with the phaser library from CMPM120. We also have some projects we had gotten inspired by to adapt to our final project.
