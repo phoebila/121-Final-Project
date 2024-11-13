@@ -18,4 +18,6 @@ James Milestone - Engine/Tools
   4.  We're going to be using JavaScript to TypeScript for our final project. 
 
 ## Outlook
-We're hoping to create the best game ever and make a million dollars. We want to replace Brace with our game. 
+- We are hoping to create something publishable, and eventually host our project on itch.io.
+- The hardest or riskiest part of the project is the impending shift from JavaScript to TypeScript.
+- We are hoping to learn how to each specialize within respective responsibilities so that we can provide the greatest benefit to our team based on the roles we chose.
