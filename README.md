@@ -2,8 +2,9 @@
 This is the CMPM121 final project repository 
 
 # Devlog Entry - [11/12/2024]
-Initial Setup
-
+## Initial Setup
+- Our group rented out a study room in the Science and Engineering library to come up with the plan for how we will implement our final project and also how to put together this DevLog.
+  
 ## Introducing the team
 Rozy Dixon - Tools\
 Phoebe Royer - Design/Engine\
