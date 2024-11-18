@@ -2,6 +2,9 @@
 This is the CMPM121 final project repository
 
 ## Devlog Entry = [11/17/2024]
+### Project Setup
+We went to James's house to work together on setting up defaults and initial tile-based movement. We used Live Share to make our collaboration smooth. In the future, we will be using individual branches, but for the initial tile-movement setup, we decided that group programming was best, since the grid would be the basis of the rest of the project.
+
 ### Current F0 Software Requirments
 - [ ] [F0.a] You control a character moving over a 2D grid.
 - [ ] [F0.b] You advance time manually in the turn-based simulation.
