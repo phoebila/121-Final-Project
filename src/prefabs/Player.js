@@ -1,21 +1,34 @@
-class Player extends gridObj{
+class Player extends gridObj {
     constructor(position, scene, texture) {
         super(position,world);
+
+
+        
         scene.add.existing(this);
         scene.physics.add.existing(this);
     }
 
 
-    move(pos){
+    move(target) {
         /*
         Check if target tile populatable
         if not, return false
+
+        if enterable,
+        set new tile to be populated by the player
+        telport the player sprite there
+        set player grid position there.
+        depopulate player's original tile.
         */ 
-        if (this.world.getTile(null)){
+        if (!this.world.checkEnterable(target)) {
             return false
         }
+        const startingPos = this.gridPos;
+        this.world.popTile(target, this);
+        this.position = target.copy();
+        this.world.dePopTile(startingPos);
 
-        return true
+        return true;
     }
 
     // Increment world time 

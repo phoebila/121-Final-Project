@@ -21,11 +21,11 @@ class Tile {
     }
 }
 
-class GridObj{
+class GridObj exttends Phaser.sprite{
     constructor(position, world){
         this.world = world;
-        this.position = position.copy();
-        this.world.popTile(this.position, this)
+        this.gridPosition = position.copy();
+        this.world.popTile(this.gridPosition, this)
     }
 }
 
@@ -34,7 +34,27 @@ class Plant extends GridObj{
         super(position, world)
         this.species = species;
         this.growthLevel = growthLevel;
+
+        //binary representation of growth rules
+        //0 = water, 1 = sun, 2 = max number of neighbors (player not included)
+        this.growthRules = [0, 0, 0];
     }
+
+    grow(){
+        if (this.growthRules == checkCanGrow()){
+            this.growthLevel++;
+        }
+    }
+
+    checkCanGrow(){
+        let growthReqs = [0, 0, 0];
+        //check water
+        growthReqs[0] = this.world.getTile(this.gridPosition).waterLvl > this.species.waterReq;
+        //check sun
+        growthReqs[1] = this.world.getTile(this.gridPosition).sunLvl > this.species.sunReq;
+        //check neighbors
+        
+rowthReqs[]    }
 }
 
 class World{
@@ -64,16 +84,19 @@ class World{
         this.getTile(pos).obj = null;
     }
     
-    checkEnterable(p{
-        this.getTile(pos)
-        if ()
+    checkEnterable(pos){
+        const tile = this.getTile(pos);
+        if (tile && tile.obj){
+            return true;
+        }
+        return false;
     }
 
-    randomWeather(){
+    generateRandomWeather(){
         for (let y = 0; y < this.gridSize.y; y++) {
             for (let x = 0; x < this.gridSize.x; x++) {
                 let tile = this.getTile(new Vector(x, y));
-                //water level can be stored up, sun l
+                //water level can be stored up, sun level cannot per F0.d
                 tile.waterLvl = tile.waterLvl + Math.random();
                 tile.sunLvl = Math.random();
             }
