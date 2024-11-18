@@ -13,9 +13,21 @@ class Play extends Phaser.Scene {
         console.log('%cPLAY SCENE :^)', testColor)
 
         this.tickButton = this.constructButton(this.TILE_SIZE, this.TILE_SIZE, 10, 6, 'press to tick time', this.moveTime)
+
+
+        // add grid
+        // add player to grid
+        this.world = new World(this,100,100,8);
+        this.player = new Player(this, new Vector(0,0), 'player');
+        this.obj = new GridObj(this, new Vector(0,0),this.world, "flower")
+        this.cameras.main.startFollow(this.player)
+        this.cameras.main.setZoom(4);
+
+        this.obj.anims.play('flower')
     }
 
-    update() {
+    update(time,delta) {
+        this.player.update(time,delta);
     }
 
     constructButton(x, y, textSize, padding, text = 'default text', result) {

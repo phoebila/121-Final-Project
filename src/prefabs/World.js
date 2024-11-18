@@ -21,59 +21,59 @@ class Tile {
     }
 }
 
-class GridObj exttends Phaser.sprite{
-    constructor(position, world){
+class GridObj extends Phaser.GameObjects.Sprite{
+    constructor(scene,position, world, texture){
+        const trueX = position.x * world.tileSize;
+        const trueY =  position.y * world.tileSize;
+        super(scene, trueX, trueY, texture);
+
+        this.position = position.copy();
         this.world = world;
         this.gridPosition = position.copy();
         this.world.popTile(this.gridPosition, this)
-    }
-}
+        this.walking = false;
 
-class Plant extends GridObj{
-    constructor(species = null, growthLevel = 0, position){
-        super(position, world)
-        this.species = species;
-        this.growthLevel = growthLevel;
-
-        //binary representation of growth rules
-        //0 = water, 1 = sun, 2 = max number of neighbors (player not included)
-        this.growthRules = [0, 0, 0];
+        scene.add.existing(this)
     }
 
-    grow(){
-        if (this.growthRules == checkCanGrow()){
-            this.growthLevel++;
+
+    move(dir) {
+        const target = this.gridPosition.add(dir);
+        this.walking = true
+        if (!this.world.checkEnterable(target)) {
+            this.walking = false
+            return false
         }
-    }
-
-    checkCanGrow(){
-        let growthReqs = [0, 0, 0];
-        //check water
-        growthReqs[0] = this.world.getTile(this.gridPosition).waterLvl > this.species.waterReq;
-        //check sun
-        growthReqs[1] = this.world.getTile(this.gridPosition).sunLvl > this.species.sunReq;
-        //check neighbors
+        const startingPosition = this.gridPosition.copy();
+        this.world.popTile(target, this);
+        this.gridPosition = target.copy();
+        this.x = this.gridPosition.x * this.world.tileSize;
+        this.y = this.gridPosition.y * this.world.tileSize;
         
-rowthReqs[]    }
+        this.world.dePopTile(startingPosition);
+        this.walking = false;
+        return true;
+    }
 }
+
 
 class World{
-    constructor(scene, width, height) {
+    constructor(scene, width, height, tileSize) {
+        this.tileSize = tileSize
         this.gridSize = new Vector(width, height)
         this.scene = scene;
         this.grid = []
-        for (let y = 0; y < this.gridSize.y; y++) {
-            for (let x = 0; x < this.gridSize.x; x++) {
-                if (this.grid[x] == null) {
-                    this.grid[x] = [];
-                }
+        for (let x = 0; x < this.gridSize.y; x++) {
+            this.grid[x] = [];
+            for (let y = 0; y < this.gridSize.x; y++) {
                 this.grid[x][y] = new Tile()
             }
         }
     }
 
     getTile(pos) {
-        return (this.grid[pos.x] && this.grid[pos.x][pos.y]) || null;
+        const grid = this.grid;
+        return (grid && this.grid[pos.x] && this.grid[pos.x][pos.y]) || null;
     }
     
     popTile(pos, arg){
@@ -86,7 +86,7 @@ class World{
     
     checkEnterable(pos){
         const tile = this.getTile(pos);
-        if (tile && tile.obj){
+        if (tile && !tile.obj){
             return true;
         }
         return false;

@@ -1,35 +1,33 @@
-class Player extends gridObj {
-    constructor(position, scene, texture) {
-        super(position,world);
-
-
-        
-        scene.add.existing(this);
-        scene.physics.add.existing(this);
+class Player extends GridObj {
+    constructor(scene,position,sprite) {
+        super(scene,position,scene.world, sprite );
+        this.waitTime = 200
+        this.timer = 0;
     }
 
-
-    move(target) {
-        /*
-        Check if target tile populatable
-        if not, return false
-
-        if enterable,
-        set new tile to be populated by the player
-        telport the player sprite there
-        set player grid position there.
-        depopulate player's original tile.
-        */ 
-        if (!this.world.checkEnterable(target)) {
-            return false
+    update(time, delta) {
+        // Listen for inputs and move the player
+        if ( this.timer <= 0){
+            if (cursors.left.isDown) {
+                this.move(new Vector(-1, 0));
+            } else if (cursors.down.isDown) {
+                this.move(new Vector(0, 1));
+            } else if (cursors.up.isDown) {
+                this.move(new Vector(0, -1));
+            } else if (cursors.right.isDown) {
+                this.move(new Vector(1, 0));
+            } 
+        } else {
+            this.timer -= delta;
         }
-        const startingPos = this.gridPos;
-        this.world.popTile(target, this);
-        this.position = target.copy();
-        this.world.dePopTile(startingPos);
-
-        return true;
+        
     }
+
+    move(dir){
+        super.move(dir)
+        this.timer = this.waitTime
+    }
+
 
     // Increment world time 
         // Change state of weather on the grid
@@ -55,10 +53,3 @@ class Player extends gridObj {
     }
 
 }
-
-
-
-
-
-
-
