@@ -6,7 +6,7 @@ This is the CMPM121 final project repository
 We went to James's house to work together on setting up defaults and initial tile-based movement. We used Live Share to make our collaboration smooth. In the future, we will be using individual branches, but for the initial tile-movement setup, we decided that group programming was best, since the grid would be the basis of the rest of the project.
 
 ### Current F0 Software Requirments
-- [ ] [F0.a] You control a character moving over a 2D grid.
+- [X] [F0.a] You control a character moving over a 2D grid.
 - [ ] [F0.b] You advance time manually in the turn-based simulation.
 - [ ] [F0.c] You can reap or sow plants on grid cells only when you are near them.
 - [ ] [F0.d] Grid cells have sun and water levels. The incoming sun and water for each cell is somehow randomly generated each turn. Sun energy cannot be stored in a cell (it is used immediately or lost) while water moisture can be slowly accumulated over several turns.
