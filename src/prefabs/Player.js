@@ -35,19 +35,20 @@ class Player extends GridObj {
         console.log(`Tile at position (${playerPos.x}, ${playerPos.y}) contains:`, tile.obj);
 
         if (tile) {
-            // Check if the tile is free for planting by ensuring it's not occupied by a plant
-            if (!tile.obj || !(tile.obj instanceof Plant)) {
+            // Check if the tile is free for planting
+            if (tile.isFreeForPlanting()) {
                 console.log('Tile is free, sowing plant.');
 
-                // Mark the tile as occupied by the player
-                tile.isOccupiedByPlayer = true; // Player occupies the tile while planting
+                // Create the plant object (assuming Plant is a valid class)
+                const plant = new Plant();  // Create a new plant (you can customize this as needed)
 
-                // Create and place the flower (GridObj with 'flower' animation)
+                // Place the plant on the tile
+                tile.placePlant(plant);  // This method places the plant and marks the tile as occupied
+
+                // Optionally: Visualize the plant in the scene (e.g., using an animation or sprite)
                 const flower = new GridObj(this.scene, playerPos, this.scene.world, "flower");
                 flower.anims.play('flower'); // Play the flower animation
-
-                // Place the flower on the tile
-                tile.obj = flower;  // Directly place the flower on the tile
+                tile.obj = flower;  // Assign the flower sprite to the tile
 
                 console.log(`Planted a flower at (${playerPos.x}, ${playerPos.y})`);
             } else {
@@ -58,16 +59,16 @@ class Player extends GridObj {
 
     reap() {
         const nearbyTile = this.getNearbyTileForAction();
-        if (nearbyTile && nearbyTile.obj instanceof Plant) {
-            console.log(`Reaped a plant from (${nearbyTile.position.x}, ${nearbyTile.position.y})`);
+        if (nearbyTile && nearbyTile.plant) {
+            console.log(`Reaped a plant from (${nearbyTile.gridPosition.x}, ${nearbyTile.gridPosition.y})`);
 
             // Remove the plant from the tile
-            nearbyTile.obj.destroy();
-            nearbyTile.obj = null;
+            nearbyTile.plant = null;  // Remove the plant from the tile
             nearbyTile.isOccupiedByPlant = false;  // Free the tile for future planting
-            nearbyTile.isOccupiedByPlayer = false; // Ensure the player no longer occupies the tile
+            nearbyTile.obj.destroy();  // Destroy the plant's visual representation (if any)
+            nearbyTile.obj = null;  // Remove the visual representation from the tile
 
-            console.log(`Reaped a plant at (${nearbyTile.position.x}, ${nearbyTile.position.y})`);
+            console.log(`Reaped a plant at (${nearbyTile.gridPosition.x}, ${nearbyTile.gridPosition.y})`);
         } else {
             console.log('No valid plant nearby to reap.');
         }
@@ -85,7 +86,7 @@ class Player extends GridObj {
                 const tile = this.world.getTile(targetPos);
 
                 if (tile && (targetPos.x !== playerPos.x || targetPos.y !== playerPos.y)) {
-                    if (tile.obj instanceof Plant) {
+                    if (tile.plant) {  // Check if the tile contains a plant
                         nearbyTiles.push(tile); // Only add tile with plant for reaping
                     }
                 }
