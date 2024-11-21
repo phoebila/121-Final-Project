@@ -24,6 +24,9 @@ class Play extends Phaser.Scene {
         this.cameras.main.setZoom(4);
 
         this.obj.anims.play('flower')
+
+        // Create a gameState to track all plants in the field and check if the win condition has been met.
+        this.gameState = new GameState();
     }
 
     update(time,delta) {

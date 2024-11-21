@@ -1,6 +1,6 @@
 class Plant extends GridObj{
-    constructor(scene,species = null, growthLevel = 0, position){
-        super(scene,position, world,sprite)
+    constructor(scene, position, world, texture, species = null, growthLevel = 0){
+        super(scene,position, world,texture)
         this.species = species;
         this.growthLevel = growthLevel;
 
@@ -31,17 +31,17 @@ class Plant extends GridObj{
             adjReq 
         );
     }
-
     checkPlantNeighbors(){
         let plantCount = 0;
         for(let dX = -1; dX < 1; dX++){
             for(let dY = -1; dY < 1; dY++){
-                let posi = new Vector(this.gridPosition.x + dX, this.gridPosition.y + dY);
+                let posi = new Vector(this.position.x + dX, this.position.y + dY);
                 let tileObj = this.world.getTile(posi).obj;
                 if(tileObj != null && tileObj instanceof Plant){
                     plantCount++;
                 }
             }
         }
+        return plantCount;
     }
 }
