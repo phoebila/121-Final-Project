@@ -1,7 +1,13 @@
+const plantSpecies = [
+    'tree',
+    'flower',
+    'bush'
+];
+
 class Plant extends GridObj{
     constructor(scene, position, world, texture, species = null, water_req = 1, sun_req = 1, neighbor_req = 8){
         super(scene,position,world,texture)
-        this.species = species;
+        this.species = plantSpecies[Math.floor(Math.random()*3)];
         this.growthLevel = 0;
 
         this.WATER_RULE = water_req;

@@ -15,13 +15,14 @@ class PlantTest extends Phaser.Scene {
         // add player to grid
         this.world = new World(this,5,5,8);
         this.player = new Player(this, new Vector(0,0), 'player');
-        this.obj = new Plant(this, new Vector(1,1),this.world, "flower", "flower", 1, 1, 8);
+        this.obj = new Plant(this, new Vector(1,1),this.world, "flower", null, 1, 1, 8);
         this.cameras.main.startFollow(this.player)
         this.cameras.main.setZoom(2);
 
         this.tickButton = this.constructButton(-40, -40, 16, 2, 'tick', this.moveTime)
 
         this.obj.anims.play('flower')
+        console.log(this.obj);
 
         this.input.on('pointerdown', () => {
             console.log("weathergen")
