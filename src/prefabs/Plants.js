@@ -1,6 +1,6 @@
 class Plant extends GridObj{
     constructor(scene,species = null, growthLevel = 0, position){
-        super(scene,position, world,sprite)
+        super(scene,position, scene.world,sprite)
         this.species = species;
         this.growthLevel = growthLevel;
 
