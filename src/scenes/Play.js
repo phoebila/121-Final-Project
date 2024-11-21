@@ -6,6 +6,7 @@ class Play extends Phaser.Scene {
     init() {
         this.BUTTON_LAYER = 100
         this.TILE_SIZE = 8
+        this.currentTurn = 0; // turn tracker
     }
 
     create() {
@@ -13,7 +14,6 @@ class Play extends Phaser.Scene {
         console.log('%cPLAY SCENE :^)', testColor)
 
         this.tickButton = this.constructButton(this.TILE_SIZE, this.TILE_SIZE, 10, 6, 'press to tick time', this.moveTime)
-
 
         // add grid
         // add player to grid
@@ -31,22 +31,41 @@ class Play extends Phaser.Scene {
     }
 
     constructButton(x, y, textSize, padding, text = 'default text', result) {
-        const content = this.add.text(x + padding/2, y + padding/2, text, { fontSize: `${textSize - 2}px`, lineSpacing: 0 })
-        content.height = textSize
-        const UIBox = this.add.rectangle(x, y, Math.ceil((content.width + padding) / this.TILE_SIZE) * this.TILE_SIZE, content.height + padding, 0xff0000)
+        const content = this.add.text(
+            x + padding / 2,
+            y + padding / 2,
+            text,
+            { fontSize: `${textSize - 2}px`, lineSpacing: 0 }
+        );
+        content.height = textSize;
+        const UIBox = this.add.rectangle(
+            x,
+            y,
+            Math.ceil((content.width + padding) / this.TILE_SIZE) * this.TILE_SIZE,
+            content.height + padding,
+            0xff0000
+        );
 
-        content.setOrigin(0).setZ(this.BUTTON_LAYER + 100).setDepth(this.BUTTON_LAYER + 1)
-        UIBox.setOrigin(0).setZ(this.BUTTON_LAYER).setDepth(this.BUTTON_LAYER)
+        content.setOrigin(0).setZ(this.BUTTON_LAYER + 100).setDepth(this.BUTTON_LAYER + 1);
+        UIBox.setOrigin(0).setZ(this.BUTTON_LAYER).setDepth(this.BUTTON_LAYER);
 
-        const button = { content, UIBox }
+        const button = { content, UIBox };
         UIBox.setInteractive().on('pointerdown', result);
 
-        return button
+        return button;
     }
 
     moveTime() {
-        console.log('peepee')
-    }
+        // Advance turn
+        this.currentTurn += 1;
+        console.log(`Turn advanced to: ${this.currentTurn}`);
+
+        // Update world and objects
+        this.world.update(this.currentTurn);
+        this.obj.update(this.currentTurn);
+
+        // Add any additional logic for advancing time here    
+        }
 }
 
 // check that condition is correct, stop program if it isn't 
