@@ -8,9 +8,9 @@ We went to James's house to work together on setting up defaults and initial til
 ### Current F0 Software Requirments
 - [X] [F0.a] You control a character moving over a 2D grid.
 - [ ] [F0.b] You advance time manually in the turn-based simulation.
-- [ ] [F0.c] You can reap or sow plants on grid cells only when you are near them.
+- [ ] [F0.c] You can reap or sow plants on grid cells only when you are near them. (Phoebe)
 - [ ] [F0.d] Grid cells have sun and water levels. The incoming sun and water for each cell is somehow randomly generated each turn. Sun energy cannot be stored in a cell (it is used immediately or lost) while water moisture can be slowly accumulated over several turns.
-- [ ] [F0.e] Each plant on the grid has a distinct type (e.g. one of 3 species) and a growth level (e.g. “level 1”, “level 2”, “level 3”).
+- [ ] [F0.e] Each plant on the grid has a distinct type (e.g. one of 3 species) and a growth level (e.g. “level 1”, “level 2”, “level 3”). (Phoebe)
 - [ ] [F0.f] Simple spatial rules govern plant growth based on sun, water, and nearby plants (growth is unlocked by satisfying conditions).
 - [ ] [F0.g] A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
 

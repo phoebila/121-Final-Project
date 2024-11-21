@@ -1,16 +1,20 @@
-// Cell ()
-// Grid ()
-// Plant ()
-
 class Vector {
-    constructor(x = 0 ,y = 0){
+    constructor(x = 0, y = 0) {
         this.x = x;
         this.y = y;
     }
 
-    add(other){ return( new Vector( this.x + other.x, this.y + other.y)) }
-    minus(other){ return( new Vector( this.x - other.x, this.y - other.y)) }
-    copy(){ return (new Vector( this.x, this.y)) }
+    add(other) {
+        return new Vector(this.x + other.x, this.y + other.y);
+    }
+
+    minus(other) {
+        return new Vector(this.x - other.x, this.y - other.y);
+    }
+
+    copy() {
+        return new Vector(this.x, this.y);
+    }
 }
 
 class Tile {
@@ -19,13 +23,31 @@ class Tile {
         this.character = null;
         this.waterLvl = waterLvl;
         this.sunLvl = sunLvl;
+        this.isOccupiedByPlant = false;  // Property to track if the tile is occupied by a plant
+    }
+
+    // Helper method to check if tile is free to use
+    isFreeForPlanting() {
+        // A tile is free for planting if it contains no object, and it is not occupied by a plant
+        return !this.obj && !this.isOccupiedByPlant;
+    }
+
+    // Mark this tile as occupied by a plant
+    markAsOccupiedByPlant() {
+        this.isOccupiedByPlant = true;
+    }
+
+    // Remove the plant and free up the tile
+    clearTile() {
+        this.isOccupiedByPlant = false;
+        this.obj = null;
     }
 }
 
-class GridObj extends Phaser.GameObjects.Sprite{
-    constructor(scene,position, world, texture){
+class GridObj extends Phaser.GameObjects.Sprite {
+    constructor(scene, position, world, texture) {
         const trueX = position.x * world.tileSize;
-        const trueY =  position.y * world.tileSize;
+        const trueY = position.y * world.tileSize;
         super(scene, trueX, trueY, texture);
 
         this.position = position.copy();
@@ -33,16 +55,15 @@ class GridObj extends Phaser.GameObjects.Sprite{
         this.world.popTile(this.position, this)
         this.walking = false;
 
-        scene.add.existing(this)
+        scene.add.existing(this);
     }
-
 
     move(dir) {
         const target = this.position.add(dir);
         this.walking = true
         if (!this.world.checkEnterable(target)) {
-            this.walking = false
-            return false
+            this.walking = false;
+            return false;
         }
         const startingPosition = this.position.copy();
         this.world.popTile(target, this);
@@ -56,17 +77,17 @@ class GridObj extends Phaser.GameObjects.Sprite{
     }
 }
 
-
-class World{
+class World {
     constructor(scene, width, height, tileSize) {
-        this.tileSize = tileSize
-        this.gridSize = new Vector(width, height)
+        this.tileSize = tileSize;
+        this.gridSize = new Vector(width, height);
         this.scene = scene;
-        this.grid = []
-        for (let x = 0; x < this.gridSize.y; x++) {
+        this.grid = [];
+        // Fixed grid initialization
+        for (let x = 0; x < this.gridSize.x; x++) {
             this.grid[x] = [];
-            for (let y = 0; y < this.gridSize.x; y++) {
-                this.grid[x][y] = new Tile()
+            for (let y = 0; y < this.gridSize.y; y++) {
+                this.grid[x][y] = new Tile();
             }
         }
     }
@@ -134,7 +155,7 @@ class World{
         if (tile && !tile.plant){
             return true;
         }
-        return false;
+        return null;
     }
 
     checkEnterable(pos){
@@ -150,11 +171,16 @@ class World{
     generateRandomWeather(){
         for (let y = 0; y < this.gridSize.y; y++) {
             for (let x = 0; x < this.gridSize.x; x++) {
-                let tile = this.getTile(new Vector(x, y));
-                //water level can be stored up, sun level cannot per F0.d
-                tile.waterLvl = tile.waterLvl + Math.random();
+                const tile = this.getTile(new Vector(x, y));
+                tile.waterLvl += Math.random();
                 tile.sunLvl = Math.random();
             }
         }
+    }
+
+    // Check if a position is within a certain range of the player (for interaction)
+    isWithinProximity(playerPos, targetPos, range) {
+        const distance = Math.abs(playerPos.x - targetPos.x) + Math.abs(playerPos.y - targetPos.y);
+        return distance <= range;
     }
 }
