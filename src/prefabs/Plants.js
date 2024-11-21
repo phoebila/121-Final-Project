@@ -6,8 +6,7 @@ class Plant extends GridObj {
         this.growthLevel = growthLevel;
 
         // Array storing thresholds for growth
-        // 0 = water, 1 = sun, 2 = max number of plant neighbors (player not included)
-        this.growthRules = [0, 0, 0];
+        this.growthRules = [0, 0, 0]; // water, sun, neighbor limit
 
         this.init();
     }

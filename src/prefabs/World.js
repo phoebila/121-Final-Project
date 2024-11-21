@@ -19,27 +19,30 @@ class Vector {
 
 class Tile {
     constructor(obj = null, waterLvl = 0, sunLvl = 0) {
-        this.obj = obj;  // Tracks any object on the tile (could be Player, GridObj, etc.)
+        this.obj = obj;  // Can be the player or another object
         this.waterLvl = waterLvl;
         this.sunLvl = sunLvl;
-        this.isOccupiedByPlant = false;  // Property to track if the tile is occupied by a plant
+        this.isOccupiedByPlant = false;  // Tracks if the tile is occupied by a plant
     }
 
-    // Helper method to check if tile is free to use
+    // Method to check if the tile is free for planting
     isFreeForPlanting() {
-        // A tile is free for planting if it contains no object, and it is not occupied by a plant
-        return !this.obj && !this.isOccupiedByPlant;
+        // Tile is free if it's not occupied by a plant and no other object is present
+        return !this.isOccupiedByPlant && this.obj === null;
     }
 
-    // Mark this tile as occupied by a plant
+    // Mark the tile as occupied by a plant
     markAsOccupiedByPlant() {
-        this.isOccupiedByPlant = true;
+        if (this.isFreeForPlanting()) {
+            console.log('Marking tile as occupied by a plant');
+            this.isOccupiedByPlant = true;  // Mark as occupied
+        }
     }
 
-    // Remove the plant and free up the tile
+    // Mark this tile as free from the plant
     clearTile() {
-        this.isOccupiedByPlant = false;
-        this.obj = null;
+        this.isOccupiedByPlant = false;  // Free the tile for other objects
+        this.obj = null;  // Remove the object from the tile
     }
 }
 
@@ -65,17 +68,17 @@ class GridObj extends Phaser.GameObjects.Sprite {
             this.walking = false;
             return false;
         }
-    
-        // Clear the old position first
+
+        // Clear the old position first, but DO NOT free the tile
         const startingPosition = this.gridPosition.copy();
-        this.world.dePopTile(startingPosition); // Remove the player from the old position
+        this.world.dePopTile(startingPosition); // Remove the player from the old position (without clearing tile)
         
         // Place the player in the new position
         this.world.popTile(target, this); // Add the player to the new position
         this.gridPosition = target.copy();
         this.x = this.gridPosition.x * this.world.tileSize;
         this.y = this.gridPosition.y * this.world.tileSize;
-    
+
         this.walking = false;
         return true;
     }
@@ -87,7 +90,8 @@ class World {
         this.gridSize = new Vector(width, height);
         this.scene = scene;
         this.grid = [];
-        // Fixed grid initialization
+
+        // Initialize grid with Tile objects
         for (let x = 0; x < this.gridSize.x; x++) {
             this.grid[x] = [];
             for (let y = 0; y < this.gridSize.y; y++) {
@@ -108,67 +112,39 @@ class World {
         return null;
     }
 
-    // Place the object (e.g., flower) on the tile
+    // Check if the tile is enterable by the player
+    checkEnterable(position) {
+        const tile = this.getTile(position);
+        if (tile && !tile.isOccupiedByPlant && tile.obj === null) {
+            return true;  // Tile is enterable if it's free and not occupied by a plant or object
+        }
+        return false;  // Tile is not enterable if occupied
+    }
+
+    // Place the object (e.g., player or plant) on the tile if it's free
     popTile(position, obj) {
         const tile = this.getTile(position);
-        
+
         if (!tile) {
             console.log(`No tile found at (${position.x}, ${position.y})`);
             return;
         }
-        
-        // Check if the tile is free for planting
+
+        // Only place an object if the tile is free (not occupied by a plant or any other object)
         if (tile.isFreeForPlanting()) {
             console.log(`Placing object at (${position.x}, ${position.y})`);
-            tile.obj = obj;  // Place the object (e.g., plant)
-            tile.markAsOccupiedByPlant(); // Mark the tile as occupied by a plant
-        } else {
-            console.log(`Tile at (${position.x}, ${position.y}) is not free, cannot place plant.`);
-        }
-    }
-    
-    // Remove the object from the tile
-    dePopTile(pos) {
-        const tile = this.getTile(pos);
-        if (tile) {
-            tile.clearTile();  // Reset the tile's object and occupation status
-            console.log(`Removing object from (${pos.x}, ${pos.y})`);
-        } else {
-            console.error(`Attempted to depop a tile at invalid position: (${pos.x}, ${pos.y})`);
-        }
-    }
-
-    checkEnterable(pos) {
-        const tile = this.getTile(pos);
-        if (!tile) {
-            console.log(`Tile at (${pos.x}, ${pos.y}) does not exist.`);
-            return false;
-        }
-    
-        // Allow movement if the tile is empty or occupied by the player or a plant
-        if (tile.obj && tile.obj !== this.player) {
-            console.log(`Tile at (${pos.x}, ${pos.y}) is occupied by: ${tile.obj}`);
-            return false;
-        }
-    
-        // Tile is free to use
-        return true;
-    }
-
-    // Generate random weather (water and sun levels) for each tile
-    generateRandomWeather() {
-        for (let y = 0; y < this.gridSize.y; y++) {
-            for (let x = 0; x < this.gridSize.x; x++) {
-                const tile = this.getTile(new Vector(x, y));
-                tile.waterLvl += Math.random();
-                tile.sunLvl = Math.random();
+            tile.obj = obj;
+            if (obj instanceof Plant) {
+                tile.markAsOccupiedByPlant();
             }
         }
     }
 
-    // Check if a position is within a certain range of the player (for interaction)
-    isWithinProximity(playerPos, targetPos, range) {
-        const distance = Math.abs(playerPos.x - targetPos.x) + Math.abs(playerPos.y - targetPos.y);
-        return distance <= range;
+    // Remove object (clear the tile) but do not reset occupation status
+    dePopTile(position) {
+        const tile = this.getTile(position);
+        if (tile) {
+            tile.obj = null;  // Just remove the object, but do not clear the plant occupation status
+        }
     }
 }
