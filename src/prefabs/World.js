@@ -29,8 +29,8 @@ class GridObj extends Phaser.GameObjects.Sprite{
 
         this.position = position.copy();
         this.world = world;
-        this.gridPosition = position.copy();
-        this.world.popTile(this.gridPosition, this)
+        this.position = position.copy();
+        this.world.popTile(this.position, this)
         this.walking = false;
 
         scene.add.existing(this)
@@ -38,17 +38,17 @@ class GridObj extends Phaser.GameObjects.Sprite{
 
 
     move(dir) {
-        const target = this.gridPosition.add(dir);
+        const target = this.position.add(dir);
         this.walking = true
         if (!this.world.checkEnterable(target)) {
             this.walking = false
             return false
         }
-        const startingPosition = this.gridPosition.copy();
+        const startingPosition = this.position.copy();
         this.world.popTile(target, this);
-        this.gridPosition = target.copy();
-        this.x = this.gridPosition.x * this.world.tileSize;
-        this.y = this.gridPosition.y * this.world.tileSize;
+        this.position = target.copy();
+        this.x = this.position.x * this.world.tileSize;
+        this.y = this.position.y * this.world.tileSize;
         
         this.world.dePopTile(startingPosition);
         this.walking = false;
@@ -97,8 +97,18 @@ class World{
             for (let x = 0; x < this.gridSize.x; x++) {
                 let tile = this.getTile(new Vector(x, y));
                 //water level can be stored up, sun level cannot per F0.d
-                tile.waterLvl = tile.waterLvl + Math.random();
-                tile.sunLvl = Math.random();
+                tile.waterLvl = tile.waterLvl + Math.floor(Math.random()*3);
+                tile.sunLvl = Math.floor(Math.random()*3);
+            }
+        }
+    }
+
+    generateWeather(waterLvl, sunLvl){
+        for (let y = 0; y < this.gridSize.y; y++) {
+            for (let x = 0; x < this.gridSize.x; x++) {
+                let tile = this.getTile(new Vector(x, y));
+                tile.waterLvl += waterLvl;
+                tile.sunLvl = sunLvl;
             }
         }
     }
