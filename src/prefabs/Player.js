@@ -5,7 +5,7 @@ class Player extends GridObj {
         this.timer = 0;
     }
 
-    update(time, delta) {
+    update(delta) {
         // Listen for inputs and move the player
         if ( this.timer <= 0){
             if (cursors.left.isDown) {
@@ -34,7 +34,7 @@ class Player extends GridObj {
         // Increment / Deincrement water levels
         // Add / Remove sunlit status
     tick() {
-
+        
     }
 
     // Harvest plant

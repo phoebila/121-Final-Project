@@ -69,6 +69,39 @@ class World{
                 this.grid[x][y] = new Tile()
             }
         }
+
+        this.time = {
+            day: 0,
+            hour: 0,
+        };
+
+        //this.lightState
+    }
+
+    tick(hour, day) {
+        // do not allow a time incrament of 
+        assert(hour < 24);
+
+        const newTime = { hour: 0, day: 0 }
+        if (this.time.hour <= 24) { 
+            this.time.hour + hour < 24 ? newTime.hour = this.time.hour + hour : newTime.hour = 24 - (this.time.hour + hour)
+        }
+        this.time.day += day
+        newTime.hour < this.time.hour ? newTime.day = this.time.day + 1 : newTime.day = this.time.day
+
+        this.time = newTime
+
+        this.generateRandomWeather()
+        
+        // update light state
+    }
+
+    getTime() {
+        return this.time
+    }
+
+    printTime() {
+        console.log(`day: ${this.time.day}, hour: ${this.time.hour}`)
     }
 
     getTile(pos) {
@@ -91,6 +124,7 @@ class World{
         }
         return false;
     }
+    
 
     generateRandomWeather(){
         for (let y = 0; y < this.gridSize.y; y++) {
