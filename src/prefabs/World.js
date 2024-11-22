@@ -101,6 +101,7 @@ class World {
         this.gridSize = new Vector(width, height);
         this.scene = scene;
         this.grid = []
+        this.gameState = new GameState();
 
         for (let x = 0; x < this.gridSize.y; x++) {
             this.grid[x] = [];
@@ -133,7 +134,7 @@ class World {
 
         this.time = newTime
 
-        this.generateRandomWeather()
+        this.generateRandomWeather();
         
         // update light state
     }

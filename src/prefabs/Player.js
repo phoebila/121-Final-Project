@@ -56,6 +56,7 @@ class Player extends GridObj {
         const plant = this.world.getTile(targetPos).plant
         this.world.dePopTile(targetPos, plant);
         if (plant){
+            this.world.gameState.removePlantFromState(this);
             plant.destroy()
         }
     }
