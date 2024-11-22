@@ -13,6 +13,7 @@ class Plant extends GridObj{
         this.WATER_RULE = water_req;
         this.SUN_RULE = sun_req;
         this.NEIGHBOR_RULE = neighbor_req
+        this.world.gameState.addPlantToState(this);
     }
 
     grow(){
@@ -21,6 +22,7 @@ class Plant extends GridObj{
             this.setTint(this.tint + 0xffb3b3);
             const tile =this.world.getTile(this.position)
             tile.waterLvl = tile.waterLvl - this.WATER_RULE;
+            this.world.gameState.addPlantToState(this);
         }
     }
 

@@ -26,8 +26,6 @@ class Play extends Phaser.Scene {
         this.input.keyboard.on('keydown-SPACE', () => this.player.sowPlant())
         this.input.keyboard.on('keydown-E', () => this.player.reap());  // E key to reap a plant
 
-        // Create game state to track win condition.
-        this.gameState = new GameState();
     }
 
     update(time, delta) {
@@ -51,5 +49,6 @@ class Play extends Phaser.Scene {
 
     moveTime(hour = 1, day = 0, world = this.world) {
         world.tick(hour, day)
+        world.gameState.debugState();
     }
 }
