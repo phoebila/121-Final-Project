@@ -8,6 +8,8 @@ class Load extends Phaser.Scene {
         this.load.spritesheet('grass-spritesheet', './assets/spritesheets/grass-spritesheet.png', { frameWidth: 8, frameHeight: 8, startFrame: 0})
         this.load.spritesheet('player', './assets/spritesheets/temp-spritesheet.png', { frameWidth: 8, frameHeight: 8, startFrame: 0 })
         this.load.spritesheet('flower', './assets/spritesheets/temp-spritesheet.png', { frameWidth: 8, frameHeight: 8, startFrame: 1, endFrame: 3 })
+        this.load.image('tree', './assets/sprites/placeHolderPlant1.png')
+        this.load.image('bush', './assets/sprites/placeHolderPlant2.png')
     }
 
     create() {

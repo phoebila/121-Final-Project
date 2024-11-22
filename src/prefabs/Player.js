@@ -41,7 +41,7 @@ class Player extends GridObj {
         if (this.world.checkPlantable(playerPos)) {
             // Create and place the plant without removing the player
             const plant = new Plant(this.scene, playerPos, this.world);
-            plant.anims.play('flower'); // Play the flower animation
+            
         }
     }
     // Increment world time 

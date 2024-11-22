@@ -6,14 +6,20 @@ const plantSpecies = [
 
 class Plant extends GridObj{
     constructor(scene, position, world, texture, species = null, water_req = 1, sun_req = 1, neighbor_req = 8){
-        super(scene,position,world,texture)
-        this.species = plantSpecies[Math.floor(Math.random()*3)];
+        const spec = plantSpecies[Math.floor(Math.random()*3)]
+        console.log(spec)
+        
+        super(scene,position,world, spec)
+        this.species = spec;
         this.growthLevel = 0;
+
+        console.log(this.texture)
 
         this.WATER_RULE = water_req;
         this.SUN_RULE = sun_req;
         this.NEIGHBOR_RULE = neighbor_req
         this.world.gameState.addPlantToState(this);
+        //plant.anims.play('flower'); // Play the flower animation
     }
 
     grow(){
@@ -37,7 +43,8 @@ class Plant extends GridObj{
         const adjReq = this.checkPlantNeighbors() < this.NEIGHBOR_RULE;
         return (waterReq &&  //check water
             sunReq  &&  //check sun
-            adjReq 
+            adjReq && 
+            this.growthLevel < GameState.WINNING_GROWTH_LEVEL
         );
     }
 
