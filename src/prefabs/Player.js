@@ -7,7 +7,7 @@ class Player extends GridObj {
         this.setOrigin(0)
     }
 
-    update(delta) {
+    update(time, delta) {
         // Listen for inputs and move the player
         if (this.timer <= 0) {
             if (cursors.left.isDown) {
@@ -41,6 +41,7 @@ class Player extends GridObj {
         } else {
             console.log('Tile is not free, cannot plant.');
         }
+    }
     // Increment world time 
         // Change state of weather on the grid
         // Increment / Deincrement water levels
