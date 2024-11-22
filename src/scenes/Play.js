@@ -53,19 +53,19 @@ class Play extends Phaser.Scene {
     }
 
     sowPlant() {
-        const playerPos = this.player.gridPosition;
+        const playerPos = this.player.position;
         const tile = this.world.getTile(playerPos);
     
         console.log(`Sowing plant at (${playerPos.x}, ${playerPos.y})`);
-        console.log(`Tile at position (${playerPos.x}, ${playerPos.y}) contains:`, tile.obj);
+        console.log(`Tile at position (${playerPos.x}, ${playerPos.y})`);
     
         if (tile) {
             // If tile is free or contains the player, sow the plant
-            if (tile.isFreeForPlanting() || tile.obj === this.player) {
+            if (this.world.checkPlantable(playerPos)) {
                 console.log('Tile is free or contains player, sowing plant.');
     
                 // Create and place the plant without removing the player
-                const plant = new GridObj(this, playerPos, this.world, 'flower');
+                const plant = new Plant(this, 1,1, playerPos, this.world, 'flower');
                 this.world.popTile(playerPos, plant);  // This will place the plant
     
                 console.log(`Planted a flower at (${playerPos.x}, ${playerPos.y})`);

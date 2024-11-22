@@ -25,23 +25,6 @@ class Tile {
         this.sunLvl = sunLvl;
         this.isOccupiedByPlant = false;  // Property to track if the tile is occupied by a plant
     }
-
-    // Helper method to check if tile is free to use
-    isFreeForPlanting() {
-        // A tile is free for planting if it contains no object, and it is not occupied by a plant
-        return !this.obj && !this.isOccupiedByPlant;
-    }
-
-    // Mark this tile as occupied by a plant
-    markAsOccupiedByPlant() {
-        this.isOccupiedByPlant = true;
-    }
-
-    // Remove the plant and free up the tile
-    clearTile() {
-        this.isOccupiedByPlant = false;
-        this.obj = null;
-    }
 }
 
 class GridObj extends Phaser.GameObjects.Sprite {
@@ -55,16 +38,17 @@ class GridObj extends Phaser.GameObjects.Sprite {
         this.world.popTile(this.position, this)
         this.walking = false;
 
+        this.tags = [];
         scene.add.existing(this);
     }
 
     move(dir) {
         const target = this.position.add(dir);
-        this.walking = true
-        if (!this.world.checkEnterable(target)) {
-            this.walking = false;
+        if (!this.world.checkEnterable(target, this)) {
             return false;
         }
+        
+        this.walking = true
         const startingPosition = this.position.copy();
         this.world.popTile(target, this);
         this.position = target
@@ -74,6 +58,12 @@ class GridObj extends Phaser.GameObjects.Sprite {
         this.world.dePopTile(startingPosition, this);
         this.walking = false;
         return true;
+    }
+
+    
+    hasTag(arg){
+        const ar = this.tags || []; // Default to an empty array if undefined
+        return ar.includes(arg);
     }
 }
 
@@ -94,19 +84,20 @@ class World {
 
 
     // PUBLIC FUNCTIONS
+
     popTile(pos, obj){
-        if (typeof obj === "Character"){
+        if (obj.hasTag("Character")){
             this.addCharacter(pos,obj)
-        } else if (typeof obj === "Plant"){
+        } else if (obj.hasTag("Plant")){
             this.addPlant(pos,obj)
         }
     }
 
 
     dePopTile(pos,obj){
-        if (typeof obj === "Character"){
+        if (obj.hasTag("Character")){
             this.removeCharacter(pos)
-        } else if (typeof obj === "Plant"){
+        } else if (obj.hasTag("Plant")){
             this.removePlant(pos)
         }
     }
@@ -115,15 +106,15 @@ class World {
 
     // Can be used, but popTile and dePopTile recommended
 
-    addPlant(pos, arg){
-        if (this.checkPlantable(pos)) {
-            this.getTile(pos).plant = arg;
+    addPlant(pos, obj){
+        if (this.checkEnterable(pos, obj)) {
+            this.getTile(pos).plant = obj;
         }
     }
 
-    addCharacter(pos, arg){
-        if (this.checkEnterable(pos)) {
-            this.getTile(pos).plant = arg;
+    addCharacter(pos, obj){
+        if (this.checkEnterable(pos,obj)) {
+            this.getTile(pos).character = obj;
         }
     }
 
@@ -150,22 +141,33 @@ class World {
         return (grid && this.grid[pos.x] && this.grid[pos.x][pos.y]) || null;
     }
 
+
+    checkEnterable(pos, obj){
+       if ( obj.hasTag("Character") && this.checkCharacterEnter(pos,obj)){
+            return true;
+        } else if (obj.hasTag("Plant") && this.checkPlantable(pos,obj)){
+            return true;
+        }
+        return false;
+    }
+
+
     checkPlantable(pos){
         const tile = this.getTile(pos);
         if (tile && !tile.plant){
             return true;
         }
-        return null;
+        return false;
     }
 
-    checkEnterable(pos){
+
+    checkCharacterEnter(pos, obj){
         const tile = this.getTile(pos);
         if (tile && !tile.character){
             return true;
         }
         return false;
     }
-
 
     // didnt want to move this but i think its public
     generateRandomWeather(){

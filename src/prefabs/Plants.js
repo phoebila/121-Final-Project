@@ -1,9 +1,10 @@
 class Plant extends GridObj {
     constructor(scene, species = null, growthLevel = 0, position, world) {
-        const sprite = "plantSprite"; // Placeholder texture name
+        const sprite = "flower"; // Placeholder texture name
         super(scene, position, world, sprite);
         this.species = species;
         this.growthLevel = growthLevel;
+        this.tags.push("Plant")
 
         // Array storing thresholds for growth
         // 0 = water, 1 = sun, 2 = max number of plant neighbors (player not included)
