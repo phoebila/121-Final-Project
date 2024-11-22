@@ -14,6 +14,8 @@ We all got together to work on discord to complete F0 requirments, keeping in mi
 
 ### How we satisfied the software requirements (F0.b-F0.g)
 
+-   [x] [F0.a] You control a character moving over a 2D grid.
+    -   The player moves by occupying the tile space the cursor pressed indicates they should occupy.
 -   [x] [F0.b] You advance time manually in the turn-based simulation.
     -   The button at the top of the tile world increments time by an hour at a time.
 -   [x] [F0.c] You can reap or sow plants on grid cells only when you are near them.
@@ -30,11 +32,11 @@ We all got together to work on discord to complete F0 requirments, keeping in mi
 ## Devlog Entry = [11/17/2024]
 
 We went to James's house to work together on setting up defaults and initial tile-based movement. We used Live Share to make our collaboration smooth. In the future, we will be using individual branches, but for the initial tile-movement setup, we decided that group programming was best, since the grid would be the basis of the rest of the project.
-
 ### How we satisfied the software requirements (F0.b-F0.g)
 
 -   [x] [F0.a] You control a character moving over a 2D grid.
     -   The player moves by occupying the tile space the cursor pressed indicates they should occupy.
+
 
 ## Devlog Entry - [11/12/2024]
 
