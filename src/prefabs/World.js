@@ -23,9 +23,40 @@ class Tile {
         this.character = null;
         this.waterLvl = waterLvl;
         this.sunLvl = sunLvl;
-        this.isOccupiedByPlant = false;  // Property to track if the tile is occupied by a plant
+    }
+
+    // Check if the tile is free for planting (ignoring the player)
+    isFreeForPlanting() {
+        return this.plant === null; // Free if no plant is present
+    }
+
+    // Link a plant to this tile
+    linkPlant(plant) {
+        if (this.isFreeForPlanting()) {
+            console.log('Linking plant to tile');
+            this.plant = plant; // Set the plant reference
+        } else {
+            console.warn('Cannot link plant, tile is already occupied by a plant');
+        }
+    }
+
+    // Unlink the plant from this tile
+    unlinkPlant() {
+        if (this.plant) {
+            console.log('Unlinking plant from tile');
+            this.plant = null;  // Clear the plant reference
+        }
+    }
+
+    // Clear the tile entirely (plant and other objects)
+    clearTile() {
+        console.log('Clearing tile');
+        this.plant = null;
+        this.obj = null;
     }
 }
+
+
 
 class GridObj extends Phaser.GameObjects.Sprite {
     constructor(scene, position, world, texture) {
@@ -73,7 +104,8 @@ class World {
         this.gridSize = new Vector(width, height);
         this.scene = scene;
         this.grid = [];
-        // Fixed grid initialization
+
+        // Initialize grid with Tile objects
         for (let x = 0; x < this.gridSize.x; x++) {
             this.grid[x] = [];
             for (let y = 0; y < this.gridSize.y; y++) {
@@ -180,9 +212,11 @@ class World {
         }
     }
 
-    // Check if a position is within a certain range of the player (for interaction)
-    isWithinProximity(playerPos, targetPos, range) {
-        const distance = Math.abs(playerPos.x - targetPos.x) + Math.abs(playerPos.y - targetPos.y);
-        return distance <= range;
+    // Remove object (clear the tile) but do not reset occupation status
+    dePopTile(position) {
+        const tile = this.getTile(position);
+        if (tile) {
+            tile.obj = null;  // Just remove the object, but do not clear the plant occupation status
+        }
     }
 }
