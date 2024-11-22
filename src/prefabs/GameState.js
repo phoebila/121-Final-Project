@@ -1,5 +1,5 @@
 // When a plant is created, reaped, or had its growth level increased, it needs to be represented in this.totalPlants
-// Uses the Array of Structures format, got help from Brace on strategy.
+// Uses the Array of Structures format, got help from Brace on strategy and the find/findIndex functions.
 class GameState{
     // If three or more plants are level three growth or above, the game is won.
     static WINNING_PLANT_COUNT = 3

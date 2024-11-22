@@ -25,16 +25,8 @@ class Play extends Phaser.Scene {
 
         this.obj.anims.play('flower')
 
-        // JDS
+        // Create game state to track win condition.
         this.gameState = new GameState();
-        this.plant = new Plant(this,new Vector(3,0),this.world, 'flower', "blah", 3)
-        this.plant2 = new Plant(this,new Vector(0,1),this.world, 'flower', "blah", 3)
-        this.plant3 = new Plant(this,new Vector(0,2),this.world, 'flower', "blah", 3)
-        this.gameState.addPlantToState(this.plant)
-        this.gameState.addPlantToState(this.plant2)
-        this.gameState.addPlantToState(this.plant3)
-        this.gameState.debugState()
-        console.log(this.gameState.checkWinCondition())
     }
 
     update(time,delta) {
