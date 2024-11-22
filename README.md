@@ -6,9 +6,6 @@ This is the CMPM121 final project repository
 
 ### F0 Reflection
 
-[grid based movement and time incrament](https://youtu.be/42cXXa04Pog)
-
-## Reflection 
 Our team's plan was to divide and conquer the different software requirements. We each split up the different requirements and started parallel programming with each other for several hours. We all contributed an equal amount to make sure that we all had an equal share to the project itself. We honestly didn't reconsider our roles that we originally decided on because we all jumped into the roles that someone else needed, so our roles ended up existing as delagated responsibilities rather than restrictive jobs for each person. As we all worked on different software requirements, when some people on the team finished, they then helped those with requirements that were giving them trouble. Our outlook changed from simply dividing the work up by part, to using that notion as an initial goal for each person, and grouping up as needed to finish the whole project. Helping each other in each aspect of the software requirements allowed us to understand each aspect of the project. Finally we all sat together and merged all our aspects from our branches to make sure it all meshed and worked together well and tied logic from our various requirements together. Being that each person had looked at all the other team member's code, it was easier for us to tie together all of our hard work at the end. 
 
 ## Devlog Entry = [11/21/2024]
