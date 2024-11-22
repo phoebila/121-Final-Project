@@ -5,6 +5,19 @@ class Player extends GridObj {
         this.timer = 0
 
         this.setOrigin(0)
+
+        this.scene.input.keyboard.on('keydown-G', () => {
+            if (!this.anims.isPlaying || this.anims.currentAnim?.key !== 'player-dance') {
+                this.anims.play('player-dance')
+            }
+        })
+
+        this.scene.input.keyboard.on('keyup-G', () => {
+            if (this.anims.isPlaying && this.anims.currentAnim?.key === 'player-dance') {
+                this.anims.stop()
+                this.setFrame(0)
+            }
+        })
     }
 
     update(time, delta) {
@@ -33,7 +46,6 @@ class Player extends GridObj {
         this.timer = this.waitTime
     }
 
-    //////////
     sowPlant() {
         const playerPos = this.position
         // If tile is free or contains the player, sow the plant
