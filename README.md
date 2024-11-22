@@ -12,7 +12,7 @@ Our team's plan was to divide and conquer the different software requirements. W
 
 We all got together to work on discord to complete F0 requirments, keeping in mind the released F1 requirements. Liveshare, Github Desktop, and Discord Whiteboard were the tools most immediately relevent to our progress. We had already set up the framework for most of the things we finished on the 21st when we worked in person, and we made sure to have individual branches we could use to fiddle in the meantime, so completing the F0 requirements went smoothly. In addition to finishing those, we chose to integrate Prettier into our repository and will be using that as our code formatter for the forseable remainder of the project.
 
-### How we satisfied the software requirements (F0.b-F0.g)
+### How we satisfied the software requirements 
 
 -   [x] [F0.a] You control a character moving over a 2D grid.
     -   The player moves by occupying the tile space the cursor pressed indicates they should occupy.
@@ -32,7 +32,7 @@ We all got together to work on discord to complete F0 requirments, keeping in mi
 ## Devlog Entry = [11/17/2024]
 
 We went to James's house to work together on setting up defaults and initial tile-based movement. We used Live Share to make our collaboration smooth. In the future, we will be using individual branches, but for the initial tile-movement setup, we decided that group programming was best, since the grid would be the basis of the rest of the project.
-### How we satisfied the software requirements (F0.b-F0.g)
+### How we satisfied the software requirements
 
 -   [x] [F0.a] You control a character moving over a 2D grid.
     -   The player moves by occupying the tile space the cursor pressed indicates they should occupy.
