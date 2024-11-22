@@ -29,4 +29,4 @@ const testColor = "color: #91aa86;"
 const goodColor = "color: #cfd1af;"
 const badColor = "color: #c088ae;"
 // key variables
-let cursors
+let cursors, space, eKey;

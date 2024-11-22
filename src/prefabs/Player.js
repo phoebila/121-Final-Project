@@ -18,7 +18,13 @@ class Player extends GridObj {
                 this.move(new Vector(0, -1));
             } else if (cursors.right.isDown) {
                 this.move(new Vector(1, 0));
+            } else if (space.isDown){
+                this.sowPlant()
+            } else if (eKey.isDown){
+                this.reap()
             }
+
+
         } else {
             this.timer -= delta;
         }
