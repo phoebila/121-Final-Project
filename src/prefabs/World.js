@@ -15,6 +15,9 @@ class Vector {
     copy() {
         return new Vector(this.x, this.y);
     }
+    stringify(){
+        return (this.x.toString() + ":" + this.y.toString())
+    }
 }
 
 class Tile {

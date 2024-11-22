@@ -8,11 +8,11 @@ class GameState{
     }
     // Used to add new plants to the state of the game, and update an existing plant's growth level.
     addPlantToState(plant){
-        this.totalPlants.set(plant.position, plant);
+        this.totalPlants.set(plant.position.stringify(), plant);
     }
     // Used when a plant is reaped.
     removePlantFromState(plant){
-        assert(this.totalPlants.get(plant.position), "Plant not found in Game State")
+        assert(this.totalPlants.get(plant.position.stringify()), "Plant not found in Game State")
 
         if(this.totalPlants.get(plant.position)){
         this.totalPlants.delete(plant.position)
