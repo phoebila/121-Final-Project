@@ -8,7 +8,8 @@ This is the CMPM121 final project repository
 
 [grid based movement and time incrament](https://youtu.be/42cXXa04Pog)
 
-<span style="color:red">INSERT HERE</span>
+## Reflection 
+Our team's plan was to divide and conquer the different software requirements. We each split up the different requirements and started parallel programming with each other for several hours. We all contributed an equal amount to make sure that we all had an equal share to the project itself. We honestly didn't reconsider our roles that we originally decided on because we all jumped into the roles that someone else needed. Helping each other in each aspect of the software requirements allowed us to understand each aspect of the project. Finally we all sat together and merged all our aspects from our branches to make sure it all meshed and worked together well. 
 
 ## Devlog Entry = [11/21/2024]
 
@@ -28,9 +29,6 @@ We all got together to work on discord to complete F0 requirments, keeping in mi
     -   Each plant has a grow function and growth rules that are passed in as parameters when constructed. When time is advanced, the plant checks the sun and water levels for its given tile, as well as the number of adjacent plants in the tiles around it. If those levels satisfy the growth requirements, the plant increases in growth level, and consumes the relevant resources from the tile.
 -   [x] [F0.g] A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
     -   When players have at least 3 plants above growth level 3, the play scenario has been completed, and a console log statement saying 'GAME WON' will be outputted.
-
-## Reflection 
-Our team's plan was to divide and conquer the different software requirements. We each split up the different requirements and started parallel programming with each other for several hours. We all contributed an equal amount to make sure that we all had an equal share to the project itself. We honestly didn't reconsider our roles that we originally decided on because we all jumped into the roles that someone else needed. Helping each other in each aspect of the software requirements allowed us to understand each aspect of the project. Finally we all sat together and merged all our aspects from our branches to make sure it all meshed and worked together well. 
 
 ## Devlog Entry = [11/17/2024]
 
