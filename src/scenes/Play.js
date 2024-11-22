@@ -25,8 +25,8 @@ class Play extends Phaser.Scene {
         // Add grid and player to the scene
         this.world = new World(this, 10, 10, 8) // Assuming you have a World class that handles the grid
         this.player = new Player(this, new Vector(0, 0), 'player') // Create the player at grid position (0, 0)
-        this.cameras.main.startFollow(this.player)
-        this.cameras.main.setZoom(4)
+        this.cameras.main.centerOn(40, 40)
+        this.cameras.main.setZoom(2)
 
         // Input handling
     }

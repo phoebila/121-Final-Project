@@ -2,6 +2,17 @@
 
 This is the CMPM121 final project repository
 
+## Devlog Entry = [11/21/2024]
+
+We alll got together to work on discord to complete f0 requirments, keeping in mind the released f1 requirements. Liveshare, Github Desktop, and Discord Whiteboard were the tools most immediately relevent to our progress. We had already set up the framework for most of the things we finished on the 21st when we worked in person, and we made sure to have individual branches we could use to fiddle in the meantime, so completing the f0 requirements went smoothly. In addition to finishing those, we chose to integrate Prettier into our repository and will be using that as our code formatter for the forseable remainder of the project.
+
+-   [x] [F0.b] You advance time manually in the turn-based simulation.
+-   [x] [F0.c] You can reap or sow plants on grid cells only when you are near them.
+-   [x] [F0.d] Grid cells have sun and water levels. The incoming sun and water for each cell is somehow randomly generated each turn. Sun energy cannot be stored in a cell (it is used immediately or lost) while water moisture can be slowly accumulated over several turns.
+-   [x] [F0.e] Each plant on the grid has a distinct type (e.g. one of 3 species) and a growth level (e.g. “level 1”, “level 2”, “level 3”).
+-   [x] [F0.f] Simple spatial rules govern plant growth based on sun, water, and nearby plants (growth is unlocked by satisfying conditions).
+-   [x] [F0.g] A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
+
 ## Devlog Entry = [11/17/2024]
 
 ### Project Setup
@@ -11,12 +22,6 @@ We went to James's house to work together on setting up defaults and initial til
 ### Current F0 Software Requirments
 
 -   [x] [F0.a] You control a character moving over a 2D grid.
--   [x] [F0.b] You advance time manually in the turn-based simulation.
--   [x] [F0.c] You can reap or sow plants on grid cells only when you are near them.
--   [x] [F0.d] Grid cells have sun and water levels. The incoming sun and water for each cell is somehow randomly generated each turn. Sun energy cannot be stored in a cell (it is used immediately or lost) while water moisture can be slowly accumulated over several turns.
--   [x] [F0.e] Each plant on the grid has a distinct type (e.g. one of 3 species) and a growth level (e.g. “level 1”, “level 2”, “level 3”).
--   [x] [F0.f] Simple spatial rules govern plant growth based on sun, water, and nearby plants (growth is unlocked by satisfying conditions).
--   [x] [F0.g] A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
 
 ## Devlog Entry - [11/12/2024]
 
