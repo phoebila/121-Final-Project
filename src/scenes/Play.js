@@ -40,8 +40,8 @@ class Play extends Phaser.Scene {
         content.height = textSize;
         const UIBox = this.add.rectangle(x, y, Math.ceil((content.width + padding) / this.TILE_SIZE) * this.TILE_SIZE, content.height + padding, 0xff0000);
 
-        content.setOrigin(0).setZ(this.BUTTON_LAYER + 100).setDepth(this.BUTTON_LAYER + 1);
-        UIBox.setOrigin(0).setZ(this.BUTTON_LAYER).setDepth(this.BUTTON_LAYER);
+        content.setOrigin(0, 1.5).setZ(this.BUTTON_LAYER + 100).setDepth(this.BUTTON_LAYER + 1)
+        UIBox.setOrigin(0, 1).setZ(this.BUTTON_LAYER).setDepth(this.BUTTON_LAYER)
 
         const button = { content, UIBox };
         UIBox.setInteractive().on('pointerdown', result);
@@ -49,8 +49,7 @@ class Play extends Phaser.Scene {
         return button;
     }
 
-    moveTime() {
-        console.log('Time advanced');
-        // Handle time advancement (you can integrate time progression logic here)
+    moveTime(hour = 1, day = 0, world = this.world) {
+        world.tick(hour, day)
     }
 }
