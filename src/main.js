@@ -14,7 +14,7 @@ let config = {
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
     zoom: Math.min((window.innerHeight/181)-.1, (window.innerWidth/291)-.1),
-    scene: [ Load, Play, Keys ]
+    scene: [ Load, PlantTest, Play, Keys ]
 }
 
 // game variables

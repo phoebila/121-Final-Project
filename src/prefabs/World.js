@@ -201,8 +201,19 @@ class World {
         for (let y = 0; y < this.gridSize.y; y++) {
             for (let x = 0; x < this.gridSize.x; x++) {
                 const tile = this.getTile(new Vector(x, y));
-                tile.waterLvl += Math.random();
-                tile.sunLvl = Math.random();
+                //water level can be stored up, sun level cannot per F0.d
+                tile.waterLvl = tile.waterLvl + Math.floor(Math.random()*3);
+                tile.sunLvl = Math.floor(Math.random()*3);
+            }
+        }
+    }
+
+    generateWeather(waterLvl, sunLvl){
+        for (let y = 0; y < this.gridSize.y; y++) {
+            for (let x = 0; x < this.gridSize.x; x++) {
+                let tile = this.getTile(new Vector(x, y));
+                tile.waterLvl += waterLvl;
+                tile.sunLvl = sunLvl;
             }
         }
     }
