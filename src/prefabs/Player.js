@@ -84,7 +84,7 @@ class Player extends GridObj {
                     nearbyTiles.push(tile);
                     console.log(`Found plant at (${targetPos.x}, ${targetPos.y})`);
                 } else {
-                    console.log(`No plant at (${targetPos.x}, ${targetPos.y})`);
+                    // console.log(`No plant at (${targetPos.x}, ${targetPos.y})`);
                 }
             }
         }
