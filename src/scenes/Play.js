@@ -23,10 +23,7 @@ class Play extends Phaser.Scene {
 
 
         // Input handling
-        this.input.keyboard.on('keydown-SPACE', () => {
-            this.player.sow();  // Spacebar to sow a plant
-            console.log(this.world.grid)
-        })
+        this.input.keyboard.on('keydown-SPACE', () => this.player.sowPlant())
         this.input.keyboard.on('keydown-E', () => this.player.reap());  // E key to reap a plant
     }
 

@@ -122,8 +122,6 @@ class World {
 
 
     dePopTile(pos,obj){
-        
-        console.log("removing player")
         if (obj instanceof Player){
             this.removeCharacter(pos)
         } else if (obj instanceof Plant){

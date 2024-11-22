@@ -1,5 +1,5 @@
 class Plant extends GridObj {
-    constructor(scene, position, world, texture, species = null, growthLevel = 0){
+    constructor(scene, position, world, species = null, growthLevel = 0){
         const sprite = "flower"; // Placeholder texture name
         super(scene, position, world, sprite);
         this.species = species;
