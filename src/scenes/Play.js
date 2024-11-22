@@ -13,7 +13,7 @@ class Play extends Phaser.Scene {
         // Initialize the world and player
         console.log('%cPLAY SCENE :^)', testColor);
 
-        this.tickButton = this.constructButton(this.TILE_SIZE, this.TILE_SIZE, 10, 6, 'Press to tick time', this.moveTime);
+        this.tickButton = this.constructButton(this.TILE_SIZE, this.TILE_SIZE, 10, 6, 'Press to tick time', () => this.moveTime());
 
         // Add grid and player to the scene
         this.world = new World(this, 10, 10, 8);  // Assuming you have a World class that handles the grid
