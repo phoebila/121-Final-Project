@@ -6,6 +6,8 @@ This is the CMPM121 final project repository
 
 ### F0 Reflection
 
+[grid based movement and time incrament](https://youtu.be/42cXXa04Pog)
+
 <span style="color:red">INSERT HERE</span>
 
 ## Devlog Entry = [11/21/2024]
