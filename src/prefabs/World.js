@@ -70,7 +70,9 @@ class GridObj extends Phaser.GameObjects.Sprite {
         this.world.popTile(this.position, this)
         this.walking = false;
 
-        scene.add.existing(this);
+        scene.add.existing(this)
+
+        this.setOrigin(0)
     }
 
     move(dir) {
@@ -98,13 +100,15 @@ class World {
         this.tileSize = tileSize;
         this.gridSize = new Vector(width, height);
         this.scene = scene;
-        this.grid = [];
+        this.grid = []
 
-        // Initialize grid with Tile objects
-        for (let x = 0; x < this.gridSize.x; x++) {
+        for (let x = 0; x < this.gridSize.y; x++) {
             this.grid[x] = [];
-            for (let y = 0; y < this.gridSize.y; y++) {
-                this.grid[x][y] = new Tile();
+            for (let y = 0; y < this.gridSize.x; y++) {
+                this.grid[x][y] = new Tile()
+
+                const index = this.getRandomIndex()
+                this.renderTile(x, y, index)
             }
         }
     }
@@ -218,4 +222,19 @@ class World {
         }
     }
 
+    getRandomIndex(key = 'grass-spritesheet') {
+        const texture = this.scene.textures.get(key)
+
+        assert(texture.key != '__MISSING')
+
+        return Phaser.Math.Between(0, texture.frameTotal - 2)
+    }
+
+    renderTile(x, y, index, key = 'grass-spritesheet') {
+        const trueX = x * this.tileSize + this.tileSize / 2
+        const trueY = y * this.tileSize + this.tileSize / 2
+
+        const tileSprite = this.scene.add.sprite(trueX, trueY, key, index)
+        tileSprite.setDisplaySize(this.tileSize, this.tileSize).setOrigin(0.5)
+    }
 }
