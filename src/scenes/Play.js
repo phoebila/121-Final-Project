@@ -21,9 +21,6 @@ class Play extends Phaser.Scene {
         this.cameras.main.startFollow(this.player);
         this.cameras.main.setZoom(4);
 
-        this.obj = new GridObj(this, new Vector(0,0),this.world, "flower")
-        this.obj.anims.play('flower')
-
 
         // Input handling
         this.input.keyboard.on('keydown-SPACE', () => {

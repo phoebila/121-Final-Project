@@ -23,9 +23,7 @@ class Player extends GridObj {
     }
 
     move(dir) {
-        const startingPosition = this.position.copy();
         super.move(dir);
-        this.world.dePopTile(startingPosition, this);
         this.timer = this.waitTime;
     }
 
@@ -54,7 +52,7 @@ class Player extends GridObj {
             console.log('Tile is free, sowing plant.');
     
             // Create the plant object (e.g., flower)
-            const flower = new GridObj(this.scene, playerPos, this.scene.world, "flower");
+            const flower = new Plant(this.scene, playerPos, this.scene.world, "flower");
             flower.anims.play('flower'); // Play the flower animation
     
             // Link the flower to the tile
@@ -68,22 +66,29 @@ class Player extends GridObj {
     
 
     reap() {
-        const nearbyTile = this.getNearbyTileForAction();
-    
-        if (nearbyTile && nearbyTile.plant) {
-            const plant = nearbyTile.plant;  // Get the plant reference
-            const position = plant.position || nearbyTile.position; // Fallback to tile position if needed
-            
-            console.log(`Reaping plant from (${position.x}, ${position.y})`);
-    
-            // Destroy the visual representation and unlink the plant
-            plant.destroy(); // Destroy the flower object
-            nearbyTile.unlinkPlant(); // Remove the plant from the tile
-    
-            console.log(`Successfully reaped the plant at (${position.x}, ${position.y})`);
-        } else {
-            console.log('No valid plant nearby to reap.');
+        const targetPos = this.position
+        const plant = this.world.getTile(targetPos).plant
+        this.world.dePopTile(targetPos, plant);
+        if (plant){
+            plant.destroy()
         }
+
+        // const nearbyTile = this.getNearbyTileForAction();
+    
+        // if (nearbyTile && nearbyTile.plant) {
+        //     const plant = nearbyTile.plant;  // Get the plant reference
+        //     const position = plant.position || nearbyTile.position; // Fallback to tile position if needed
+            
+        //     console.log(`Reaping plant from (${position.x}, ${position.y})`);
+    
+        //     // Destroy the visual representation and unlink the plant
+        //     plant.destroy(); // Destroy the flower object
+        //     nearbyTile.unlinkPlant(); // Remove the plant from the tile
+    
+        //     console.log(`Successfully reaped the plant at (${position.x}, ${position.y})`);
+        // } else {
+        //     console.log('No valid plant nearby to reap.');
+        // }
     }
 
     getNearbyTileForAction() {

@@ -85,7 +85,6 @@ class GridObj extends Phaser.GameObjects.Sprite {
         this.position = target
         this.x = this.position.x * this.world.tileSize;
         this.y = this.position.y * this.world.tileSize;
-        
         this.world.dePopTile(startingPosition, this);
         this.walking = false;
         return true;
@@ -210,11 +209,4 @@ class World {
         }
     }
 
-    // Remove object (clear the tile) but do not reset occupation status
-    dePopTile(position) {
-        const tile = this.getTile(position);
-        if (tile) {
-            tile.obj = null;  // Just remove the object, but do not clear the plant occupation status
-        }
-    }
 }
