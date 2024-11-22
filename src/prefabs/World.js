@@ -19,32 +19,44 @@ class Vector {
 
 class Tile {
     constructor(obj = null, waterLvl = 0, sunLvl = 0) {
-        this.obj = obj;  // Can be the player or another object
+        this.obj = obj;         // Can be the player or another non-plant object
+        this.plant = null;      // Reference to the plant object (if any)
         this.waterLvl = waterLvl;
         this.sunLvl = sunLvl;
-        this.isOccupiedByPlant = false;  // Tracks if the tile is occupied by a plant
     }
 
-    // Method to check if the tile is free for planting
+    // Check if the tile is free for planting (ignoring the player)
     isFreeForPlanting() {
-        // Tile is free if it's not occupied by a plant and no other object is present
-        return !this.isOccupiedByPlant && this.obj === null;
+        return this.plant === null; // Free if no plant is present
     }
 
-    // Mark the tile as occupied by a plant
-    markAsOccupiedByPlant() {
+    // Link a plant to this tile
+    linkPlant(plant) {
         if (this.isFreeForPlanting()) {
-            console.log('Marking tile as occupied by a plant');
-            this.isOccupiedByPlant = true;  // Mark as occupied
+            console.log('Linking plant to tile');
+            this.plant = plant; // Set the plant reference
+        } else {
+            console.warn('Cannot link plant, tile is already occupied by a plant');
         }
     }
 
-    // Mark this tile as free from the plant
+    // Unlink the plant from this tile
+    unlinkPlant() {
+        if (this.plant) {
+            console.log('Unlinking plant from tile');
+            this.plant = null;  // Clear the plant reference
+        }
+    }
+
+    // Clear the tile entirely (plant and other objects)
     clearTile() {
-        this.isOccupiedByPlant = false;  // Free the tile for other objects
-        this.obj = null;  // Remove the object from the tile
+        console.log('Clearing tile');
+        this.plant = null;
+        this.obj = null;
     }
 }
+
+
 
 class GridObj extends Phaser.GameObjects.Sprite {
     constructor(scene, position, world, texture) {
