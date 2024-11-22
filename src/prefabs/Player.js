@@ -23,8 +23,6 @@ class Player extends GridObj {
             } else if (eKey.isDown){
                 this.reap()
             }
-
-
         } else {
             this.timer -= delta;
         }
@@ -44,8 +42,6 @@ class Player extends GridObj {
             // Create and place the plant without removing the player
             const plant = new Plant(this.scene, playerPos, this.world);
             plant.anims.play('flower'); // Play the flower animation
-        } else {
-            console.log('Tile is not free, cannot plant.');
         }
     }
     // Increment world time 
