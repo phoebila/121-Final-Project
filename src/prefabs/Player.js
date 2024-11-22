@@ -52,14 +52,18 @@ class Player extends GridObj {
 
     reap() {
         const nearbyTile = this.getNearbyTileForAction();
+    
         if (nearbyTile && nearbyTile.plant) {
-            console.log(`Reaped a plant from (${nearbyTile.gridPosition.x}, ${nearbyTile.gridPosition.y})`);
-
-            // Destroy the visual representation and unlink the plant from the tile
-            nearbyTile.plant.destroy();  // Destroy the flower object
-            nearbyTile.unlinkPlant();   // Use a method in Tile to remove the plant and free the tile
-
-            console.log(`Reaped a plant at (${nearbyTile.gridPosition.x}, ${nearbyTile.gridPosition.y})`);
+            const plant = nearbyTile.plant;  // Get the plant reference
+            const position = plant.gridPosition || nearbyTile.gridPosition; // Fallback to tile position if needed
+            
+            console.log(`Reaping plant from (${position.x}, ${position.y})`);
+    
+            // Destroy the visual representation and unlink the plant
+            plant.destroy(); // Destroy the flower object
+            nearbyTile.unlinkPlant(); // Remove the plant from the tile
+    
+            console.log(`Successfully reaped the plant at (${position.x}, ${position.y})`);
         } else {
             console.log('No valid plant nearby to reap.');
         }
@@ -68,23 +72,25 @@ class Player extends GridObj {
     getNearbyTileForAction() {
         const nearbyTiles = [];
         const playerPos = this.gridPosition;
-
+    
         console.log(`Player Position: (${playerPos.x}, ${playerPos.y})`);
-
+    
         for (let dx = -this.scene.interactionRange; dx <= this.scene.interactionRange; dx++) {
             for (let dy = -this.scene.interactionRange; dy <= this.scene.interactionRange; dy++) {
                 const targetPos = new Vector(playerPos.x + dx, playerPos.y + dy);
                 const tile = this.world.getTile(targetPos);
-
-                if (tile && (targetPos.x !== playerPos.x || targetPos.y !== playerPos.y)) {
-                    if (tile.plant) {  // Check if the tile contains a plant
-                        nearbyTiles.push(tile); // Only add tile with plant for reaping
-                    }
+    
+                if (tile && tile.plant) {  // Only consider tiles with valid plants
+                    nearbyTiles.push(tile);
+                    console.log(`Found plant at (${targetPos.x}, ${targetPos.y})`);
+                } else {
+                    console.log(`No plant at (${targetPos.x}, ${targetPos.y})`);
                 }
             }
         }
-
+    
         console.log(`Nearby tiles with plants: ${nearbyTiles.length}`);
         return nearbyTiles[0] || null; // Return the first valid tile with a plant
     }
+    
 }
