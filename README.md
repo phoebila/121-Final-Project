@@ -25,7 +25,7 @@ We all got together to work on discord to complete F0 requirments, keeping in mi
 -   [x] [F0.e] Each plant on the grid has a distinct type (e.g. one of 3 species) and a growth level (e.g. “level 1”, “level 2”, “level 3”).
     -   Plants have the species and growth level attributes to govern their creation and upgrades.
 -   [x] [F0.f] Simple spatial rules govern plant growth based on sun, water, and nearby plants (growth is unlocked by satisfying conditions).
-    -   <span style="color:red">INSERT HERE</span>
+    -   Each plant has a grow function and growth rules that are passed in as parameters when constructed. When time is advanced, the plant checks the sun and water levels for its given tile, as well as the number of adjacent plants in the tiles around it. If those levels satisfy the growth requirements, the plant increases in growth level, and consumes the relevant resources from the tile.
 -   [x] [F0.g] A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
     -   <span style="color:red">INSERT HERE</span>
 
