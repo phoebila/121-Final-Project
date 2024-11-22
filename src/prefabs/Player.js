@@ -3,8 +3,6 @@ class Player extends GridObj {
         super(scene, position, scene.world, sprite);
         this.waitTime = 200;
         this.timer = 0;
-        this.tags.push("Character")
-        this.tags.push("Player")
     }
 
     update(time, delta) {
@@ -25,13 +23,30 @@ class Player extends GridObj {
     }
 
     move(dir) {
+        const startingPosition = this.position.copy();
         super.move(dir);
+        this.world.dePopTile(startingPosition, this);
         this.timer = this.waitTime;
     }
 
+
+    //////////
+    sowPlant() {
+        const playerPos = this.player.position;
+        // If tile is free or contains the player, sow the plant
+        if (this.world.checkPlantable(playerPos)) {
+            // Create and place the plant without removing the player
+            const plant = new Plant(this, 1,1, playerPos, this.world);
+        } else {
+            console.log('Tile is not free, cannot plant.');
+        }
+    }
+
+
     sow() {
-        const playerPos = this.gridPosition;
-        const tile = this.scene.world.getTile(playerPos);
+        console.log(this.tags)
+        const playerPos = this.position;
+        const tile = this.world.getTile(playerPos);
     
         console.log(`Sowing plant at (${playerPos.x}, ${playerPos.y})`);
     
@@ -57,7 +72,7 @@ class Player extends GridObj {
     
         if (nearbyTile && nearbyTile.plant) {
             const plant = nearbyTile.plant;  // Get the plant reference
-            const position = plant.gridPosition || nearbyTile.gridPosition; // Fallback to tile position if needed
+            const position = plant.position || nearbyTile.position; // Fallback to tile position if needed
             
             console.log(`Reaping plant from (${position.x}, ${position.y})`);
     
@@ -73,7 +88,7 @@ class Player extends GridObj {
 
     getNearbyTileForAction() {
         const nearbyTiles = [];
-        const playerPos = this.gridPosition;
+        const playerPos = this.position;
     
         console.log(`Player Position: (${playerPos.x}, ${playerPos.y})`);
     

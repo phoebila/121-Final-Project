@@ -4,10 +4,10 @@ class Plant extends GridObj {
         super(scene, position, world, sprite);
         this.species = species;
         this.growthLevel = growthLevel;
-        this.tags.push("Plant")
 
         // Array storing thresholds for growth
-        this.growthRules = [0, 0, 0]; // water, sun, neighbor limit
+        // 0 = water, 1 = sun, 2 = max number of plant neighbors (player not included)
+        this.growthRules = [0, 0, 0];
 
         this.init();
     }
@@ -25,7 +25,7 @@ class Plant extends GridObj {
     }
 
     checkCanGrow() {
-        const tile = this.world.getTile(this.gridPosition);
+        const tile = this.world.getTile(this.position);
         
         // Check if the tile has sufficient water and sun
         const waterReq = tile.waterLvl >= this.growthRules[this.WATER_RULE];
@@ -43,7 +43,7 @@ class Plant extends GridObj {
         for (let dX = -1; dX <= 1; dX++) {
             for (let dY = -1; dY <= 1; dY++) {
                 if (dX === 0 && dY === 0) continue; // Skip the current tile
-                const posi = new Vector(this.gridPosition.x + dX, this.gridPosition.y + dY);
+                const posi = new Vector(this.position.x + dX, this.position.y + dY);
                 const tileObj = this.world.getTile(posi)?.obj;
                 if (tileObj instanceof Plant) {
                     plantCount++;

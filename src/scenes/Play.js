@@ -16,7 +16,7 @@ class Play extends Phaser.Scene {
         this.tickButton = this.constructButton(this.TILE_SIZE, this.TILE_SIZE, 10, 6, 'Press to tick time', this.moveTime);
 
         // Add grid and player to the scene
-        this.world = new World(this, 100, 100, 8);  // Assuming you have a World class that handles the grid
+        this.world = new World(this, 10, 10, 8);  // Assuming you have a World class that handles the grid
         this.player = new Player(this, new Vector(0, 0), 'player');  // Create the player at grid position (0, 0)
         this.cameras.main.startFollow(this.player);
         this.cameras.main.setZoom(4);
@@ -26,7 +26,10 @@ class Play extends Phaser.Scene {
 
 
         // Input handling
-        this.input.keyboard.on('keydown-SPACE', () => this.player.sow());  // Spacebar to sow a plant
+        this.input.keyboard.on('keydown-SPACE', () => {
+            this.player.sow();  // Spacebar to sow a plant
+            console.log(this.world.grid)
+        })
         this.input.keyboard.on('keydown-E', () => this.player.reap());  // E key to reap a plant
     }
 

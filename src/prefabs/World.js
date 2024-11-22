@@ -66,10 +66,10 @@ class GridObj extends Phaser.GameObjects.Sprite {
 
         this.position = position.copy();
         this.world = world;
+        this.tags = [];
         this.world.popTile(this.position, this)
         this.walking = false;
 
-        this.tags = [];
         scene.add.existing(this);
     }
 
@@ -92,10 +92,6 @@ class GridObj extends Phaser.GameObjects.Sprite {
     }
 
     
-    hasTag(arg){
-        const ar = this.tags || []; // Default to an empty array if undefined
-        return ar.includes(arg);
-    }
 }
 
 class World {
@@ -118,18 +114,20 @@ class World {
     // PUBLIC FUNCTIONS
 
     popTile(pos, obj){
-        if (obj.hasTag("Character")){
+        if (obj instanceof Player){
             this.addCharacter(pos,obj)
-        } else if (obj.hasTag("Plant")){
+        } else if (obj instanceof Plant){
             this.addPlant(pos,obj)
         }
     }
 
 
     dePopTile(pos,obj){
-        if (obj.hasTag("Character")){
+        
+        console.log("removing player")
+        if (obj instanceof Player){
             this.removeCharacter(pos)
-        } else if (obj.hasTag("Plant")){
+        } else if (obj instanceof Plant){
             this.removePlant(pos)
         }
     }
@@ -175,9 +173,9 @@ class World {
 
 
     checkEnterable(pos, obj){
-       if ( obj.hasTag("Character") && this.checkCharacterEnter(pos,obj)){
+       if ( obj instanceof Player && this.checkCharacterEnter(pos,obj)){
             return true;
-        } else if (obj.hasTag("Plant") && this.checkPlantable(pos,obj)){
+        } else if (obj instanceof Plant && this.checkPlantable(pos,obj)){
             return true;
         }
         return false;
