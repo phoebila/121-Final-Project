@@ -29,6 +29,9 @@ We all got together to work on discord to complete F0 requirments, keeping in mi
 -   [x] [F0.g] A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
     -   When players have at least 3 plants above growth level 3, the play scenario has been completed, and a console log statement saying 'GAME WON' will be outputted.
 
+## Reflection 
+Our team's plan was to divide and conquer the different software requirements. We each split up the different requirements and started parallel programming with each other for several hours. We all contributed an equal amount to make sure that we all had an equal share to the project itself. We honestly didn't reconsider our roles that we originally decided on because we all jumped into the roles that someone else needed. Helping each other in each aspect of the software requirements allowed us to understand each aspect of the project. Finally we all sat together and merged all our aspects from our branches to make sure it all meshed and worked together well. 
+
 ## Devlog Entry = [11/17/2024]
 
 We went to James's house to work together on setting up defaults and initial tile-based movement. We used Live Share to make our collaboration smooth. In the future, we will be using individual branches, but for the initial tile-movement setup, we decided that group programming was best, since the grid would be the basis of the rest of the project.
