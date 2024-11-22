@@ -140,6 +140,14 @@ class World {
         this.generateRandomWeather();
         
         // update light state
+        this.gameState.totalPlants.forEach(value => {
+           value.tick(); 
+        });
+        if(this.gameState.checkWinCondition())
+        {
+              console.log("GAME WON")
+
+        }
     }
 
     getTime() {

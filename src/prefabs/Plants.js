@@ -26,7 +26,7 @@ class Plant extends GridObj{
         }
     }
 
-    update(){
+    tick(){
         this.grow();
     }
 

@@ -21,6 +21,7 @@ class GameState{
     }
     // Prints the current state of all plants in the field.
     debugState(){
+        console.log("Game State Start")
         this.totalPlants.forEach((value) => {
             console.log("[P]: Position: ", value.position, " Growth Level: ", value.growthLevel)
         })
@@ -35,10 +36,17 @@ class GameState{
     checkWinCondition()
     {
         let gameWon = true;
+        // The amount of plants above the minimum growth level
+        let ripePlants = 0;
+        
         if (this.totalPlants.size < GameState.WINNING_PLANT_COUNT) gameWon = false;
+        
         this.totalPlants.forEach((value) => {
-            if(value.growthLevel < GameState.WINNING_GROWTH_LEVEL) gameWon = false;
+            if(value.growthLevel >= GameState.WINNING_GROWTH_LEVEL) ripePlants += 1;
         });
+
+        if (ripePlants < GameState.WINNING_PLANT_COUNT) gameWon = false;
+        
         return gameWon;
     }
 }
