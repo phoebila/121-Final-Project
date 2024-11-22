@@ -13,7 +13,7 @@ class Load extends Phaser.Scene {
         // running checks
         console.log('%cLOAD SCENE :^)', testColor)
         // moving through
-        this.scene.start('plantTestScene')
+        this.scene.start('playScene')
 
         this.anims.create({
             key: 'flower',
