@@ -20,7 +20,6 @@ class GameState {
     }
     // Prints the current state of all plants in the field.
     debugState() {
-        console.log('Game State Start')
         this.totalPlants.forEach(value => {
             console.log('[P]: Position: ', value.position, ' Growth Level: ', value.growthLevel)
         })

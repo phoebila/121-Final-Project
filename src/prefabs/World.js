@@ -121,7 +121,7 @@ class World {
     }
 
     tick(hour, day) {
-        // do not allow a time incrament of
+        // do not allow a time incrament of more than a day (in hours)
         assert(hour < 24)
 
         this.time.hour += hour
@@ -131,14 +131,9 @@ class World {
             newTime.day = this.time.day + Math.floor(this.time.hour / 24)
             this.time = newTime
         }
+        this.time.day += day
 
-        // if (this.time.hour <= 24) {
-        //     this.time.hour + hour < 24 ? newTime.hour = this.time.hour + hour : newTime.hour = 24 - (this.time.hour + hour)
-        // }
-        // this.time.day += day
-        // newTime.hour < this.time.hour ? newTime.day = this.time.day + 1 : newTime.day = this.time.day
-
-        // this.time = newTime
+        this.printTime()
 
         this.generateRandomWeather()
 

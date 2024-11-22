@@ -24,7 +24,6 @@ class Plant extends GridObj {
         this.SUN_RULE = sun_req
         this.NEIGHBOR_RULE = neighbor_req
         this.world.gameState.addPlantToState(this)
-        //plant.anims.play('flower'); // Play the flower animation
     }
 
     grow() {
