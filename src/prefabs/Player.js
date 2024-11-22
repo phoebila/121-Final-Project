@@ -3,6 +3,8 @@ class Player extends GridObj {
         super(scene,position,scene.world, sprite );
         this.waitTime = 200
         this.timer = 0;
+
+        this.setOrigin(0)
     }
 
     update(time, delta) {

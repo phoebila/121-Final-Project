@@ -34,6 +34,8 @@ class GridObj extends Phaser.GameObjects.Sprite{
         this.walking = false;
 
         scene.add.existing(this)
+
+        this.setOrigin(0)
     }
 
 
@@ -63,10 +65,14 @@ class World{
         this.gridSize = new Vector(width, height)
         this.scene = scene;
         this.grid = []
+
         for (let x = 0; x < this.gridSize.y; x++) {
             this.grid[x] = [];
             for (let y = 0; y < this.gridSize.x; y++) {
                 this.grid[x][y] = new Tile()
+
+                const index = this.getRandomIndex()
+                this.renderTile(x, y, index)
             }
         }
     }
@@ -101,5 +107,21 @@ class World{
                 tile.sunLvl = Math.random();
             }
         }
+    }
+
+    getRandomIndex(key = 'grass-spritesheet') {
+        const texture = this.scene.textures.get(key)
+
+        assert(texture.key != '__MISSING')
+
+        return Phaser.Math.Between(0, texture.frameTotal - 2)
+    }
+
+    renderTile(x, y, index, key = 'grass-spritesheet') {
+        const trueX = x * this.tileSize + this.tileSize / 2
+        const trueY = y * this.tileSize + this.tileSize / 2
+
+        const tileSprite = this.scene.add.sprite(trueX, trueY, key, index)
+        tileSprite.setDisplaySize(this.tileSize, this.tileSize).setOrigin(0.5)
     }
 }

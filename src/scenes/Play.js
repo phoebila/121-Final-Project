@@ -18,7 +18,7 @@ class Play extends Phaser.Scene {
         // add grid
         // add player to grid
         this.world = new World(this,100,100,8);
-        this.player = new Player(this, new Vector(0,0), 'player');
+        this.player = new Player(this, new Vector(0,0), 'player')
         this.obj = new GridObj(this, new Vector(0,0),this.world, "flower")
         this.cameras.main.startFollow(this.player)
         this.cameras.main.setZoom(4);
