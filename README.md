@@ -15,7 +15,7 @@ We all got together to work on discord to complete F0 requirments, keeping in mi
 ### How we satisfied the software requirements (F0.b-F0.g)
 
 -   [x] [F0.b] You advance time manually in the turn-based simulation.
-    -   The button at the top of the tile world incraments time by an hour at a time.
+    -   The button at the top of the tile world increments time by an hour at a time.
 -   [x] [F0.c] You can reap or sow plants on grid cells only when you are near them.
     -   Players can sow plants onto the tile they are standing on by pressing the 'E' key. Players can reap plants that they are standing on by pressing the 'SPACE' key.
 -   [x] [F0.d] Grid cells have sun and water levels. The incoming sun and water for each cell is somehow randomly generated each turn. Sun energy cannot be stored in a cell (it is used immediately or lost) while water moisture can be slowly accumulated over several turns.
