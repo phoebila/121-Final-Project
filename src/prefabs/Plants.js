@@ -58,8 +58,8 @@ class Plant extends GridObj{
                     continue;
                 }
                 let posi = new Vector(this.position.x + dX, this.position.y + dY);
-                let tileObj = this.world.getTile(posi).obj;
-                if(tileObj != null && tileObj instanceof Plant){
+                let tile = this.world.getTile(posi);
+                if(tile != null && tile.plant instanceof Plant){
                     plantCount++;
                 }
             }
