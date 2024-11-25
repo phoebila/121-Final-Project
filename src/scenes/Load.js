@@ -1,6 +1,6 @@
 class Load extends Phaser.Scene {
     constructor() {
-        super('LoadScene')
+        super('loadScene')
     }
 
     preload() {
@@ -29,17 +29,26 @@ class Load extends Phaser.Scene {
         // running checks
         console.log('%cLOAD SCENE :^)', testColor)
         // moving through
-        this.scene.start('playScene')
+        this.scene.start('menuScene')
+    }
 
-        this.anims.create({
-            key: 'flower',
-            frames: this.anims.generateFrameNames('flower', {
-                start: 0,
-                end: 2,
-            }),
-            frameRate: 5,
-            yoyo: true,
-            repeat: -1,
+    initializeData() {
+        const data = [
+            { id: 'saveNames', auto: 'null' },
+            { id: 'saveFiles', auto: 'null' },
+        ]
+
+        data.forEach(element => {
+            this.retrieveData(element.id, element.auto)
         })
+    }
+
+    retrieveData(id, auto) {
+        if (!localStorage.getItem(id)) {
+            localStorage.setItem(id, auto)
+            console.log(`(brand new data) ${id}: ${localStorage.getItem(id)}`)
+        } else {
+            console.log(`${id}: ${localStorage.getItem(id)}`)
+        }
     }
 }

@@ -1,6 +1,15 @@
 // making myself not miserable
 'use strict'
 
+const tileSize = 8 // tile size in pixels
+const worldWidth = 12 // world width in tiles
+const worldHeight = 8 // world height in tiles
+const worldPadding = 2 // padding for UI layer in tiles
+const dimensions = {
+    width: tileSize * worldWidth + tileSize * 2,
+    height: tileSize * worldHeight + tileSize * 3 + tileSize * worldPadding,
+}
+
 // game config
 let config = {
     parent: 'GAME TITLE',
@@ -8,13 +17,16 @@ let config = {
     render: {
         pixelArt: true,
     },
-    width: 291,
-    height: 181,
+    width: dimensions.width,
+    height: dimensions.height,
     scale: {
         autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    zoom: Math.min(window.innerHeight / 181 - 0.1, window.innerWidth / 291 - 0.1),
-    scene: [Load, PlantTest, Play, Keys],
+    zoom: Math.min(
+        window.innerHeight / dimensions.height - 0.5,
+        window.innerWidth / dimensions.width - 0.1,
+    ),
+    scene: [Load, Menu, Play, Keys, UI],
 }
 
 // game variables
