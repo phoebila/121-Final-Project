@@ -30,10 +30,9 @@ class Plant extends GridObj {
     }
 
     setGrowth(level){
-        for ( let i = 0; i < level; i++){
-            this.growthLevel++
-            this.setTint(this.tint + 0xffb3b3)
-        }
+        this.growthLevel = level
+        this.setTint(this.tint + (0xffb3b3)* level)
+        
     }
 
     grow() {

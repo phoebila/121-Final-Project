@@ -24,15 +24,17 @@ class Vector {
 const BIT_LAYOUT = {
     LIGHT_LEVEL: { shift: 0, bits: 2 },  // First 2 bits
     WATER_LEVEL: { shift: 2, bits: 2 }, // Next 2 bits
-    PLANT_TYPE: { shift: 4, bits: 3 },  // Next 2 bits
-    PLANT_LEVEL: { shift: 7, bits: 2 }, // Next 2 bits
+    SPECIES: { shift: 4, bits: 3 },  // Next 2 bits
+    GROWTH_LEVEL: { shift: 7, bits: 2 }, // Next 2 bits
 };
 function calculateMask (bits) {
     return (1 << bits ) - 1
 }
 
+
 Object.keys(BIT_LAYOUT).forEach((key) => {
     BIT_LAYOUT[key].mask = calculateMask(BIT_LAYOUT[key].bits);
+
 });
 
 class Tile {
@@ -46,23 +48,22 @@ class Tile {
 
     // Encode the current state into a bitfield
     saveMe() {
-        const plantType = this.plant ? this.plant.species : 0;
-        const plantLevel = this.plant ? this.plant.growthLevel : 0;
-        //console.log("Light Level:", this.sunLvl, "Water Level:", this.waterLvl, "Plant Type:", plantType, "Plant Level:", plantLevel);
-        return this.encodeTileData(this.sunLvl, this.waterLvl, plantType, plantLevel);
+        const species = this.plant ? this.plant.species : 0;
+        const growthLevel = this.plant ? this.plant.growthLevel : 0;
+        return this.encodeTileData(this.sunLvl, this.waterLvl, species, growthLevel);
     }
     
 
     // Restore state from a bitfield
     loadMe(memento, position, scene) {
-        // this.plant && this.plant.destroy();
+        this.plant && this.plant.destroy();
         console.log(memento.toString(2))
 
         const decoded = this.decodeTileData(memento);
         this.sunLvl = decoded.lightLevel;
         this.waterLvl = decoded.waterLevel;
         // Map back to your plant system if necessary
-        if (decoded.plantLevel > 0){
+        if (decoded.species > 0){
             this.plant = new Plant(scene,position, scene.world,  decoded.species)
             this.plant.setGrowth(decoded.growthLevel)
         }
@@ -76,18 +77,18 @@ class Tile {
 
     encodeTileData(lightLevel, waterLevel, species, growthLevel) {
         let data = 0;
-        data |= (lightLevel ) << BIT_LAYOUT.LIGHT_LEVEL.shift;
-        data |= (waterLevel) << BIT_LAYOUT.WATER_LEVEL.shift;
-        data |= (species) << BIT_LAYOUT.PLANT_TYPE.shift;
-        data |= (growthLevel ) << BIT_LAYOUT.PLANT_LEVEL.shift;
+        data |= (lightLevel&  BIT_LAYOUT.LIGHT_LEVEL.mask) << BIT_LAYOUT.LIGHT_LEVEL.shift;
+        data |= (waterLevel&  BIT_LAYOUT.WATER_LEVEL.mask) << BIT_LAYOUT.WATER_LEVEL.shift;
+        data |= (species&  BIT_LAYOUT.SPECIES.mask) << BIT_LAYOUT.SPECIES.shift;
+        data |= (growthLevel &  BIT_LAYOUT.GROWTH_LEVEL.mask) << BIT_LAYOUT.GROWTH_LEVEL.shift;
         return data;
     }
     decodeTileData(data) {
         return {
-            lightLevel: (data >> BIT_LAYOUT.LIGHT_LEVEL.shift) & 3,
-            waterLevel: (data >> BIT_LAYOUT.WATER_LEVEL.shift) &  3,
-            species: (data >> BIT_LAYOUT.PLANT_TYPE.shift) &  7,
-            growthLevel: (data >> BIT_LAYOUT.PLANT_LEVEL.shift) &  3,
+            lightLevel: (data >> BIT_LAYOUT.LIGHT_LEVEL.shift) & BIT_LAYOUT.LIGHT_LEVEL.mask,
+            waterLevel: (data >> BIT_LAYOUT.WATER_LEVEL.shift) &  BIT_LAYOUT.WATER_LEVEL.mask,
+            species: (data >> BIT_LAYOUT.SPECIES.shift) &  BIT_LAYOUT.SPECIES.mask,
+            growthLevel: (data >> BIT_LAYOUT.GROWTH_LEVEL.shift) &  BIT_LAYOUT.GROWTH_LEVEL.mask,
         };
     }
 
