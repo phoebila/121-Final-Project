@@ -11,14 +11,12 @@ class Plant extends GridObj {
         sun_req = 1,
         neighbor_req = 8,
     ) {
-        const spec = plantSpecies[Math.floor(Math.random() * 3)]
-        console.log(spec)
+        const spec = Math.floor(Math.random() * 3)
+        const specName = plantSpecies[spec]
 
-        super(scene, position, world, spec)
+        super(scene, position, world, specName)
         this.species = spec
         this.growthLevel = 0
-
-        console.log(this.texture)
 
         this.WATER_RULE = water_req
         this.SUN_RULE = sun_req

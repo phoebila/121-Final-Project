@@ -44,14 +44,14 @@ class Tile {
 
     // Encode the current state into a bitfield
     saveMe() {
-        const plantType = this.plant ? this.plant.type : 0; // Example, map your plant types
-        const plantLevel = this.plant ? this.plant.level : 0; // Example growth level
-        return encodeTileData(this.sunLvl, this.waterLvl, plantType, plantLevel);
+        const plantType = this.plant ? this.plant.species : 0; // Example, map your plant types
+        const plantLevel = this.plant ? this.plant.growthLevel : 0; // Example growth level
+        return this.encodeTileData(this.sunLvl, this.waterLvl, plantType, plantLevel);
     }
 
     // Restore state from a bitfield
     loadMe(memento) {
-        const decoded = decodeTileData(memento);
+        const decoded = this.decodeTileData(memento);
         this.sunLvl = decoded.lightLevel;
         this.waterLvl = decoded.waterLevel;
         // Map back to your plant system if necessary

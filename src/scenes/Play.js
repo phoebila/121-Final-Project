@@ -22,6 +22,21 @@ class Play extends Phaser.Scene {
             () => this.moveTime(),
         )
 
+        this.testSave = this.constructButton(
+            this.TILE_SIZE,
+            this.TILE_SIZE+ 10,
+            10,
+            6,
+            'Press to test save',
+            () => {
+                for (let i =0; i < this.world.grid.length; i++){
+                    for (let j = 0; j < this.world.grid[i].length; j++){
+                        console.log(this.world.grid[i][j].saveMe());
+                    }
+                }
+            },
+        )
+
         // Add grid and player to the scene
         this.world = new World(this, 10, 10, 8) // Assuming you have a World class that handles the grid
         this.player = new Player(this, new Vector(0, 0), 'player') // Create the player at grid position (0, 0)
@@ -29,6 +44,7 @@ class Play extends Phaser.Scene {
         this.cameras.main.setZoom(2)
 
         // Input handling
+
     }
 
     update(time, delta) {
