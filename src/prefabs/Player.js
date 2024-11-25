@@ -1,39 +1,120 @@
 class Player extends GridObj {
+
     constructor(scene, position, sprite) {
         super(scene, position, scene.world, sprite)
         this.waitTime = 200
         this.timer = 0
+        this.direction = new Vector(0,0);
+
+        
 
         this.setOrigin(0)
+
+        const player = this;
+        this.states = [
+            {
+                name: "idle",
+                enter(){
+                    //play idle anim
+                    player.play('idle');
+                },
+                exit(){},
+                update(){
+                    const readInput = (direction)=>{
+                        console.log(direction)
+                        player.direction = direction;
+                        player.sm.changeState("walk")
+                    }
+                    if (cursors.left.isDown) {
+                        readInput(new Vector(-1,0))
+                    } else if (cursors.down.isDown) {
+                        readInput(new Vector(0, 1))
+                    } else if (cursors.up.isDown) {
+                        readInput(new Vector(0, -1))
+                    } else if (cursors.right.isDown) {
+                        readInput(new Vector(1, 0))
+                    } else if (space.isDown) {
+                        player.sm.changeState("reap")
+                    } else if (eKey.isDown) {
+                        player.sm.changeState("sow")
+                    }
+                }
+            },
+            {
+                name: "coolDown",
+                enter(){
+                    // play cool down anim?
+                    // wait a few frames then change state back to idle
+                    player.sm.changeState("idle")
+                },
+                exit(){},
+                update(){}
+            },
+            {
+                name: "walk",
+                enter( ){
+                    // play walk anim
+                    player.move();
+                    player.sm.changeState("coolDown")
+                },
+                exit(){},
+                update(){}
+            },
+            {
+                name: "reap",
+                enter(){
+                    // play animation then do function on callback
+                    player.playAnimation('reap', ()=>{
+                        player.reap();
+                        player.sm.changeState("idle")
+                    });
+                },
+                exit(){},
+                update(){}
+            },
+            {
+                name: "sow",
+                enter(){
+    
+                    // play animation then do function on callback
+                    player.playAnimation('sow', ()=>{
+                        player.sowPlant();
+                        player.sm.changeState("idle")
+                    });
+                },
+                exit(){},
+                update(){}
+            }
+        ]
+        this.setUpSM();
+        this.sm.changeState("idle");
+    }
+    
+    
+
+    playAnimation(animation, callback){
+        this.play('walk');
+        this.on('animationcomplete', ()=>{
+            callback && callback();
+        }, this.scene); // Use `this` context if needed
     }
 
     update(time, delta) {
-        // Listen for inputs and move the player
-        if (this.timer <= 0) {
-            if (cursors.left.isDown) {
-                this.move(new Vector(-1, 0))
-            } else if (cursors.down.isDown) {
-                this.move(new Vector(0, 1))
-            } else if (cursors.up.isDown) {
-                this.move(new Vector(0, -1))
-            } else if (cursors.right.isDown) {
-                this.move(new Vector(1, 0))
-            } else if (space.isDown) {
-                this.sowPlant()
-            } else if (eKey.isDown) {
-                this.reap()
-            }
-        } else {
-            this.timer -= delta
+        this.sm.update(time,delta);
+    }
+
+    setUpSM(){
+        this.sm = new StateMachine(this);
+        for (let i of this.states ) {
+            this.sm.addState(i);
         }
     }
 
-    move(dir) {
-        super.move(dir)
-        this.timer = this.waitTime
+
+    move() {
+        super.move(this.direction);
     }
 
-    //////////
     sowPlant() {
         const playerPos = this.position
         // If tile is free or contains the player, sow the plant
