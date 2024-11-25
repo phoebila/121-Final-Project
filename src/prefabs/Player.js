@@ -16,12 +16,11 @@ class Player extends GridObj {
                 name: "idle",
                 enter(){
                     //play idle anim
-                    player.play('idle');
+                    player.play('player-idle');
                 },
                 exit(){},
                 update(){
                     const readInput = (direction)=>{
-                        console.log(direction)
                         player.direction = direction;
                         player.sm.changeState("walk")
                     }
@@ -37,6 +36,8 @@ class Player extends GridObj {
                         player.sm.changeState("reap")
                     } else if (eKey.isDown) {
                         player.sm.changeState("sow")
+                    } else if (Phaser.Input.Keyboard.JustDown(gKey)){
+                        player.sm.changeState("dance")
                     }
                 }
             },
@@ -53,9 +54,11 @@ class Player extends GridObj {
             {
                 name: "walk",
                 enter( ){
-                    // play walk anim
-                    player.move();
-                    player.sm.changeState("coolDown")
+                    console.log("entering")
+                    player.playAnimation('player-walk', ()=>{
+                        player.move();
+                        player.sm.changeState("idle")
+                    })
                 },
                 exit(){},
                 update(){}
@@ -64,7 +67,7 @@ class Player extends GridObj {
                 name: "reap",
                 enter(){
                     // play animation then do function on callback
-                    player.playAnimation('reap', ()=>{
+                    player.playAnimation('player-reap', ()=>{
                         player.reap();
                         player.sm.changeState("idle")
                     });
@@ -77,38 +80,37 @@ class Player extends GridObj {
                 enter(){
     
                     // play animation then do function on callback
-                    player.playAnimation('sow', ()=>{
+                    player.playAnimation('player-sow', ()=>{
                         player.sowPlant();
                         player.sm.changeState("idle")
                     });
                 },
                 exit(){},
                 update(){}
+            },
+            {
+                name: "dance",
+                enter(){
+    
+                    // play animation then do function on callback
+                    player.playAnimation('player-dance', ()=>{});
+                },
+                exit(){},
+                update(){
+                    if (!gKey.isDown){
+                        player.sm.changeState("idle")
+                    }
+                }
             }
         ]
         this.setUpSM();
         this.sm.changeState("idle");
-        /*
-        this.scene.input.keyboard.on('keydown-G', () => {
-            if (!this.anims.isPlaying || this.anims.currentAnim?.key !== 'player-dance') {
-                this.anims.play('player-dance')
-            }
-        })
-
-        this.scene.input.keyboard.on('keyup-G', () => {
-            if (this.anims.isPlaying && this.anims.currentAnim?.key === 'player-dance') {
-                this.anims.stop()
-                this.setFrame(0)
-            }
-        })
-        */
     }
     
     
-
     playAnimation(animation, callback){
-        this.play('walk');
-        this.on('animationcomplete', ()=>{
+        this.play(animation);
+        this.once('animationcomplete', ()=>{
             callback && callback();
         }, this.scene); // Use `this` context if needed
     }
@@ -126,6 +128,7 @@ class Player extends GridObj {
 
 
     move() {
+        console.log("moving")
         super.move(this.direction);
     }
 

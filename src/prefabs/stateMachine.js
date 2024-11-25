@@ -12,7 +12,6 @@ class StateMachine {
     }
     changeState(key){
         const newState = this.states[key];
-        console.log(newState)
         if (!(newState)){
             console.log("Invalid state!");
             return(false);
@@ -28,7 +27,6 @@ class StateMachine {
         this.currentState.enter();
     }
     update(time,delta){
-        console.log(this.currentState)
         this.currentState && this.currentState.update(time,delta);
     }
 }

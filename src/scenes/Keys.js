@@ -13,5 +13,6 @@ class Keys extends Phaser.Scene {
         cursors = this.input.keyboard.createCursorKeys()
         space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
         eKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E)
+        gKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.G)
     }
 }
