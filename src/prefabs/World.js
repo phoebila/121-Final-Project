@@ -20,43 +20,63 @@ class Vector {
     }
 }
 
+
+const BIT_LAYOUT = {
+    LIGHT_LEVEL: { shift: 0, bits: 2 },  // First 2 bits
+    WATER_LEVEL: { shift: 2, bits: 2 }, // Next 2 bits
+    PLANT_TYPE: { shift: 4, bits: 2 },  // Next 2 bits
+    PLANT_LEVEL: { shift: 6, bits: 2 }, // Next 2 bits
+};
+const calculateMask = (bits) => (1 << bits) - 1;
+
+Object.keys(BIT_LAYOUT).forEach((key) => {
+    BIT_LAYOUT[key].mask = calculateMask(BIT_LAYOUT[key].bits) << BIT_LAYOUT[key].shift;
+});
+
 class Tile {
     constructor(plant = null, waterLvl = 0, sunLvl = 0) {
-        this.plant = null
-        this.character = null
-        this.waterLvl = waterLvl
-        this.sunLvl = sunLvl
+        this.plant = plant; // Plant reference
+        this.waterLvl = waterLvl;
+        this.sunLvl = sunLvl;
+    }
+    
+
+
+    // Encode the current state into a bitfield
+    saveMe() {
+        const plantType = this.plant ? this.plant.type : 0; // Example, map your plant types
+        const plantLevel = this.plant ? this.plant.level : 0; // Example growth level
+        return encodeTileData(this.sunLvl, this.waterLvl, plantType, plantLevel);
     }
 
-    // Check if the tile is free for planting (ignoring the player)
-    isFreeForPlanting() {
-        return this.plant === null // Free if no plant is present
+    // Restore state from a bitfield
+    loadMe(memento) {
+        const decoded = decodeTileData(memento);
+        this.sunLvl = decoded.lightLevel;
+        this.waterLvl = decoded.waterLevel;
+        // Map back to your plant system if necessary
+        this.plant = { type: decoded.plantType, level: decoded.plantLevel };
     }
 
-    // Link a plant to this tile
-    linkPlant(plant) {
-        if (this.isFreeForPlanting()) {
-            console.log('Linking plant to tile')
-            this.plant = plant // Set the plant reference
-        } else {
-            console.warn('Cannot link plant, tile is already occupied by a plant')
-        }
+
+    encodeTileData(lightLevel, waterLevel, plantType, plantLevel) {
+        let data = 0;
+        data |= (lightLevel & BIT_LAYOUT.LIGHT_LEVEL.mask) << BIT_LAYOUT.LIGHT_LEVEL.shift;
+        data |= (waterLevel & BIT_LAYOUT.WATER_LEVEL.mask) << BIT_LAYOUT.WATER_LEVEL.shift;
+        data |= (plantType & BIT_LAYOUT.PLANT_TYPE.mask) << BIT_LAYOUT.PLANT_TYPE.shift;
+        data |= (plantLevel & BIT_LAYOUT.PLANT_LEVEL.mask) << BIT_LAYOUT.PLANT_LEVEL.shift;
+        return data;
     }
 
-    // Unlink the plant from this tile
-    unlinkPlant() {
-        if (this.plant) {
-            console.log('Unlinking plant from tile')
-            this.plant = null // Clear the plant reference
-        }
+    decodeTileData(data) {
+        return {
+            lightLevel: (data >> BIT_LAYOUT.LIGHT_LEVEL.shift) & calculateMask(BIT_LAYOUT.LIGHT_LEVEL.bits),
+            waterLevel: (data >> BIT_LAYOUT.WATER_LEVEL.shift) & calculateMask(BIT_LAYOUT.WATER_LEVEL.bits),
+            plantType: (data >> BIT_LAYOUT.PLANT_TYPE.shift) & calculateMask(BIT_LAYOUT.PLANT_TYPE.bits),
+            plantLevel: (data >> BIT_LAYOUT.PLANT_LEVEL.shift) & calculateMask(BIT_LAYOUT.PLANT_LEVEL.bits),
+        };
     }
 
-    // Clear the tile entirely (plant and other objects)
-    clearTile() {
-        console.log('Clearing tile')
-        this.plant = null
-        this.obj = null
-    }
 }
 
 class GridObj extends Phaser.GameObjects.Sprite {
@@ -96,6 +116,8 @@ class GridObj extends Phaser.GameObjects.Sprite {
 
 class World {
     constructor(scene, width, height, tileSize) {
+        this.width = width
+        this.height = height
         this.tileSize = tileSize
         this.gridSize = new Vector(width, height)
         this.scene = scene
