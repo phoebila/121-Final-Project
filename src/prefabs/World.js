@@ -30,7 +30,7 @@ const BIT_LAYOUT = {
 const calculateMask = (bits) => (1 << bits) - 1;
 
 Object.keys(BIT_LAYOUT).forEach((key) => {
-    BIT_LAYOUT[key].mask = calculateMask(BIT_LAYOUT[key].bits) << BIT_LAYOUT[key].shift;
+    BIT_LAYOUT[key].mask = calculateMask(BIT_LAYOUT[key].bits);
 });
 
 class Tile {
@@ -44,10 +44,12 @@ class Tile {
 
     // Encode the current state into a bitfield
     saveMe() {
-        const plantType = this.plant ? this.plant.species : 0; // Example, map your plant types
-        const plantLevel = this.plant ? this.plant.growthLevel : 0; // Example growth level
+        const plantType = this.plant ? this.plant.species : 0;
+        const plantLevel = this.plant ? this.plant.growthLevel : 0;
+        //console.log("Light Level:", this.sunLvl, "Water Level:", this.waterLvl, "Plant Type:", plantType, "Plant Level:", plantLevel);
         return this.encodeTileData(this.sunLvl, this.waterLvl, plantType, plantLevel);
     }
+    
 
     // Restore state from a bitfield
     loadMe(memento) {
@@ -62,12 +64,12 @@ class Tile {
     encodeTileData(lightLevel, waterLevel, plantType, plantLevel) {
         let data = 0;
         data |= (lightLevel & BIT_LAYOUT.LIGHT_LEVEL.mask) << BIT_LAYOUT.LIGHT_LEVEL.shift;
+        
         data |= (waterLevel & BIT_LAYOUT.WATER_LEVEL.mask) << BIT_LAYOUT.WATER_LEVEL.shift;
-        data |= (plantType & BIT_LAYOUT.PLANT_TYPE.mask) << BIT_LAYOUT.PLANT_TYPE.shift;
+        data |= (plantType& BIT_LAYOUT.PLANT_TYPE.mask) << BIT_LAYOUT.PLANT_TYPE.shift;
         data |= (plantLevel & BIT_LAYOUT.PLANT_LEVEL.mask) << BIT_LAYOUT.PLANT_LEVEL.shift;
         return data;
     }
-
     decodeTileData(data) {
         return {
             lightLevel: (data >> BIT_LAYOUT.LIGHT_LEVEL.shift) & calculateMask(BIT_LAYOUT.LIGHT_LEVEL.bits),

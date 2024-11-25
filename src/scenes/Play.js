@@ -31,7 +31,8 @@ class Play extends Phaser.Scene {
             () => {
                 for (let i =0; i < this.world.grid.length; i++){
                     for (let j = 0; j < this.world.grid[i].length; j++){
-                        console.log(this.world.grid[i][j].saveMe());
+                        this.world.grid[i][j].saveMe()
+                        //console.log(this.world.grid[i][j].saveMe());
                     }
                 }
             },

@@ -1,4 +1,4 @@
-const plantSpecies = ['tree', 'flower', 'bush']
+const plantSpecies = ['empty', 'tree', 'flower', 'bush']
 
 class Plant extends GridObj {
     constructor(
@@ -11,7 +11,7 @@ class Plant extends GridObj {
         sun_req = 1,
         neighbor_req = 8,
     ) {
-        const spec = Math.floor(Math.random() * 3)
+        const spec = Math.floor(Math.random() * 3) + 1
         const specName = plantSpecies[spec]
 
         super(scene, position, world, specName)
