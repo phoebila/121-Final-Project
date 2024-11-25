@@ -10,19 +10,17 @@ class Load extends Phaser.Scene {
             frameHeight: 8,
             startFrame: 0,
         })
-        this.load.spritesheet('player', './assets/spritesheets/temp-spritesheet.png', {
+        this.load.spritesheet('player', './assets/spritesheets/player-spritesheet.png', {
             frameWidth: 8,
             frameHeight: 8,
             startFrame: 0,
         })
-        this.load.spritesheet('flower', './assets/spritesheets/temp-spritesheet.png', {
+        this.load.spritesheet('flower', './assets/spritesheets/flower-spritesheet.png', {
             frameWidth: 8,
             frameHeight: 8,
             startFrame: 1,
             endFrame: 3,
         })
-        this.load.image('tree', './assets/sprites/placeHolderPlant1.png')
-        this.load.image('bush', './assets/sprites/placeHolderPlant2.png')
     }
 
     create() {
@@ -39,6 +37,16 @@ class Load extends Phaser.Scene {
             }),
             frameRate: 5,
             yoyo: true,
+            repeat: -1,
+        })
+
+        this.anims.create({
+            key: 'player-dance',
+            frames: this.anims.generateFrameNames('player', {
+                start: 16,
+                end: 19,
+            }),
+            frameRate: 5,
             repeat: -1,
         })
     }

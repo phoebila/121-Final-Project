@@ -88,6 +88,20 @@ class Player extends GridObj {
         ]
         this.setUpSM();
         this.sm.changeState("idle");
+        /*
+        this.scene.input.keyboard.on('keydown-G', () => {
+            if (!this.anims.isPlaying || this.anims.currentAnim?.key !== 'player-dance') {
+                this.anims.play('player-dance')
+            }
+        })
+
+        this.scene.input.keyboard.on('keyup-G', () => {
+            if (this.anims.isPlaying && this.anims.currentAnim?.key === 'player-dance') {
+                this.anims.stop()
+                this.setFrame(0)
+            }
+        })
+        */
     }
     
     
