@@ -5,13 +5,18 @@ class Plant extends GridObj {
         scene,
         position,
         world,
+        species = null,
         _texture,
-        _species = null,
         water_req = 1,
         sun_req = 1,
         neighbor_req = 8,
     ) {
-        const spec = Math.floor(Math.random() * 3) + 1
+        let spec;
+        if (!species){
+            spec = Math.floor(Math.random() * 3) + 1
+        } else {
+            spec = species
+        }
         const specName = plantSpecies[spec]
 
         super(scene, position, world, specName)
@@ -22,6 +27,13 @@ class Plant extends GridObj {
         this.SUN_RULE = sun_req
         this.NEIGHBOR_RULE = neighbor_req
         this.world.gameState.addPlantToState(this)
+    }
+
+    setGrowth(level){
+        for ( let i = 0; i < level; i++){
+            this.growthLevel++
+            this.setTint(this.tint + 0xffb3b3)
+        }
     }
 
     grow() {

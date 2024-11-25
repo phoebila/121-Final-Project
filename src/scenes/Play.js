@@ -29,10 +29,11 @@ class Play extends Phaser.Scene {
             6,
             'Press to test save',
             () => {
+                
                 for (let i =0; i < this.world.grid.length; i++){
                     for (let j = 0; j < this.world.grid[i].length; j++){
-                        this.world.grid[i][j].saveMe()
-                        //console.log(this.world.grid[i][j].saveMe());
+                        //this.world.grid[i][j].saveMe()
+                        console.log(   this.world.grid[i][j].loadMe(this.world.grid[i][j].saveMe(), new Vector(i,j), this));
                     }
                 }
             },
