@@ -81,9 +81,9 @@ class GridObj extends Phaser.GameObjects.Sprite {
 }
 
 class World {
-    constructor(scene, width, height, tileSize) {
-        this.width = width
+    constructor(scene, height, width, tileSize) {
         this.height = height
+        this.width = width
         this.tileSize = tileSize
         this.gridSize = new Vector(width, height)
         this.scene = scene
@@ -123,6 +123,7 @@ class World {
 
         this.printTime()
 
+        console.log(this.grid[0][0].waterLvl)
         this.generateRandomWeather()
 
         // update light state
@@ -167,9 +168,9 @@ class World {
     }
 
     generateRandomWeather() {
-        for (let y = 0; y < this.gridSize.y; y++) {
-            for (let x = 0; x < this.gridSize.x; x++) {
-                const tile = this.getTile(new Vector(x, y))
+        for (let x = 0; x < this.gridSize.x; x++) {
+            for (let y = 0; y < this.gridSize.y; y++) {
+                const tile = this.getTile(new Vector(y, x))
                 //water level can be stored up, sun level cannot per F0.d
                 tile.waterLvl = tile.waterLvl + Math.floor(Math.random() * 3)
                 tile.sunLvl = Math.floor(Math.random() * 3)
@@ -177,15 +178,6 @@ class World {
         }
     }
 
-    generateWeather(waterLvl, sunLvl) {
-        for (let y = 0; y < this.gridSize.y; y++) {
-            for (let x = 0; x < this.gridSize.x; x++) {
-                let tile = this.getTile(new Vector(x, y))
-                tile.waterLvl += waterLvl
-                tile.sunLvl = sunLvl
-            }
-        }
-    }
 
     getRandomIndex(key = 'grass-spritesheet') {
         const texture = this.scene.textures.get(key)
