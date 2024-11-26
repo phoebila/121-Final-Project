@@ -2,6 +2,23 @@
 
 This is the CMPM121 final project repository
 
+## Devlog Entry = [11/26/2024]
+
+### F1 Reflection
+For this week, Jack, James, and Rozy all came through and revamped the byte array. Our team's plan changed since we had very little turn around time to try and get this section of our final project finished in time for the Thanksgiving Holiday. Thankfully, Jack, James and Rozy pulled through and were able to develop a byte array shown below. We definitely changed up the roles this time around for this part of the implementation since people were either unavailable or working on other class projects. Our game design evolved more into making sure that the player can have more agency over their choices. This allows the player to be able to have their choices matter, and undo actions based on players' wishes. 
+
+### How we satisfied the software requirements
+- [x] [F0] Same as last week.
+- [x] [F1.a] The important state of your game's grid must be backed by a single contiguous byte array in AoS or SoA format. If your game stores the grid state in multiple format, the byte array format must be the primary format (i.e. other formats are decoded from it as needed).
+    - Each integer represents a tile in the world, so we ended up using an array of structures: 
+    ![Array of Structures][assets\images\arrayOfStructures.png]
+- [x] [F1.b] The player must be able to manually save their progress in the game. This must allow them to load state and continue play another day (i.e. after quitting the game app). The player must be able to manage multiple save files/slots.
+    - Implemented a Menu scene in phaser, allowing the player to load and create saves. Using local storage players can load their save based on the save name, this passes all the need information to the play scene.
+- [x] [F1.c] The game must implement an implicit auto-save system to support recovery from unexpected quits. (For example, when the game is launched, if an auto-save entry is present, the game might ask the player "do you want to continue where you left off?" The auto-save entry might or might not be visible among the list of manual save entries available for the player to load as part of F1.b.)
+    - Implemented a savePrompt function that allows for automatic creation of a save file for the player. The save file is connected to a randomized string of numbers that can be used for the information passed to the play scene.
+- [] [F1.d] The player must be able to undo every major choice (all the way back to the start of play), even from a saved game. They should be able to redo (undo of undo operations) multiple times.
+    - 
+
 ## Devlog Entry = [11/22/2024]
 
 ### F0 Reflection
