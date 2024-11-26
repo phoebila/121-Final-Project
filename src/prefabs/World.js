@@ -178,7 +178,6 @@ class World {
         }
     }
 
-
     getRandomIndex(key = 'grass-spritesheet') {
         const texture = this.scene.textures.get(key)
 

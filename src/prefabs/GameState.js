@@ -6,10 +6,12 @@ class GameState {
     constructor() {
         this.totalPlants = new Map()
     }
+
     // Used to add new plants to the state of the game, and update an existing plant's growth level.
     addPlantToState(plant) {
         this.totalPlants.set(plant.position.stringify(), plant)
     }
+
     // Used when a plant is reaped.
     removePlantFromState(plant) {
         assert(this.totalPlants.get(plant.position.stringify()), 'Plant not found in Game State')
@@ -18,17 +20,21 @@ class GameState {
             this.totalPlants.delete(plant.position)
         }
     }
+
     // Prints the current state of all plants in the field.
     debugState() {
         this.totalPlants.forEach(value => {
             console.log('[P]: Position: ', value.position, ' Growth Level: ', value.growthLevel)
         })
     }
+
+    // return plants fromm position
     getPlantAtPosition(position) {
         if (this.totalPlants.get(position)) {
             return this.totalPlants.get(position)
         }
     }
+
     // Returns true or false based on whether the game has been completed or not.
     checkWinCondition() {
         let gameWon = true
