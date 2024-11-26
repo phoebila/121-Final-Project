@@ -90,9 +90,9 @@ class World {
         this.grid = []
         this.gameState = new GameState()
 
-        for (let x = 0; x < this.gridSize.y; x++) {
+        for (let x = 0; x < this.gridSize.x; x++) {
             this.grid[x] = []
-            for (let y = 0; y < this.gridSize.x; y++) {
+            for (let y = 0; y < this.gridSize.y; y++) {
                 this.grid[x][y] = new Tile()
 
                 const index = this.getRandomIndex()
@@ -170,7 +170,7 @@ class World {
     generateRandomWeather() {
         for (let x = 0; x < this.gridSize.x; x++) {
             for (let y = 0; y < this.gridSize.y; y++) {
-                const tile = this.getTile(new Vector(y, x))
+                const tile = this.getTile(new Vector(x, y))
                 //water level can be stored up, sun level cannot per F0.d
                 tile.waterLvl = tile.waterLvl + Math.floor(Math.random() * 3)
                 tile.sunLvl = Math.floor(Math.random() * 3)
