@@ -5,7 +5,7 @@ This is the CMPM121 final project repository
 ## Devlog Entry = [11/26/2024]
 
 ### F1 Reflection
-For this week, Jack, James, and Rozy all came through and revamped the byte array. Our team's plan changed since we had very little turn around time to try and get this section of our final project finished in time for the Thanksgiving Holiday. Thankfully, Jack, James and Rozy pulled through and were able to develop a byte array shown below. We definitely changed up the roles this time around for this part of the implementation since people were either unavailable or working on other class projects. Our game design evolved more into making sure that the player can have more agency over their choices. This allows the player to be able to have their choices matter, and undo actions based on players' wishes. 
+For this week, Jack, James, and Rozy all came through and revamped the byte array. Our team's plan changed since we had very little turn around time to try and get this section of our final project finished in time for the Thanksgiving Holiday. Thankfully, Jack, James and Rozy pulled through and were able to develop a byte array shown below. We definitely changed up the roles this time around for this part of the implementation since people were either unavailable or working on other class projects. Jackson became more of our tools guy and Phoebe ended up working on more of the design for the README. Our game design evolved more into making sure that the player can have more agency over their choices. This allows the player to be able to have their choices matter, and undo actions based on players' wishes. 
 
 ### How we satisfied the software requirements
 - [x] [F0] Same as last week.
