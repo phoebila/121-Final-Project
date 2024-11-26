@@ -3,14 +3,6 @@
         "format": "prettier --write ."
     },
     "devDependencies": {
-        "prettier": "^3.3.3"
-    },
-    "prettier": {
-        "trailingComma": "all",
-        "tabWidth": 4,
-        "semi": false,
-        "singleQuote": true,
-        "printWidth": 100,
-        "arrowParens": "avoid"
+        "prettier": "3.4.1"
     }
 }
