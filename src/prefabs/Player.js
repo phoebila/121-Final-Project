@@ -55,7 +55,9 @@ class Player extends GridObj {
                 name: "walk",
                 enter( ){
                     player.play('player-walk');
-                    player.moveComp.startMoving( player.sm.changeState("idle"));
+                    player.moveComp.startMoving( ()=>{
+                        player.sm.changeState("idle")
+                    });
                 },
                 exit(){},
                 update(time,delta){

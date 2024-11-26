@@ -17,47 +17,40 @@ class MoveComp extends Componenet{
     }
 
     startMoving(callback){
-        if (!this.walking){
-            this.walking = true;
-            this.callback = callback;
-            this.speedVector = this.parent.direction.mult(2);
-            this.startGridPosition = this.parent.position.copy();
-            this.targetGridPosition = this.parent.position.add(this.parent.direction);
-            this.trueTargetPosition.x = this.targetGridPosition.x * this.world.tileSize;
-            this.trueTargetPosition.y = this.targetGridPosition.y * this.world.tileSize;
-    
-            if ( !this.world.checkEnterable(this.targetGridPosition, this.parent)){
-                console.log("cannot walk here");
-                this.parent.sm.changeState("idle");
-                return;
-            }
-            this.world.popTile(this.targetGridPosition, this.parent);
+        this.callback = callback;
+        this.speedVector = this.parent.direction.mult(2);
+        this.startGridPosition = this.parent.position.copy();
+        this.targetGridPosition = this.parent.position.add(this.parent.direction);
+        this.trueTargetPosition.x = this.targetGridPosition.x * this.world.tileSize;
+        this.trueTargetPosition.y = this.targetGridPosition.y * this.world.tileSize;
+
+
+        if ( !this.world.checkEnterable(this.targetGridPosition, this.parent)){
+            console.log("cannot walk here");
+            this.parent.sm.changeState("idle");
+            return;
         }
-
-        
-
-        
+        this.world.popTile(this.targetGridPosition, this.parent);
     }
 
     update(time,delta){
-        moveRoutine();
+        this.moveRoutine();
     }
 
 
     moveRoutine(){
         for (let axis of ['x','y']){
-            
+            this.parent[axis] += this.speedVector[axis];
             if ( ( ( this.parent[axis] > this.trueTargetPosition[axis] ) && ( this.parent.direction[axis] > 0 ) ) ||
             ( ( this.parent[axis] < this.trueTargetPosition[axis] ) && ( this.parent.direction[axis] < 0 ) )   ){
                 this.parent.x = this.trueTargetPosition.x;
                 this.parent.y = this.trueTargetPosition.y;
                 this.world.dePopTile(this.startGridPosition, this.parent)
+                this.parent.position = this.targetGridPosition.copy();
                 this.callback && this.callback();
                 this.walking = false;
                 return;
-            } else {
-                this.parent[axis] += this.speedVector[axis];
-            }
+            } 
         }
         
     }
