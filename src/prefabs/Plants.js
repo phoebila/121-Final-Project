@@ -1,29 +1,38 @@
-const plantSpecies = ['tree', 'flower', 'bush']
+const plantSpecies = ['empty', 'tree', 'flower', 'bush']
 
 class Plant extends GridObj {
     constructor(
         scene,
         position,
         world,
+        species = null,
         _texture,
-        _species = null,
         water_req = 1,
         sun_req = 1,
         neighbor_req = 8,
     ) {
-        const spec = plantSpecies[Math.floor(Math.random() * 3)]
-        console.log(spec)
+        let spec;
+        if (!species){
+            spec = Math.floor(Math.random() * 3) + 1
+        } else {
+            spec = species
+        }
+        const specName = plantSpecies[spec]
 
-        super(scene, position, world, spec)
+        super(scene, position, world, specName)
         this.species = spec
         this.growthLevel = 0
-
-        console.log(this.texture)
 
         this.WATER_RULE = water_req
         this.SUN_RULE = sun_req
         this.NEIGHBOR_RULE = neighbor_req
         this.world.gameState.addPlantToState(this)
+    }
+
+    setGrowth(level){
+        this.growthLevel = level
+        this.setTint(this.tint + (0xffb3b3)* level)
+        
     }
 
     grow() {

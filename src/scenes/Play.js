@@ -27,8 +27,6 @@ class Play extends Phaser.Scene {
         this.player = new Player(this, new Vector(0, 0), 'player') // Create the player at grid position (0, 0)
         this.cameras.main.centerOn(40, 40)
         this.cameras.main.setZoom(2)
-
-        // Input handling
     }
 
     update(time, delta) {

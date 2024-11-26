@@ -1,70 +1,48 @@
-class Vector {
-    constructor(x = 0, y = 0) {
-        this.x = x
-        this.y = y
-    }
-
-    add(other) {
-        return new Vector(this.x + other.x, this.y + other.y)
-    }
-
-    minus(other) {
-        return new Vector(this.x - other.x, this.y - other.y)
-    }
-
-    copy() {
-        return new Vector(this.x, this.y)
-    }
-    stringify() {
-        return this.x.toString() + ':' + this.y.toString()
-    }
-    mult(coefficient){
-        
-        const x = this.x * coefficient
-        const y = this.y * coefficient
-        return (new Vector(x,y));
-    }
-    equal(other){
-        return (this.x == other.x && this.y == other.y);
-    }
-}
-
 class Tile {
     constructor(plant = null, waterLvl = 0, sunLvl = 0) {
-        this.plant = null
-        this.character = null
-        this.waterLvl = waterLvl
-        this.sunLvl = sunLvl
+        this.plant = plant; // Plant reference
+        this.waterLvl = waterLvl;
+        this.sunLvl = sunLvl;
     }
 
-    // Check if the tile is free for planting (ignoring the player)
-    isFreeForPlanting() {
-        return this.plant === null // Free if no plant is present
+    // Encode the current state into a bitfield
+    saveMe() {
+        const species = this.plant ? this.plant.species : 0;
+        const growthLevel = this.plant ? this.plant.growthLevel : 0;
+        return this.encodeTileData(this.sunLvl, this.waterLvl, species, growthLevel);
     }
+    
+    // Restore state from a bitfield
+    loadMe(memento, position, scene) {
+        this.plant && this.plant.destroy();
+        console.log(memento.toString(2))
 
-    // Link a plant to this tile
-    linkPlant(plant) {
-        if (this.isFreeForPlanting()) {
-            console.log('Linking plant to tile')
-            this.plant = plant // Set the plant reference
-        } else {
-            console.warn('Cannot link plant, tile is already occupied by a plant')
+        const decoded = this.decodeTileData(memento);
+        this.sunLvl = decoded[bitDetailsIndex.LIGHT_LEVEL];
+        this.waterLvl = decoded[bitDetailsIndex.WATER_LEVEL];;
+        // Map back to your plant system if necessary
+        if (decoded[bitDetailsIndex.SPECIES] > 0){
+            this.plant = new Plant(scene,position, scene.world,  decoded[bitDetailsIndex.SPECIES])
+            this.plant.setGrowth(decoded[bitDetailsIndex.GROWTH_LEVEL])
         }
+        return(this)
     }
 
-    // Unlink the plant from this tile
-    unlinkPlant() {
-        if (this.plant) {
-            console.log('Unlinking plant from tile')
-            this.plant = null // Clear the plant reference
+
+    encodeTileData(lightLevel, waterLevel, species, growthLevel) {
+        let data = 0;
+        const tileData = [lightLevel, waterLevel, species, growthLevel];
+        for ( let i = 0; i < tileData.length; i++){
+            data |= ( tileData[i] & bitLayout[i].mask) << bitLayout[i].shift;
         }
+        return data;
     }
-
-    // Clear the tile entirely (plant and other objects)
-    clearTile() {
-        console.log('Clearing tile')
-        this.plant = null
-        this.obj = null
+    decodeTileData(data) {
+        let decoded = [];
+        for (let i = 0; i <bitLayout.length; i++){
+            decoded.push( (data>> bitLayout[i].shift) & bitLayout[i].mask)
+        }
+        return (decoded)
     }
 }
 
@@ -105,6 +83,8 @@ class GridObj extends Phaser.GameObjects.Sprite {
 
 class World {
     constructor(scene, width, height, tileSize) {
+        this.width = width
+        this.height = height
         this.tileSize = tileSize
         this.gridSize = new Vector(width, height)
         this.scene = scene
@@ -166,81 +146,28 @@ class World {
     // PUBLIC FUNCTIONS
 
     popTile(pos, obj) {
-        if (obj instanceof Player) {
-            this.addCharacter(pos, obj)
-        } else if (obj instanceof Plant) {
-            this.addPlant(pos, obj)
+        if (obj instanceof Player && this.checkEnterable(pos, obj)) {
+            this.getTile(pos).character = obj
+        } else if (obj instanceof Plant && this.checkEnterable(pos, obj)) {
+            this.getTile(pos).plant = obj
         }
     }
 
     dePopTile(pos, obj) {
         if (obj instanceof Player) {
-            this.removeCharacter(pos)
+            const tile = this.getTile(pos)
+            if (tile) {
+                tile.character = null
+            }
         } else if (obj instanceof Plant) {
-            this.removePlant(pos)
+            const tile = this.getTile(pos)
+            if (tile) {
+                tile.plant = null
+            }
         }
     }
 
-    // Can be used, but popTile and dePopTile recommended
 
-    addPlant(pos, obj) {
-        if (this.checkEnterable(pos, obj)) {
-            this.getTile(pos).plant = obj
-        }
-    }
-
-    addCharacter(pos, obj) {
-        if (this.checkEnterable(pos, obj)) {
-            this.getTile(pos).character = obj
-        }
-    }
-
-    removeCharacter(pos) {
-        const tile = this.getTile(pos)
-        if (tile) {
-            tile.character = null
-        }
-    }
-
-    removePlant(pos) {
-        const tile = this.getTile(pos)
-        if (tile) {
-            tile.plant = null
-        }
-    }
-
-    // PRIVATE FUNCTIONS
-    getTile(pos) {
-        const grid = this.grid
-        return (grid && this.grid[pos.x] && this.grid[pos.x][pos.y]) || null
-    }
-
-    checkEnterable(pos, obj) {
-        if (obj instanceof Player && this.checkCharacterEnter(pos, obj)) {
-            return true
-        } else if (obj instanceof Plant && this.checkPlantable(pos, obj)) {
-            return true
-        }
-        return false
-    }
-
-    checkPlantable(pos) {
-        const tile = this.getTile(pos)
-        if (tile && !tile.plant) {
-            return true
-        }
-        return false
-    }
-
-    checkCharacterEnter(pos, obj) {
-        const tile = this.getTile(pos)
-        if (tile && !tile.character) {
-            return true
-        }
-        return false
-    }
-
-    // didnt want to move this but i think its public
     generateRandomWeather() {
         for (let y = 0; y < this.gridSize.y; y++) {
             for (let x = 0; x < this.gridSize.x; x++) {
@@ -276,5 +203,42 @@ class World {
 
         const tileSprite = this.scene.add.sprite(trueX, trueY, key, index)
         tileSprite.setDisplaySize(this.tileSize, this.tileSize).setOrigin(0.5)
+    }
+
+
+
+
+
+
+
+     // PRIVATE FUNCTIONS
+     getTile(pos) {
+        const grid = this.grid
+        return (grid && this.grid[pos.x] && this.grid[pos.x][pos.y]) || null
+    }
+
+    checkEnterable(pos, obj) {
+        if (obj instanceof Player && this.checkCharacterEnter(pos, obj)) {
+            return true
+        } else if (obj instanceof Plant && this.checkPlantable(pos, obj)) {
+            return true
+        }
+        return false
+    }
+
+    checkPlantable(pos) {
+        const tile = this.getTile(pos)
+        if (tile && !tile.plant) {
+            return true
+        }
+        return false
+    }
+
+    checkCharacterEnter(pos, obj) {
+        const tile = this.getTile(pos)
+        if (tile && !tile.character) {
+            return true
+        }
+        return false
     }
 }
