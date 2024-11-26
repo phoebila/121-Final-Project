@@ -86,7 +86,7 @@ class Play extends Phaser.Scene {
 
                 localStorage.setItem('saveFiles', saveFiles.join(' '))
             }
-            
+
             console.log(localStorage.getItem('saveFiles'))
         } else {
             console.log('there is no save file under that name')

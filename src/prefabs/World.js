@@ -1,48 +1,47 @@
 class Tile {
     constructor(plant = null, waterLvl = 0, sunLvl = 0) {
-        this.plant = plant; // Plant reference
-        this.waterLvl = waterLvl;
-        this.sunLvl = sunLvl;
+        this.plant = plant // Plant reference
+        this.waterLvl = waterLvl
+        this.sunLvl = sunLvl
     }
 
     // Encode the current state into a bitfield
     saveMe() {
-        const species = this.plant ? this.plant.species : 0;
-        const growthLevel = this.plant ? this.plant.growthLevel : 0;
-        return this.encodeTileData(this.sunLvl, this.waterLvl, species, growthLevel);
+        const species = this.plant ? this.plant.species : 0
+        const growthLevel = this.plant ? this.plant.growthLevel : 0
+        return this.encodeTileData(this.sunLvl, this.waterLvl, species, growthLevel)
     }
-    
+
     // Restore state from a bitfield
     loadMe(memento, position, scene) {
-        this.plant && this.plant.destroy();
+        this.plant && this.plant.destroy()
         console.log(memento.toString(2))
 
-        const decoded = this.decodeTileData(memento);
-        this.sunLvl = decoded[bitDetailsIndex.LIGHT_LEVEL];
-        this.waterLvl = decoded[bitDetailsIndex.WATER_LEVEL];;
+        const decoded = this.decodeTileData(memento)
+        this.sunLvl = decoded[bitDetailsIndex.LIGHT_LEVEL]
+        this.waterLvl = decoded[bitDetailsIndex.WATER_LEVEL]
         // Map back to your plant system if necessary
-        if (decoded[bitDetailsIndex.SPECIES] > 0){
-            this.plant = new Plant(scene,position, scene.world,  decoded[bitDetailsIndex.SPECIES])
+        if (decoded[bitDetailsIndex.SPECIES] > 0) {
+            this.plant = new Plant(scene, position, scene.world, decoded[bitDetailsIndex.SPECIES])
             this.plant.setGrowth(decoded[bitDetailsIndex.GROWTH_LEVEL])
         }
-        return(this)
+        return this
     }
-
 
     encodeTileData(lightLevel, waterLevel, species, growthLevel) {
-        let data = 0;
-        const tileData = [lightLevel, waterLevel, species, growthLevel];
-        for ( let i = 0; i < tileData.length; i++){
-            data |= ( tileData[i] & bitLayout[i].mask) << bitLayout[i].shift;
+        let data = 0
+        const tileData = [lightLevel, waterLevel, species, growthLevel]
+        for (let i = 0; i < tileData.length; i++) {
+            data |= (tileData[i] & bitLayout[i].mask) << bitLayout[i].shift
         }
-        return data;
+        return data
     }
     decodeTileData(data) {
-        let decoded = [];
-        for (let i = 0; i <bitLayout.length; i++){
-            decoded.push( (data>> bitLayout[i].shift) & bitLayout[i].mask)
+        let decoded = []
+        for (let i = 0; i < bitLayout.length; i++) {
+            decoded.push((data >> bitLayout[i].shift) & bitLayout[i].mask)
         }
-        return (decoded)
+        return decoded
     }
 }
 
@@ -167,7 +166,6 @@ class World {
         }
     }
 
-
     generateRandomWeather() {
         for (let y = 0; y < this.gridSize.y; y++) {
             for (let x = 0; x < this.gridSize.x; x++) {
@@ -205,14 +203,8 @@ class World {
         tileSprite.setDisplaySize(this.tileSize, this.tileSize).setOrigin(0.5)
     }
 
-
-
-
-
-
-
-     // PRIVATE FUNCTIONS
-     getTile(pos) {
+    // PRIVATE FUNCTIONS
+    getTile(pos) {
         const grid = this.grid
         return (grid && this.grid[pos.x] && this.grid[pos.x][pos.y]) || null
     }

@@ -11,8 +11,8 @@ class Plant extends GridObj {
         sun_req = 1,
         neighbor_req = 8,
     ) {
-        let spec;
-        if (!species){
+        let spec
+        if (!species) {
             spec = Math.floor(Math.random() * 3) + 1
         } else {
             spec = species
@@ -29,10 +29,9 @@ class Plant extends GridObj {
         this.world.gameState.addPlantToState(this)
     }
 
-    setGrowth(level){
+    setGrowth(level) {
         this.growthLevel = level
-        this.setTint(this.tint + (0xffb3b3)* level)
-        
+        this.setTint(this.tint + 0xffb3b3 * level)
     }
 
     grow() {

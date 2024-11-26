@@ -23,16 +23,14 @@ class Load extends Phaser.Scene {
         })
     }
 
-    
-
     create() {
         // running checks
         console.log('%cLOAD SCENE :^)', testColor)
         // moving through
         this.scene.start('menuScene')
 
-        function getFrames(frameNum,sheetKey){
-            return (frameNum.map(num => ({ key: sheetKey, frame: num })))
+        function getFrames(frameNum, sheetKey) {
+            return frameNum.map(num => ({ key: sheetKey, frame: num }))
         }
 
         this.anims.create({
@@ -66,11 +64,11 @@ class Load extends Phaser.Scene {
             repeat: -1,
         })
 
-        const  walkFrameNum= [8,9,10,11,16,17,18,19];
-        
+        const walkFrameNum = [8, 9, 10, 11, 16, 17, 18, 19]
+
         this.anims.create({
             key: 'player-walk',
-            frames: getFrames(walkFrameNum,'player'),
+            frames: getFrames(walkFrameNum, 'player'),
             frameRate: 10,
             repeat: 0,
         })
@@ -84,7 +82,7 @@ class Load extends Phaser.Scene {
             frameRate: 10,
             repeat: 0,
         })
-        
+
         this.anims.create({
             key: 'player-sow',
             frames: this.anims.generateFrameNames('player', {
@@ -105,7 +103,7 @@ class Load extends Phaser.Scene {
         data.forEach(element => {
             this.retrieveData(element.id, element.auto)
         })
-    }    
+    }
 
     retrieveData(id, auto) {
         if (!localStorage.getItem(id)) {

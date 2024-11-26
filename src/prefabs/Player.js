@@ -1,31 +1,29 @@
 class Player extends GridObj {
-
     constructor(scene, position, sprite) {
         super(scene, position, scene.world, sprite)
         this.waitTime = 200
         this.timer = 0
-        this.direction = new Vector(0,0);
+        this.direction = new Vector(0, 0)
         this.moveComp = new MoveComp(this)
-        
 
         this.setOrigin(0)
 
-        const player = this;
+        const player = this
         this.states = [
             {
-                name: "idle",
-                enter(){
+                name: 'idle',
+                enter() {
                     //play idle anim
-                    player.play('player-idle');
+                    player.play('player-idle')
                 },
-                exit(){},
-                update(){
-                    const readInput = (direction)=>{
-                        player.direction = direction;
-                        player.sm.changeState("walk")
+                exit() {},
+                update() {
+                    const readInput = direction => {
+                        player.direction = direction
+                        player.sm.changeState('walk')
                     }
                     if (cursors.left.isDown) {
-                        readInput(new Vector(-1,0))
+                        readInput(new Vector(-1, 0))
                     } else if (cursors.down.isDown) {
                         readInput(new Vector(0, 1))
                     } else if (cursors.up.isDown) {
@@ -33,104 +31,104 @@ class Player extends GridObj {
                     } else if (cursors.right.isDown) {
                         readInput(new Vector(1, 0))
                     } else if (space.isDown) {
-                        player.sm.changeState("reap")
+                        player.sm.changeState('reap')
                     } else if (eKey.isDown) {
-                        player.sm.changeState("sow")
-                    } else if (Phaser.Input.Keyboard.JustDown(gKey)){
-                        player.sm.changeState("dance")
+                        player.sm.changeState('sow')
+                    } else if (Phaser.Input.Keyboard.JustDown(gKey)) {
+                        player.sm.changeState('dance')
                     }
-                }
+                },
             },
             {
-                name: "coolDown",
-                enter(){
+                name: 'coolDown',
+                enter() {
                     // play cool down anim?
                     // wait a few frames then change state back to idle
-                    player.sm.changeState("idle")
+                    player.sm.changeState('idle')
                 },
-                exit(){},
-                update(){}
+                exit() {},
+                update() {},
             },
             {
-                name: "walk",
-                enter( ){
-                    player.play('player-walk');
-                    player.moveComp.startMoving( ()=>{
-                        player.sm.changeState("idle")
-                    });
+                name: 'walk',
+                enter() {
+                    player.play('player-walk')
+                    player.moveComp.startMoving(() => {
+                        player.sm.changeState('idle')
+                    })
                 },
-                exit(){},
-                update(time,delta){
-                    player.moveComp.update(time,delta)
-                }
+                exit() {},
+                update(time, delta) {
+                    player.moveComp.update(time, delta)
+                },
             },
             {
-                name: "reap",
-                enter(){
+                name: 'reap',
+                enter() {
                     // play animation then do function on callback
-                    player.playAnimation('player-reap', ()=>{
-                        player.reap();
-                        player.sm.changeState("idle")
-                    });
+                    player.playAnimation('player-reap', () => {
+                        player.reap()
+                        player.sm.changeState('idle')
+                    })
                 },
-                exit(){},
-                update(){}
+                exit() {},
+                update() {},
             },
             {
-                name: "sow",
-                enter(){
-    
+                name: 'sow',
+                enter() {
                     // play animation then do function on callback
-                    player.playAnimation('player-sow', ()=>{
-                        player.sowPlant();
-                        player.sm.changeState("idle")
-                    });
+                    player.playAnimation('player-sow', () => {
+                        player.sowPlant()
+                        player.sm.changeState('idle')
+                    })
                 },
-                exit(){},
-                update(){}
+                exit() {},
+                update() {},
             },
             {
-                name: "dance",
-                enter(){
-    
+                name: 'dance',
+                enter() {
                     // play animation then do function on callback
-                    player.playAnimation('player-dance', ()=>{});
+                    player.playAnimation('player-dance', () => {})
                 },
-                exit(){},
-                update(){
-                    if (!gKey.isDown){
-                        player.sm.changeState("idle")
+                exit() {},
+                update() {
+                    if (!gKey.isDown) {
+                        player.sm.changeState('idle')
                     }
-                }
-            }
+                },
+            },
         ]
-        this.setUpSM();
-        this.sm.changeState("idle");
+        this.setUpSM()
+        this.sm.changeState('idle')
     }
-    
-    
-    playAnimation(animation, callback){
-        this.play(animation);
-        this.once('animationcomplete', ()=>{
-            callback && callback();
-        }, this.scene); // Use `this` context if needed
+
+    playAnimation(animation, callback) {
+        this.play(animation)
+        this.once(
+            'animationcomplete',
+            () => {
+                callback && callback()
+            },
+            this.scene,
+        ) // Use `this` context if needed
     }
 
     update(time, delta) {
-        this.sm.update(time,delta);
+        this.sm.update(time, delta)
     }
 
-    setUpSM(){
-        this.sm = new StateMachine(this);
-        for (let i of this.states ) {
-            this.sm.addState(i);
+    setUpSM() {
+        this.sm = new StateMachine(this)
+        for (let i of this.states) {
+            this.sm.addState(i)
         }
     }
 
-
     move() {
-        console.log("moving")
-        super.move(this.direction);
+        console.log('moving')
+        super.move(this.direction)
     }
 
     sowPlant() {

@@ -30,6 +30,8 @@ class Menu extends Phaser.Scene {
                 this.constructButton(tileSize, posY, 10, 6, element.text, element.function)
             }
         })
+
+        this.scene.get('loadScene').initializeData()
     }
 
     constructButton(x, y, textSize, padding, text = 'default text', result) {
