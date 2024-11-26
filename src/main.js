@@ -1,13 +1,17 @@
-// making myself not miserable
+// allow for strict typing
 'use strict'
 
-const tileSize = 8 // tile size in pixels
-const worldWidth = 12 // world width in tiles
-const worldHeight = 8 // world height in tiles
-const worldPadding = 2 // padding for UI layer in tiles
-const dimensions = {
-    width: tileSize * worldWidth + tileSize * 2,
-    height: tileSize * worldHeight + tileSize * 3 + tileSize * worldPadding,
+const tileSize = 8
+
+const worldPadding = 2
+const worldDimensions = {
+    width: 12,
+    height: 8
+}
+
+const gameDimensions = {
+    width: tileSize * tileDimensions.width + tileSize * 2,
+    height: tileSize * tileDimensions.height + tileSize * 3 + tileSize * worldPadding,
 }
 
 // game config
@@ -17,14 +21,14 @@ let config = {
     render: {
         pixelArt: true,
     },
-    width: dimensions.width,
-    height: dimensions.height,
+    width: gameDimensions.width,
+    height: gameDimensions.height,
     scale: {
         autoCenter: Phaser.Scale.CENTER_BOTH,
     },
     zoom: Math.min(
-        window.innerHeight / dimensions.height - 0.5,
-        window.innerWidth / dimensions.width - 0.1,
+        window.innerHeight / gameDimensions.height - 0.5,
+        window.innerWidth / gameDimensions.width - 0.1,
     ),
     scene: [Load, Menu, Play, Keys, UI],
 }
