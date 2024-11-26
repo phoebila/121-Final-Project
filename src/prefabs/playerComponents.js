@@ -26,7 +26,7 @@ class MoveComp extends Componenet{
 
 
         if ( !this.world.checkEnterable(this.targetGridPosition, this.parent)){
-            console.log("cannot walk here");
+            //console.log("cannot walk here");
             this.parent.sm.changeState("idle");
             return;
         }
