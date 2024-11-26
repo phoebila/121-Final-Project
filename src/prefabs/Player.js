@@ -5,7 +5,7 @@ class Player extends GridObj {
         this.waitTime = 200
         this.timer = 0
         this.direction = new Vector(0,0);
-
+        this.moveComp = new MoveComp(this)
         
 
         this.setOrigin(0)
@@ -54,14 +54,13 @@ class Player extends GridObj {
             {
                 name: "walk",
                 enter( ){
-                    console.log("entering")
-                    player.playAnimation('player-walk', ()=>{
-                        player.move();
-                        player.sm.changeState("idle")
-                    })
+                    player.play('player-walk');
+                    player.moveComp.startMoving( player.sm.changeState("idle"));
                 },
                 exit(){},
-                update(){}
+                update(time,delta){
+                    player.moveComp.update(time,delta)
+                }
             },
             {
                 name: "reap",
