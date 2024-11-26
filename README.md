@@ -11,7 +11,7 @@ For this week, Jack, James, and Rozy all came through and revamped the byte arra
 - [x] [F0] Same as last week.
 - [x] [F1.a] The important state of your game's grid must be backed by a single contiguous byte array in AoS or SoA format. If your game stores the grid state in multiple format, the byte array format must be the primary format (i.e. other formats are decoded from it as needed).
     - Each integer represents a tile in the world, so we ended up using an array of structures: 
-    ![Array of Structures][assets/images/arrayOfStructures.png]
+    ![Array of Structures][assets/images/arrayOfStructures.png "Array of Structures"]
 - [x] [F1.b] The player must be able to manually save their progress in the game. This must allow them to load state and continue play another day (i.e. after quitting the game app). The player must be able to manage multiple save files/slots.
     - Implemented a Menu scene in phaser, allowing the player to load and create saves. Using local storage players can load their save based on the save name, this passes all the need information to the play scene.
 - [x] [F1.c] The game must implement an implicit auto-save system to support recovery from unexpected quits. (For example, when the game is launched, if an auto-save entry is present, the game might ask the player "do you want to continue where you left off?" The auto-save entry might or might not be visible among the list of manual save entries available for the player to load as part of F1.b.)
