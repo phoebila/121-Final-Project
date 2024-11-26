@@ -18,7 +18,13 @@ class Vector {
     stringify() {
         return this.x.toString() + ':' + this.y.toString()
     }
+    mult(coefficient){
+        
+        const x = this.x * coefficient
+        const y = this.y * coefficient
+        return (new Vector(x,y));
+    }
+    equal(other){
+        return (this.x == other.x && this.y == other.y);
+    }
 }
-
-
-
