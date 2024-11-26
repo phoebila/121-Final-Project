@@ -36,6 +36,7 @@ class Tile {
         }
         return data
     }
+    
     decodeTileData(data) {
         let decoded = []
         for (let i = 0; i < bitLayout.length; i++) {

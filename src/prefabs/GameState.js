@@ -3,6 +3,7 @@ class GameState {
     // If three or more plants are level three growth or above, the game is won.
     static WINNING_PLANT_COUNT = 3
     static WINNING_GROWTH_LEVEL = 3
+
     constructor() {
         this.totalPlants = new Map()
     }
@@ -16,19 +17,10 @@ class GameState {
     removePlantFromState(plant) {
         assert(this.totalPlants.get(plant.position.stringify()), 'Plant not found in Game State')
 
-        if (this.totalPlants.get(plant.position)) {
-            this.totalPlants.delete(plant.position)
-        }
+        this.totalPlants.delete(plant.position.stringify())
     }
 
-    // Prints the current state of all plants in the field.
-    debugState() {
-        this.totalPlants.forEach(value => {
-            console.log('[P]: Position: ', value.position, ' Growth Level: ', value.growthLevel)
-        })
-    }
-
-    // return plants fromm position
+    // Return plants from position.
     getPlantAtPosition(position) {
         if (this.totalPlants.get(position)) {
             return this.totalPlants.get(position)
@@ -37,18 +29,26 @@ class GameState {
 
     // Returns true or false based on whether the game has been completed or not.
     checkWinCondition() {
-        let gameWon = true
-        // The amount of plants above the minimum growth level
-        let ripePlants = 0
+        const ripePlants = Array.from(this.totalPlants.values()).filter(
+            plant => plant.growthLevel >= GameState.WINNING_GROWTH_LEVEL,
+        )
+        return ripePlants.length >= GameState.WINNING_PLANT_COUNT
+    }
 
-        if (this.totalPlants.size < GameState.WINNING_PLANT_COUNT) gameWon = false
+    serialize() {
+        const serializedPlants = Array.from(this.totalPlants.entries()).map(([position, plant]) => ({
+            position: plant.position,
+            data: plant.serialize(),
+        }));
+        return { plants: serializedPlants };
+    }
 
-        this.totalPlants.forEach(value => {
-            if (value.growthLevel >= GameState.WINNING_GROWTH_LEVEL) ripePlants += 1
-        })
-
-        if (ripePlants < GameState.WINNING_PLANT_COUNT) gameWon = false
-
-        return gameWon
+    deserialize(data) {
+        this.totalPlants.clear();
+        data.plants.forEach(({ position, data }) => {
+            const newPlant = new Plant(null, position, null); // Will sync `world` later
+            newPlant.deserialize(data);
+            this.addPlantToState(newPlant);
+        });
     }
 }

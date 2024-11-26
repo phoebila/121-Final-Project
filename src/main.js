@@ -6,12 +6,12 @@ const tileSize = 8
 const worldPadding = 2
 const worldDimensions = {
     width: 12,
-    height: 8
+    height: 8,
 }
 
 const gameDimensions = {
-    width: tileSize * tileDimensions.width + tileSize * 2,
-    height: tileSize * tileDimensions.height + tileSize * 3 + tileSize * worldPadding,
+    width: tileSize * worldDimensions.width + tileSize * 2,
+    height: tileSize * worldDimensions.height + tileSize * 3 + tileSize * worldPadding,
 }
 
 // game config

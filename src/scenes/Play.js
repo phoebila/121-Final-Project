@@ -22,7 +22,7 @@ class Play extends Phaser.Scene {
         this.scene.get('uiScene').displayPlayUI()
 
         // Add grid and player to the scene
-        this.world = new World(this, worldHeight, worldWidth, 8) // Assuming you have a World class that handles the grid
+        this.world = new World(this, worldDimensions.height, worldDimensions.width, 8) // Assuming you have a World class that handles the grid
         this.player = new Player(this, new Vector(0, 0), 'player') // Create the player at grid position (0, 0)
         this.cameras.main.centerOn(
             centerX - this.TILE_SIZE,
