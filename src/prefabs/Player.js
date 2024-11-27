@@ -2,6 +2,8 @@ class Player extends GridObj {
     constructor(gameManager, position) {
         super(gameManager, position, 'player')
         this.direction = new Vector(0, 0)
+
+        this.speed = 0.4
         this.moveComp = new MoveComp(this)
 
         this.setOrigin(0)

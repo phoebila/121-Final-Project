@@ -6,7 +6,6 @@ class Play extends Phaser.Scene {
     init(data) {
         this.BUTTON_LAYER = 100
         this.TILE_SIZE = tileSize
-        this.interactionRange = 3 // Player must be within 3 tiles
 
         this.SAVE_NAME = data.SAVE_NAME
         this.SAVE_FILE = data.SAVE_FILE
@@ -22,7 +21,7 @@ class Play extends Phaser.Scene {
         this.scene.get('uiScene').displayPlayUI()
 
         // Add grid and player to the scene
-        this.gameManager = new GameManager( this, worldDimensions, this.TILE_SIZE);
+        this.gameManager = new GameManager(this, worldDimensions, this.TILE_SIZE)
         this.cameras.main.centerOn(
             centerX - this.TILE_SIZE,
             centerY - this.TILE_SIZE * worldPadding - this.TILE_SIZE * 2,
@@ -30,7 +29,7 @@ class Play extends Phaser.Scene {
     }
 
     update(time, delta) {
-        this.gameManager.update(time,delta);
+        this.gameManager.update(time, delta)
     }
 
     constructButton(x, y, textSize, padding, text = 'default text', result) {
@@ -59,8 +58,6 @@ class Play extends Phaser.Scene {
         return button
     }
 
-    
-
     savePrompt() {
         // eventually, allow for save as link
         // for now, just save
@@ -87,8 +84,8 @@ class Play extends Phaser.Scene {
         }
     }
 
+    // currently unused, to be used with load from file
     saveToFile() {
-        // currently unused, to be used with load from file
         const data = 'text'
         const filename = 'myfilename.txt'
         const type = 'text/plain'

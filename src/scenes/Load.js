@@ -57,10 +57,6 @@ class Load extends Phaser.Scene {
             return frameNum.map(num => ({ key: sheetKey, frame: num }))
         }
 
-
-
-
-        
         this.anims.create({
             key: 'player-dance',
             frames: this.anims.generateFrameNames('player', {

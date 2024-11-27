@@ -107,14 +107,14 @@ class MoveComp extends Componenet {
         this.startGridPosition = new Vector(0, 0)
         this.trueTargetPosition = new Vector(0, 0)
         this.callback = null
-        this.gameManager = parent.gameManager;
-        this.world = this.gameManager.world;
+        this.gameManager = parent.gameManager
+        this.world = this.gameManager.world
         this.walking = false
     }
 
     startMoving(callback) {
         this.callback = callback
-        this.speedVector = this.parent.direction.mult(2)
+        this.speedVector = this.parent.direction.mult(this.parent.speed)
         this.startGridPosition = this.parent.position.copy()
         this.targetGridPosition = this.parent.position.add(this.parent.direction)
         this.trueTargetPosition.x = this.targetGridPosition.x * this.gameManager.tileSize
@@ -126,7 +126,7 @@ class MoveComp extends Componenet {
         }
     }
 
-    update(time, delta) {
+    update(_time, _delta) {
         this.moveRoutine()
     }
 
