@@ -3,37 +3,33 @@ class WorldStates  {
         this.gameManager = gameManager
         this.formerStates = []
         this.undoneStates = []
+        this.currentAction;
     }
     undo(){
-        // pop state from the formerStates array. load it. pushes it to the undoneStates array
-        if ( this.formerStates.length < 2){
+        if ( this.formerStates.length < 1 ){
             console.log("cannot undo")
-            return
-        }
-        const state = this.formerStates.pop();
-        if (state ){
-            this.gameManager.world.loadWorldInstance(this.formerStates[this.formerStates.length -1])
-            this.undoneStates.push(state)
-            console.log(this.undoneStates, this.formerStates)
+        } else {
+            this.undoneStates.push(this.currentAction);
+            this.currentAction = this.formerStates.pop();
+            console.log(this.currentAction)
+            this.gameManager.world.loadWorldInstance(this.currentAction)
         }
     }
     redo(){
-        // pop state from undoneStates. push it to formerStates load it
-        const state = this.undoneStates.pop();
-        if (state){
-            this.formerStates.push(state)
-            this.gameManager.world.loadWorldInstance(this.formerStates[this.formerStates.length -1 ])
-            
+        if (this.undoneStates.length < 1){
+            console.log("cannot redo")
         } else {
-            console.log("failed to redo")
+            this.formerStates.push(this.currentAction)
+            this.currentAction = this.undoneStates.pop();
+            this.gameManager.world.loadWorldInstance(this.currentAction)
         }
-
     }
-    addState(state){
-        // clear undone states
-        // push arg to formerstates
-        this.undoneStates = []
-        this.formerStates.push(state)
+    addState(){
+        this.formerStates.push(this.currentAction)
+        this.currentAction = this.gameManager.world.exportWorldInstance()
+        console.log(this)
+        //this.gameManager.world.loadWorldInstance(this.currentAction)
+        console.log(this)
     }
 
 }
@@ -55,11 +51,10 @@ class GameManager {
         
 
         this.loadGame(saveData)
-        this.world.loadWorldInstance(this.worldStates.formerStates[this.worldStates.formerStates.length -1 ])
+        this.world.loadWorldInstance(this.worldStates.currentAction)
 
         this.worldUpdated = new CustomEvent("world-updated", {});
         document.addEventListener("world-updated", () => {
-            console.log('updated')
             this.gameStateUpdated();
         })
     }
@@ -67,8 +62,8 @@ class GameManager {
     exportGame(){
         const gameManager = this
         this.gameStateUpdated()
-        console.log(this.worldStates.formerStates)
         return (JSON.stringify({
+            currentAction: gameManager.worldStates.currentAction,
             formerStates: gameManager.worldStates.formerStates,
             undoneStates: gameManager.worldStates.undoneStates
         }))
@@ -76,6 +71,7 @@ class GameManager {
 
     loadGame(data){
         const sampleStates= JSON.parse(data)
+        this.worldStates.currentAction = sampleStates.currentAction
         this.worldStates.formerStates = sampleStates.formerStates
         this.worldStates.undoneStates = sampleStates.undoneStates
     }
