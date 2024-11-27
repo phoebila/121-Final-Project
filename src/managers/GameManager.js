@@ -43,7 +43,7 @@ class GameManager {
         this.world = new World(this, gridSize, tileSize)
 
         this.plantManager = new PlantManager(this.scene, this)
-        this.winManager = new WinConManager()
+        this.winManager = new WinConManager(this)
 
         this.player = new Player(this, new Vector(0, 0))
         
@@ -88,6 +88,7 @@ class GameManager {
     }
 
     tick(hour = 1, day = 0) {
+        this.gameStateUpdated()
         // Update time
         this.time.hour += hour
         if (this.time.hour >= 24) {
