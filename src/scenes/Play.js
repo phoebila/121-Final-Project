@@ -21,7 +21,7 @@ class Play extends Phaser.Scene {
         this.scene.get('uiScene').displayPlayUI()
 
         // Add grid and player to the scene
-        this.gameManager = new GameManager(this, worldDimensions, this.TILE_SIZE)
+        this.gameManager = new GameManager(this, worldDimensions, this.TILE_SIZE, this.SAVE_FILE)
         this.cameras.main.centerOn(
             centerX - this.TILE_SIZE,
             centerY - this.TILE_SIZE * worldPadding - this.TILE_SIZE * 2,
@@ -58,10 +58,7 @@ class Play extends Phaser.Scene {
         return button
     }
 
-    savePrompt() {
-        // eventually, allow for save as link
-        // for now, just save
-
+    save() {
         let saveNames = localStorage.getItem('saveNames').split(' ').map(Number)
         let saveFiles = localStorage.getItem('saveFiles').split(' ').map(Number)
         if (saveNames.find(element => element == this.SAVE_NAME)) {
@@ -71,7 +68,7 @@ class Play extends Phaser.Scene {
             console.log(localStorage.getItem('saveFiles'))
 
             if (index > -1) {
-                const newData = Math.floor(Math.floor(Math.random() * 90000) + 10000)
+                const newData = this.gameManager.world.saveAsString()
                 saveFiles[index] = newData
 
                 localStorage.setItem('saveFiles', saveFiles.join(' '))
@@ -81,29 +78,6 @@ class Play extends Phaser.Scene {
         } else {
             console.log('there is no save file under that name')
             console.log(saveNames)
-        }
-    }
-
-    // currently unused, to be used with load from file
-    saveToFile() {
-        const data = 'text'
-        const filename = 'myfilename.txt'
-        const type = 'text/plain'
-
-        // src = https://stackoverflow.com/questions/13405129/create-and-save-a-file-with-javascript
-        var file = new Blob([data], { type: type })
-        if (window.navigator.msSaveOrOpenBlob) window.navigator.msSaveOrOpenBlob(file, filename)
-        else {
-            var a = document.createElement('a'),
-                url = URL.createObjectURL(file)
-            a.href = url
-            a.download = filename
-            document.body.appendChild(a)
-            a.click()
-            setTimeout(function () {
-                document.body.removeChild(a)
-                window.URL.revokeObjectURL(url)
-            }, 0)
         }
     }
 }

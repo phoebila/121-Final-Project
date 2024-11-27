@@ -46,3 +46,6 @@ const goodColor = 'color: #cfd1af;'
 const badColor = 'color: #c088ae;'
 // key variables
 let cursors, space, eKey, gKey
+// default save state
+const defaultSaveData =
+    '[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]'

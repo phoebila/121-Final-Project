@@ -49,6 +49,6 @@ class UI extends Phaser.Scene {
     }
 
     save() {
-        this.scene.get('playScene').savePrompt()
+        this.scene.get('playScene').save()
     }
 }

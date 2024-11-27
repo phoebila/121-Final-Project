@@ -1,12 +1,15 @@
 class GameManager {
-    constructor(scene, gridSize, tileSize) {
+    constructor(scene, gridSize, tileSize, saveData) {
         this.scene = scene
         this.tileSize = tileSize
 
         // Instantiate key modules
-        this.world = new World(scene, gridSize, tileSize)
+        this.world = new World(this, gridSize, tileSize)
+
         this.plantManager = new PlantManager(this.scene, this)
         this.winManager = new WinConManager()
+
+        this.world.assembleWorld(this.world.loadFromString(saveData))
 
         this.time = { day: 0, hour: 0 }
         this.player = new Player(this, new Vector(0, 0))

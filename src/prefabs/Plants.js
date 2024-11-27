@@ -1,5 +1,6 @@
 class Plant extends GridObj {
     constructor(gameManager, position, species = 1) {
+        console.log(gameManager, gameManager.plantManager)
         const plantManager = gameManager.plantManager
 
         console.log(species, plantManager.plantAttributes)

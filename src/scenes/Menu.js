@@ -3,7 +3,9 @@ class Menu extends Phaser.Scene {
         super('menuScene')
     }
 
-    preload() {}
+    init() {
+        this.SPLIT = '/'
+    }
 
     create() {
         // running checks
@@ -72,34 +74,30 @@ class Menu extends Phaser.Scene {
         if (localStorage.getItem('saveNames') == 'null') {
             localStorage.setItem('saveNames', '1')
 
-            const saveNames = localStorage.getItem('saveNames').split(' ')
-            console.log(saveNames)
+            const saveNames = localStorage.getItem('saveNames').split(this.SPLIT)
 
             console.log(`your new save data is under ${localStorage.getItem('saveNames')}`)
 
-            // replace with blank game state
-            const newData = Math.floor(Math.floor(Math.random() * 90000) + 10000)
+            const newData = defaultSaveData
             localStorage.setItem('saveFiles', `${newData}`)
 
             console.log(`the assciociated game data is ${localStorage.getItem('saveFiles')}`)
         } else {
-            let saveNames = localStorage.getItem('saveNames').split(' ').map(Number)
+            let saveNames = localStorage.getItem('saveNames').split(this.SPLIT).map(Number)
             const newSaveNumber = saveNames.length > 0 ? saveNames[saveNames.length - 1] + 1 : 1
             saveNames.push(newSaveNumber)
 
-            localStorage.setItem('saveNames', saveNames.join(' '))
+            localStorage.setItem('saveNames', saveNames.join(this.SPLIT))
 
-            console.log(saveNames)
             console.log(`your new save data is under ${saveNames[saveNames.length - 1]}`)
 
-            let saveFiles = localStorage.getItem('saveFiles').split(' ').map(Number)
-            // replace with blank game state
-            const newData = Math.floor(Math.floor(Math.random() * 90000) + 10000)
+            let saveFiles = localStorage.getItem('saveFiles').split(this.SPLIT)
+
+            const newData = defaultSaveData
             saveFiles.push(newData)
 
-            localStorage.setItem('saveFiles', saveFiles.join(' '))
+            localStorage.setItem('saveFiles', saveFiles.join(this.SPLIT))
 
-            console.log(saveFiles)
             console.log(`the assciociated game data is ${saveFiles[saveFiles.length - 1]}`)
         }
     }
@@ -112,8 +110,9 @@ class Menu extends Phaser.Scene {
 
         const saveName = prompt('enter your save name')
 
-        let saveNames = localStorage.getItem('saveNames').split(' ').map(Number)
-        let saveFiles = localStorage.getItem('saveFiles').split(' ').map(Number)
+        let saveNames = localStorage.getItem('saveNames').split('/').map(Number)
+        let saveFiles = localStorage.getItem('saveFiles').split('/')
+
         if (saveNames.find(element => element == saveName)) {
             const key = saveNames.find(element => element == saveName)
             const index = saveNames.indexOf(key)
@@ -122,8 +121,6 @@ class Menu extends Phaser.Scene {
                 this.saveName = saveNames[index]
                 this.saveFile = saveFiles[index]
             }
-
-            console.log(this.saveName, this.saveFile)
         } else {
             console.log('there is no save file under that name')
             console.log(saveNames)
@@ -138,8 +135,8 @@ class Menu extends Phaser.Scene {
 
         const saveName = prompt('enter your save name')
 
-        let saveNames = localStorage.getItem('saveNames').split(' ').map(Number)
-        let saveFiles = localStorage.getItem('saveFiles').split(' ').map(Number)
+        let saveNames = localStorage.getItem('saveNames').split(this.SPLIT).map(Number)
+        let saveFiles = localStorage.getItem('saveFiles').split(this.SPLIT)
         if (saveNames.find(element => element == saveName)) {
             const key = saveNames.find(element => element == saveName)
             const index = saveNames.indexOf(key)
@@ -149,8 +146,8 @@ class Menu extends Phaser.Scene {
                 saveFiles.splice(index, 1)
             }
 
-            localStorage.setItem('saveNames', saveNames.join(' '))
-            localStorage.setItem('saveFiles', saveFiles.join(' '))
+            localStorage.setItem('saveNames', saveNames.join(this.SPLIT))
+            localStorage.setItem('saveFiles', saveFiles.join(this.SPLIT))
 
             console.log(saveNames, saveFiles)
         } else {

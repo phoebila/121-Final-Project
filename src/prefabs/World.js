@@ -1,34 +1,41 @@
 class Tile {
-    constructor(plant = null, waterLvl = 0, sunLvl = 0) {
-        this.plant = plant // Plant reference
+    constructor(gameManager, plant = null, waterLvl = 0, sunLvl = 0) {
+        this.gameManager = gameManager
+
+        this.plant = plant
         this.waterLvl = waterLvl
         this.sunLvl = sunLvl
     }
 
     // Encode the current state into a bitfield
-    saveMe() {
+    saveTile() {
         const species = this.plant ? this.plant.species : 0
         const growthLevel = this.plant ? this.plant.growthLevel : 0
+
+        console.log('saved data:', species, growthLevel, this.sunLvl, this.waterLvl)
         return this.encodeTileData(this.sunLvl, this.waterLvl, species, growthLevel)
     }
 
-    cleanMe() {
+    cleanTile() {
         this.plant && this.plant.destroy()
         this.sunLvl = 0
         this.waterLvl = 0
     }
 
     // Restore state from a bitfield
-    loadMe(memento, position, scene) {
-        this.cleanMe()
+    loadTile(memento, position, scene) {
+        this.cleanTile()
 
         const decoded = this.decodeTileData(memento)
         this.sunLvl = decoded[bitDetailsIndex.LIGHT_LEVEL]
         this.waterLvl = decoded[bitDetailsIndex.WATER_LEVEL]
         // Map back to your plant system if necessary
         if (decoded[bitDetailsIndex.SPECIES] > 0) {
-            this.plant = new Plant(scene, position, scene.world, decoded[bitDetailsIndex.SPECIES])
-            this.plant.setGrowth(decoded[bitDetailsIndex.GROWTH_LEVEL])
+            this.plant = this.gameManager.plantManager.addPlant(
+                position,
+                [bitDetailsIndex.SPECIES],
+                decoded[bitDetailsIndex.GROWTH_LEVEL],
+            )
         }
         return this
     }
@@ -67,22 +74,54 @@ class GridObj extends Phaser.GameObjects.Sprite {
 }
 
 class World {
-    constructor(scene, gridSize, tileSize) {
+    constructor(gameManager, gridSize, tileSize) {
+        this.scene = gameManager.scene
+
+        this.gameManager = gameManager
+        this.gameState = new WinConManager()
+
         this.height = gridSize.height
         this.width = gridSize.width
         this.tileSize = tileSize
-        this.gridSize = gridSize
-        this.scene = scene
-        this.grid = []
-        this.gameState = new WinConManager()
 
+        this.gridSize = gridSize
+        this.grid = []
+
+        // render blank state
         for (let x = 0; x < this.gridSize.width; x++) {
             this.grid[x] = []
             for (let y = 0; y < this.gridSize.height; y++) {
-                this.grid[x][y] = new Tile()
+                this.grid[x][y] = new Tile(this.gameManager)
 
                 const index = this.#getRandomIndex()
                 this.#renderTile(x, y, index)
+            }
+        }
+    }
+
+    saveAsString() {
+        let output = []
+
+        for (let i = 0; i < this.width; i++) {
+            for (let j = 0; j < this.height; j++) {
+                output.push(this.grid[i][j].saveTile())
+            }
+        }
+
+        return JSON.stringify(output)
+    }
+
+    loadFromString(input) {
+        return JSON.parse(input)
+    }
+
+    assembleWorld(saveData) {
+        let tilePos = 0
+        for (let i = 0; i < this.width; i++) {
+            for (let j = 0; j < this.height; j++) {
+                console.log('here', saveData[tilePos], this.grid[i][j])
+                this.grid[i][j].loadTile(saveData[tilePos], new Vector(i, j), this.scene)
+                tilePos++
             }
         }
     }
