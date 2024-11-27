@@ -1,5 +1,5 @@
 // When a plant is created, reaped, or had its growth level increased, it needs to be represented in this.totalPlants
-class GameState {
+class WinConManager {
     // If three or more plants are level three growth or above, the game is won.
     static WINNING_PLANT_COUNT = 3
     static WINNING_GROWTH_LEVEL = 3
@@ -30,9 +30,9 @@ class GameState {
     // Returns true or false based on whether the game has been completed or not.
     checkWinCondition() {
         const ripePlants = Array.from(this.totalPlants.values()).filter(
-            plant => plant.growthLevel >= GameState.WINNING_GROWTH_LEVEL,
+            plant => plant.growthLevel >= WinConManager.WINNING_GROWTH_LEVEL,
         )
-        return ripePlants.length >= GameState.WINNING_PLANT_COUNT
+        return ripePlants.length >= WinConManager.WINNING_PLANT_COUNT
     }
 
     serialize() {

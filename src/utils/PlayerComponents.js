@@ -57,7 +57,7 @@ function initializePlayerState(player) {
             enter() {
                 // play animation then do function on callback
                 player.playAnimation('player-reap', () => {
-                    player.reap()
+                    player.gameManager.plantManager.removePlant(player.position)
                     player.sm.changeState('idle')
                 })
             },
@@ -69,7 +69,7 @@ function initializePlayerState(player) {
             enter() {
                 // play animation then do function on callback
                 player.playAnimation('player-sow', () => {
-                    player.sowPlant()
+                    player.gameManager.plantManager.addPlant(player.position)
                     player.sm.changeState('idle')
                 })
             },
@@ -103,12 +103,12 @@ class Componenet {
 class MoveComp extends Componenet {
     constructor(parent) {
         super(parent)
-
         this.targetGridPosition = new Vector(0, 0)
         this.startGridPosition = new Vector(0, 0)
         this.trueTargetPosition = new Vector(0, 0)
         this.callback = null
-        this.world = this.parent.world
+        this.gameManager = parent.gameManager;
+        this.world = this.gameManager.world;
         this.walking = false
     }
 
@@ -117,14 +117,13 @@ class MoveComp extends Componenet {
         this.speedVector = this.parent.direction.mult(2)
         this.startGridPosition = this.parent.position.copy()
         this.targetGridPosition = this.parent.position.add(this.parent.direction)
-        this.trueTargetPosition.x = this.targetGridPosition.x * this.world.tileSize
-        this.trueTargetPosition.y = this.targetGridPosition.y * this.world.tileSize
+        this.trueTargetPosition.x = this.targetGridPosition.x * this.gameManager.tileSize
+        this.trueTargetPosition.y = this.targetGridPosition.y * this.gameManager.tileSize
 
-        if (!this.world.checkEnterable(this.targetGridPosition, this.parent)) {
+        if (!this.world.checkEnterable(this.targetGridPosition)) {
             this.parent.sm.changeState('idle')
             return
         }
-        this.world.popTile(this.targetGridPosition, this.parent)
     }
 
     update(time, delta) {
@@ -142,7 +141,6 @@ class MoveComp extends Componenet {
             ) {
                 this.parent.x = this.trueTargetPosition.x
                 this.parent.y = this.trueTargetPosition.y
-                this.world.dePopTile(this.startGridPosition, this.parent)
                 this.parent.position = this.targetGridPosition.copy()
                 this.callback && this.callback()
                 this.walking = false

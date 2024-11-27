@@ -15,11 +15,35 @@ class Load extends Phaser.Scene {
             frameHeight: 8,
             startFrame: 0,
         })
-        this.load.spritesheet('flower', './assets/spritesheets/flower-spritesheet.png', {
+        this.load.spritesheet('marigold', './assets/spritesheets/flower-spritesheet.png', {
             frameWidth: 8,
             frameHeight: 8,
-            startFrame: 1,
-            endFrame: 3,
+            startFrame: 0,
+            endFrame: 2,
+        })
+        this.load.spritesheet('lily', './assets/spritesheets/flower-spritesheet.png', {
+            frameWidth: 8,
+            frameHeight: 8,
+            startFrame: 3,
+            endFrame: 5,
+        })
+        this.load.spritesheet('sunflower', './assets/spritesheets/flower-spritesheet.png', {
+            frameWidth: 8,
+            frameHeight: 8,
+            startFrame: 6,
+            endFrame: 8,
+        })
+        this.load.spritesheet('daisy', './assets/spritesheets/flower-spritesheet.png', {
+            frameWidth: 8,
+            frameHeight: 8,
+            startFrame: 9,
+            endFrame: 11,
+        })
+        this.load.spritesheet('tulip', './assets/spritesheets/flower-spritesheet.png', {
+            frameWidth: 8,
+            frameHeight: 8,
+            startFrame: 12,
+            endFrame: 14,
         })
     }
 
@@ -33,17 +57,10 @@ class Load extends Phaser.Scene {
             return frameNum.map(num => ({ key: sheetKey, frame: num }))
         }
 
-        this.anims.create({
-            key: 'flower',
-            frames: this.anims.generateFrameNames('flower', {
-                start: 0,
-                end: 2,
-            }),
-            frameRate: 5,
-            yoyo: true,
-            repeat: -1,
-        })
 
+
+
+        
         this.anims.create({
             key: 'player-dance',
             frames: this.anims.generateFrameNames('player', {

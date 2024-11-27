@@ -1,32 +1,17 @@
-const plantSpecies = ['empty', 'tree', 'flower', 'bush']
-
 class Plant extends GridObj {
-    constructor(
-        scene,
-        position,
-        world,
-        species = null,
-        _texture,
-        water_req = 1,
-        sun_req = 1,
-        neighbor_req = 8,
-    ) {
-        let spec
-        if (!species) {
-            spec = Math.floor(Math.random() * 3) + 1
-        } else {
-            spec = species
-        }
-        const specName = plantSpecies[spec]
-
-        super(scene, position, world, specName)
-        this.species = spec
+    constructor(gameManager, position, species = 1) {
+        const plantManager =  gameManager.plantManager
+        
+        console.log(species, plantManager.plantAttributes)
+        super(gameManager, position, plantManager.plantAttributes[species].sprite)
+        this.plantManager = plantManager
+        this.plantAttributes = this.plantManager.plantAttributes[species]
+        this.species = species
         this.growthLevel = 0
 
-        this.WATER_RULE = water_req
-        this.SUN_RULE = sun_req
-        this.NEIGHBOR_RULE = neighbor_req
-        this.world.gameState.addPlantToState(this)
+        this.WATER_RULE = this.plantAttributes.waterReq
+        this.SUN_RULE = this.plantAttributes.sunReq
+        this.NEIGHBOR_RULE = this.plantAttributes.neighborReq
     }
 
     setGrowth(level) {
@@ -57,7 +42,7 @@ class Plant extends GridObj {
             waterReq && //check water
             sunReq && //check sun
             adjReq &&
-            this.growthLevel < GameState.WINNING_GROWTH_LEVEL
+            this.growthLevel < WinConManager.WINNING_GROWTH_LEVEL
         )
     }
 
