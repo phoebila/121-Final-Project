@@ -1,9 +1,7 @@
 class Plant extends GridObj {
     constructor(gameManager, position, species = 1) {
-        console.log(gameManager, gameManager.plantManager)
         const plantManager = gameManager.plantManager
 
-        console.log(species, plantManager.plantAttributes)
         super(gameManager, position, plantManager.plantAttributes[species].sprite)
         this.plantManager = plantManager
         this.plantAttributes = this.plantManager.plantAttributes[species]
@@ -26,7 +24,6 @@ class Plant extends GridObj {
             this.setTint(this.tint + 0xffb3b3)
             const tile = this.world.getTile(this.position)
             tile.waterLvl = tile.waterLvl - this.WATER_RULE
-            this.world.gameState.addPlantToState(this)
         }
     }
 

@@ -12,7 +12,6 @@ class Tile {
         const species = this.plant ? this.plant.species : 0
         const growthLevel = this.plant ? this.plant.growthLevel : 0
 
-        console.log('saved data:', species, growthLevel, this.sunLvl, this.waterLvl)
         return this.encodeTileData(this.sunLvl, this.waterLvl, species, growthLevel)
     }
 
@@ -24,8 +23,6 @@ class Tile {
 
     // Restore state from a bitfield
     loadTile(memento, position, scene) {
-        this.cleanTile()
-
         const decoded = this.decodeTileData(memento)
         this.sunLvl = decoded[bitDetailsIndex.LIGHT_LEVEL]
         this.waterLvl = decoded[bitDetailsIndex.WATER_LEVEL]
@@ -37,7 +34,6 @@ class Tile {
                 decoded[bitDetailsIndex.GROWTH_LEVEL],
             )
         }
-        return this
     }
 
     encodeTileData(lightLevel, waterLevel, species, growthLevel) {
@@ -78,7 +74,6 @@ class World {
         this.scene = gameManager.scene
 
         this.gameManager = gameManager
-        this.gameState = new WinConManager()
 
         this.height = gridSize.height
         this.width = gridSize.width
@@ -119,7 +114,6 @@ class World {
         let tilePos = 0
         for (let i = 0; i < this.width; i++) {
             for (let j = 0; j < this.height; j++) {
-                console.log('here', saveData[tilePos], this.grid[i][j])
                 this.grid[i][j].loadTile(saveData[tilePos], new Vector(i, j), this.scene)
                 tilePos++
             }

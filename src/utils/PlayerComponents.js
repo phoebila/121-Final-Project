@@ -45,6 +45,7 @@ function initializePlayerState(player) {
         {
             name: 'reap',
             enter() {
+                console.log("world", player.gameManager.world.grid)
                 // play animation then do function on callback
                 player.playAnimation('player-reap', () => {
                     player.gameManager.plantManager.removePlant(player.position)
@@ -70,6 +71,7 @@ function initializePlayerState(player) {
             name: 'dance',
             enter() {
                 // play animation then do function on callback
+                console.log(player.gameManager.world.grid)
                 player.playAnimation('player-dance', () => {})
             },
             exit() {},
@@ -116,13 +118,13 @@ class MoveComp extends Componenet {
         }
     }
 
-    update(_time, _delta) {
-        this.moveRoutine()
+    update(time, delta) {
+        this.moveRoutine(time, delta)
     }
 
-    moveRoutine() {
+    moveRoutine(time, delta) {
         for (let axis of ['x', 'y']) {
-            this.parent[axis] += this.speedVector[axis]
+            this.parent[axis] += this.speedVector[axis] * delta/5
             if (
                 (this.parent[axis] > this.trueTargetPosition[axis] &&
                     this.parent.direction[axis] > 0) ||

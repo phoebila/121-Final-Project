@@ -31,6 +31,7 @@ class PlantManager {
             species ? species : Math.floor(Math.random() * 3) + 1,
         )
         newPlant.setGrowth(growthLevel)
+        this.world.addPlant(pos, newPlant)
         this.plantCollection.set(this.generatePlantKey(pos), newPlant)
     }
 
