@@ -8,6 +8,7 @@ class Plant extends GridObj {
         species = null,
         _texture,
         water_req = 1,
+
         sun_req = 1,
         neighbor_req = 8,
     ) {

@@ -1,6 +1,10 @@
 {
     "scripts": {
-        "format": "prettier --write ."
+        "format": "prettier --write .",
+        "prepare": "husky"
+    },
+    "lint-staged": {
+        "**/*": "prettier --write --ignore-unknown"
     },
     "devDependencies": {
         "husky": "^9.1.7",
