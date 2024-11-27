@@ -30,16 +30,6 @@ function initializePlayerState(player) {
             },
         },
         {
-            name: 'coolDown',
-            enter() {
-                // play cool down anim?
-                // wait a few frames then change state back to idle
-                player.sm.changeState('idle')
-            },
-            exit() {},
-            update() {},
-        },
-        {
             name: 'walk',
             enter() {
                 player.play('player-walk')
