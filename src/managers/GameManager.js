@@ -26,6 +26,7 @@ class WorldStates  {
         }
     }
     addState(){
+        this.undoneStates = [];
         this.formerStates.push(this.currentAction)
         this.currentAction = this.gameManager.world.exportWorldInstance()
         this.gameManager.world.loadWorldInstance(this.currentAction)
@@ -37,7 +38,7 @@ class GameManager {
     constructor(scene, gridSize, tileSize, saveData = defaultSaveData) {
         this.scene = scene
         this.tileSize = tileSize
-        
+        this.time = { hour: 0, day: 0}
         // Instantiate key modules
         this.world = new World(this, gridSize, tileSize)
 
@@ -60,7 +61,6 @@ class GameManager {
 
     exportGame(){
         const gameManager = this
-        this.gameStateUpdated()
         return (JSON.stringify({
             currentAction: gameManager.worldStates.currentAction,
             formerStates: gameManager.worldStates.formerStates,

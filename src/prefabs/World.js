@@ -36,7 +36,6 @@ class Tile {
                 decoded[bitDetailsIndex.SPECIES],
                 decoded[bitDetailsIndex.GROWTH_LEVEL],
             )
-            //console.log(this.plant, position, decoded[bitDetailsIndex.SPECIES],decoded[bitDetailsIndex.GROWTH_LEVEL])
         }
     }
 
@@ -90,7 +89,6 @@ class World {
         this.scene = gameManager.scene
 
         this.gameManager = gameManager
-
         this.height = gridSize.height
         this.width = gridSize.width
         this.tileSize = tileSize
@@ -113,7 +111,7 @@ class World {
     exportWorldInstance() {
         const bytesForTime = 2;
         const bytesForPos = 1;
-        let requiredbytes = (this.width * this.height) //+ bytesForTime + bytesForPos;
+        let requiredbytes = (this.width * this.height) + bytesForTime + bytesForPos;
 
         const byteAr = new Uint16Array(requiredbytes)
         let visitedTiles = 0;
@@ -124,20 +122,18 @@ class World {
             }
         }
         
-        // const playerPos = this.gameManager.player.position;
-        // const currentTime = this.gameManager.time;
-
-        // const posBytes = (playerPos.x << 8) | (playerPos.y)
-        // const timeBytes =  (currentTime.hour << 8) | currentTime.day
+        const playerPos = this.gameManager.player.position;
+        const currentTime = this.gameManager.time;
         
-        // const extraBytes = [posBytes, timeBytes]
-        // for ( let i = 0; i < extraBytes.length; i++){
-        //     byteAr[visitedTiles + i] =  extraBytes[i]
-        // }
+        const posBytes = (playerPos.x << 8) | (playerPos.y)
+        const timeBytes =  (currentTime.hour << 8) | currentTime.day
+        
+        const extraBytes = [posBytes, timeBytes]
+        byteAr[visitedTiles + 1] =  posBytes;
+        byteAr[visitedTiles + 2] =  timeBytes;
         return byteAr
     }
 
-    // const data = JSON.parse(input)
 
     loadWorldInstance(data) {
         let visitedTiles = 0
@@ -147,8 +143,10 @@ class World {
                 visitedTiles++
             }
         }
-        // this.gameManager.player.teleport(new Vector(data.playerPos.x, data.playerPos.y))
-        // this.time = data.time
+        const initialPlayerPos = new Vector(data[visitedTiles + 1] >> 8, data[visitedTiles + 1] & calculateMask(8))
+        this.gameManager.player.teleport(initialPlayerPos)
+        const initialTime = {hour: data[visitedTiles + 2] >> 8, day: data[visitedTiles + 2] & calculateMask(8)};
+        this.gameManager.time = initialTime
     }
 
     checkEnterable(pos) {

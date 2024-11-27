@@ -26,11 +26,9 @@ class PlantManager {
     addPlant(pos, species = Math.floor(Math.random() * 3) + 1, growthLevel = 0) {
         if (!this.world.checkPlantable(pos)) return false
         const newPlant = new Plant(this.gameManager, pos, species)
-        console.log(newPlant)
         newPlant.setGrowth(growthLevel)
         this.world.addPlant(pos, newPlant)
         this.plantCollection.set(this.generatePlantKey(pos), newPlant)
-        console.log(newPlant)
         return newPlant
     }
 

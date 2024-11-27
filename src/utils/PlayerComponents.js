@@ -34,6 +34,7 @@ function initializePlayerState(player) {
             enter() {
                 player.play('player-walk')
                 player.moveComp.startMoving(() => {
+                    document.dispatchEvent(player.gameManager.worldUpdated)
                     player.sm.changeState('idle')
                 })
             },
