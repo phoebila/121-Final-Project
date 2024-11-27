@@ -1,5 +1,5 @@
 class GameManager {
-    constructor(scene, gridSize, tileSize, saveData) {
+    constructor(scene, gridSize, tileSize, saveData = defaultSaveData) {
         this.scene = scene
         this.tileSize = tileSize
 
@@ -9,10 +9,11 @@ class GameManager {
         this.plantManager = new PlantManager(this.scene, this)
         this.winManager = new WinConManager()
 
+        this.player = new Player(this, new Vector(0, 0))
         this.world.assembleWorld(this.world.loadFromString(saveData))
 
-        this.time = { day: 0, hour: 0 }
-        this.player = new Player(this, new Vector(0, 0))
+        this.time = saveData.time
+        this.player.position = saveData.playerPos
     }
 
     update(time, delta) {

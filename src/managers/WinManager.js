@@ -34,23 +34,4 @@ class WinConManager {
         )
         return ripePlants.length >= WinConManager.WINNING_PLANT_COUNT
     }
-
-    serialize() {
-        const serializedPlants = Array.from(this.totalPlants.entries()).map(
-            ([position, plant]) => ({
-                position: plant.position,
-                data: plant.serialize(),
-            }),
-        )
-        return { plants: serializedPlants }
-    }
-
-    deserialize(data) {
-        this.totalPlants.clear()
-        data.plants.forEach(({ position, data }) => {
-            const newPlant = new Plant(null, position, null) // Will sync `world` later
-            newPlant.deserialize(data)
-            this.addPlantToState(newPlant)
-        })
-    }
 }

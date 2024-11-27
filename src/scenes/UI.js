@@ -6,18 +6,21 @@ class UI extends Phaser.Scene {
     create() {
         // running checks
         console.log('%cUI SCENE :^)', testColor)
-
-        if (this.scene.get('playScene').active) {
-        }
     }
 
     displayPlayUI() {
-        this.tickButton = this.constructButton(tileSize, tileSize, 10, 6, 'tick time', () =>
-            this.tick(),
+        this.tickButton = this.constructButton(tileSize, tileSize, 10, 6, 't', () => this.tick())
+
+        this.saveButton = this.constructButton(4 * tileSize, tileSize, 10, 6, 's', () =>
+            this.save(),
         )
 
-        this.saveButton = this.constructButton(9 * tileSize, tileSize, 10, 6, 'save', () =>
-            this.save(),
+        this.undoButton = this.constructButton(7 * tileSize, tileSize, 10, 6, 'u', () =>
+            this.undo(),
+        )
+
+        this.redoButton = this.constructButton(10 * tileSize, tileSize, 10, 6, 'r', () =>
+            this.redo(),
         )
     }
 
@@ -50,5 +53,13 @@ class UI extends Phaser.Scene {
 
     save() {
         this.scene.get('playScene').save()
+    }
+
+    undo() {
+        this.scene.get('playScene').undo()
+    }
+
+    redo() {
+        this.scene.get('playScene').redo()
     }
 }

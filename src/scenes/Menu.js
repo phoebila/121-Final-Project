@@ -78,8 +78,10 @@ class Menu extends Phaser.Scene {
 
             console.log(`your new save data is under ${localStorage.getItem('saveNames')}`)
 
-            const newData = defaultSaveData
+            const newData = JSON.stringify(defaultSaveData)
             localStorage.setItem('saveFiles', `${newData}`)
+
+            console.log(JSON.parse(newData))
 
             console.log(`the assciociated game data is ${localStorage.getItem('saveFiles')}`)
         } else {
@@ -93,7 +95,7 @@ class Menu extends Phaser.Scene {
 
             let saveFiles = localStorage.getItem('saveFiles').split(this.SPLIT)
 
-            const newData = defaultSaveData
+            const newData = JSON.stringify(defaultSaveData)
             saveFiles.push(newData)
 
             localStorage.setItem('saveFiles', saveFiles.join(this.SPLIT))

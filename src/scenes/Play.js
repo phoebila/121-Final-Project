@@ -80,4 +80,12 @@ class Play extends Phaser.Scene {
             console.log(saveNames)
         }
     }
+
+    undo() {
+        // MUST follow D2 example
+    }
+
+    redo() {
+        // MUST follow D2 example
+    }
 }

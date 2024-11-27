@@ -87,6 +87,7 @@ function initializePlayerState(player) {
 // Base class for player components
 class Componenet {
     constructor(parent) {
+        console.log(parent)
         this.parent = parent
     }
 }

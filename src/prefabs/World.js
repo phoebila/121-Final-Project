@@ -95,13 +95,20 @@ class World {
     }
 
     saveAsString() {
-        let output = []
+        let output = {
+            tileData: [],
+            playerPos: new Vector(0, 0),
+            time: { hour: 0, day: 0 },
+        }
 
         for (let i = 0; i < this.width; i++) {
             for (let j = 0; j < this.height; j++) {
-                output.push(this.grid[i][j].saveTile())
+                output.tileData.push(this.grid[i][j].saveTile())
             }
         }
+
+        output.playerPos = this.gameManager.player.position
+        output.time = this.gameManager.time
 
         return JSON.stringify(output)
     }
@@ -110,14 +117,25 @@ class World {
         return JSON.parse(input)
     }
 
-    assembleWorld(saveData) {
+    assembleWorld(input) {
+        let saveData = {
+            tileData: input.tileData,
+            playerPos: input.playerPos,
+            time: input.time,
+        }
+
+        console.log(saveData)
+
         let tilePos = 0
         for (let i = 0; i < this.width; i++) {
             for (let j = 0; j < this.height; j++) {
-                this.grid[i][j].loadTile(saveData[tilePos], new Vector(i, j), this.scene)
+                this.grid[i][j].loadTile(saveData.tileData[tilePos], new Vector(i, j), this.scene)
                 tilePos++
             }
         }
+
+        this.playerPos = saveData.playerPos
+        this.time = saveData.time
     }
 
     checkEnterable(pos) {
