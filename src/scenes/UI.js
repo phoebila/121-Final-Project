@@ -56,10 +56,10 @@ class UI extends Phaser.Scene {
     }
 
     undo() {
-        this.scene.get('playScene').undo()
+        this.scene.get('playScene').gameManager.worldStates.undo()
     }
 
     redo() {
-        this.scene.get('playScene').redo()
+        this.scene.get('playScene').gameManager.worldStates.redo()
     }
 }

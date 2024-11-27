@@ -23,6 +23,7 @@ class Tile {
 
     // Restore state from a bitfield
     loadTile(memento, position, scene) {
+        this.cleanTile()
         const decoded = this.decodeTileData(memento)
         this.sunLvl = decoded[bitDetailsIndex.LIGHT_LEVEL]
         this.waterLvl = decoded[bitDetailsIndex.WATER_LEVEL]
@@ -130,23 +131,21 @@ class World {
         // for ( let i = 0; i < extraBytes.length; i++){
         //     byteAr[visitedTiles + i] =  extraBytes[i]
         // }
-        console.log(JSON.stringify(byteAr))
         return byteAr
     }
 
     // const data = JSON.parse(input)
 
     loadWorldInstance(data) {
-        
         let visitedTiles = 0
         for (let i = 0; i < this.width; i++) {
             for (let j = 0; j < this.height; j++) {
-                this.grid[i][j].loadTile(data.tileData[visitedTiles], new Vector(i, j), this.scene)
+                this.grid[i][j].loadTile(data[visitedTiles], new Vector(i, j), this.scene)
                 visitedTiles++
             }
         }
-        this.gameManager.player.teleport(new Vector(data.playerPos.x, data.playerPos.y))
-        this.time = data.time
+        // this.gameManager.player.teleport(new Vector(data.playerPos.x, data.playerPos.y))
+        // this.time = data.time
     }
 
     checkEnterable(pos) {
@@ -170,6 +169,7 @@ class World {
         if (tile && tile.plant) {
             tile.plant.destroy()
             tile.plant = null
+            return true;
         }
     }
 

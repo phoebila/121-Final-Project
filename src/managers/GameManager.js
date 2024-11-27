@@ -7,20 +7,25 @@ class WorldStates  {
     undo(){
         // pop state from the formerStates array. load it. pushes it to the undoneStates array
         if ( this.formerStates.length < 2){
+            console.log("cannot undo")
             return
         }
         const state = this.formerStates.pop();
         if (state ){
-            this.gameManager.world.loadGame(this.formerStates[-1])
+            this.gameManager.world.loadWorldInstance(this.formerStates[this.formerStates.length -1])
             this.undoneStates.push(state)
+            console.log(this.undoneStates, this.formerStates)
         }
     }
     redo(){
         // pop state from undoneStates. push it to formerStates load it
-        const state = undoneStates.pop();
+        const state = this.undoneStates.pop();
         if (state){
-            this.gameManager.world.loadWorldInstance(state)
             this.formerStates.push(state)
+            this.gameManager.world.loadWorldInstance(this.formerStates[this.formerStates.length -1 ])
+            
+        } else {
+            console.log("failed to redo")
         }
 
     }
@@ -46,15 +51,27 @@ class GameManager {
 
         this.player = new Player(this, new Vector(0, 0))
         
-        this.worldStates = new worldStates(this);
+        this.worldStates = new WorldStates(this);
         
 
         this.loadGame(saveData)
-        this.world.loadWorldInstance(this.worldStates[-1])
+        this.world.loadWorldInstance(this.worldStates.formerStates[this.worldStates.formerStates.length -1 ])
+
+        this.worldUpdated = new CustomEvent("world-updated", {});
+        document.addEventListener("world-updated", () => {
+            console.log('updated')
+            this.gameStateUpdated();
+        })
     }
 
-    saveGame(){
-        return (JSON.stringify(this.worldStates))
+    exportGame(){
+        const gameManager = this
+        this.gameStateUpdated()
+        console.log(this.worldStates.formerStates)
+        return (JSON.stringify({
+            formerStates: gameManager.worldStates.formerStates,
+            undoneStates: gameManager.worldStates.undoneStates
+        }))
     }
 
     loadGame(data){

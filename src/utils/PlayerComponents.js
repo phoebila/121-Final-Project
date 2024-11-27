@@ -45,10 +45,11 @@ function initializePlayerState(player) {
         {
             name: 'reap',
             enter() {
-                console.log('world', player.gameManager.world.grid)
                 // play animation then do function on callback
                 player.playAnimation('player-reap', () => {
-                    player.gameManager.plantManager.removePlant(player.position)
+                    if (player.gameManager.plantManager.removePlant(player.position)){
+                        document.dispatchEvent(player.gameManager.worldUpdated)
+                    }
                     player.sm.changeState('idle')
                 })
             },
@@ -60,7 +61,9 @@ function initializePlayerState(player) {
             enter() {
                 // play animation then do function on callback
                 player.playAnimation('player-sow', () => {
-                    player.gameManager.plantManager.addPlant(player.position)
+                    if (player.gameManager.plantManager.addPlant(player.position) ) {
+                        document.dispatchEvent(player.gameManager.worldUpdated)
+                    }
                     player.sm.changeState('idle')
                 })
             },
@@ -71,7 +74,6 @@ function initializePlayerState(player) {
             name: 'dance',
             enter() {
                 // play animation then do function on callback
-                console.log(player.gameManager.world.grid)
                 player.playAnimation('player-dance', () => {})
             },
             exit() {},
@@ -87,7 +89,6 @@ function initializePlayerState(player) {
 // Base class for player components
 class Componenet {
     constructor(parent) {
-        console.log(parent)
         this.parent = parent
     }
 }
