@@ -12,6 +12,13 @@ class Tile {
         return this.encodeTileData(this.sunLvl, this.waterLvl, species, growthLevel)
     }
 
+
+    cleanMe(scene){
+        this.plant && this.plant.destroy()
+        this.sunLvl = 0;
+        this.waterLvl = 0;
+    }
+
     // Restore state from a bitfield
     loadMe(memento, position, scene) {
         this.plant && this.plant.destroy()
