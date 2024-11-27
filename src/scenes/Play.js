@@ -64,7 +64,7 @@ class Play extends Phaser.Scene {
         if (saveNames.find(element => element == this.SAVE_NAME)) {
             const key = saveNames.find(element => element == this.SAVE_NAME)
             const index = saveNames.indexOf(key)
-            
+
             if (index > -1) {
                 const newData = this.gameManager.exportGame()
                 saveFiles[index] = newData

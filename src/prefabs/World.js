@@ -31,7 +31,6 @@ class Tile {
         // Map back to your plant system if necessary
         if (decoded[bitDetailsIndex.SPECIES] > 0) {
             this.plant = this.gameManager.plantManager.addPlant(
-                
                 position,
                 decoded[bitDetailsIndex.SPECIES],
                 decoded[bitDetailsIndex.GROWTH_LEVEL],
@@ -71,7 +70,7 @@ class GridObj extends Phaser.GameObjects.Sprite {
         this.setOrigin(0)
     }
 
-    teleport(target){
+    teleport(target) {
         if (!this.world.checkEnterable(target)) {
             return false
         }
@@ -80,8 +79,6 @@ class GridObj extends Phaser.GameObjects.Sprite {
         this.y = this.position.y * this.world.tileSize
         return true
     }
-
-
 }
 
 class World {
@@ -109,31 +106,30 @@ class World {
     }
 
     exportWorldInstance() {
-        const bytesForTime = 2;
-        const bytesForPos = 1;
-        let requiredbytes = (this.width * this.height) + bytesForTime + bytesForPos;
+        const bytesForTime = 2
+        const bytesForPos = 1
+        let requiredbytes = this.width * this.height + bytesForTime + bytesForPos
 
         const byteAr = new Uint16Array(requiredbytes)
-        let visitedTiles = 0;
+        let visitedTiles = 0
         for (let i = 0; i < this.width; i++) {
             for (let j = 0; j < this.height; j++) {
                 byteAr[visitedTiles] = this.grid[i][j].saveTile()
-                visitedTiles++;
+                visitedTiles++
             }
         }
-        
-        const playerPos = this.gameManager.player.position;
-        const currentTime = this.gameManager.time;
-        
-        const posBytes = (playerPos.x << 8) | (playerPos.y)
-        const timeBytes =  (currentTime.hour << 8) | currentTime.day
-        
+
+        const playerPos = this.gameManager.player.position
+        const currentTime = this.gameManager.time
+
+        const posBytes = (playerPos.x << 8) | playerPos.y
+        const timeBytes = (currentTime.hour << 8) | currentTime.day
+
         const extraBytes = [posBytes, timeBytes]
-        byteAr[visitedTiles + 1] =  posBytes;
-        byteAr[visitedTiles + 2] =  timeBytes;
+        byteAr[visitedTiles + 1] = posBytes
+        byteAr[visitedTiles + 2] = timeBytes
         return byteAr
     }
-
 
     loadWorldInstance(data) {
         let visitedTiles = 0
@@ -143,9 +139,15 @@ class World {
                 visitedTiles++
             }
         }
-        const initialPlayerPos = new Vector(data[visitedTiles + 1] >> 8, data[visitedTiles + 1] & calculateMask(8))
+        const initialPlayerPos = new Vector(
+            data[visitedTiles + 1] >> 8,
+            data[visitedTiles + 1] & calculateMask(8),
+        )
         this.gameManager.player.teleport(initialPlayerPos)
-        const initialTime = {hour: data[visitedTiles + 2] >> 8, day: data[visitedTiles + 2] & calculateMask(8)};
+        const initialTime = {
+            hour: data[visitedTiles + 2] >> 8,
+            day: data[visitedTiles + 2] & calculateMask(8),
+        }
         this.gameManager.time = initialTime
     }
 
@@ -170,7 +172,7 @@ class World {
         if (tile && tile.plant) {
             tile.plant.destroy()
             tile.plant = null
-            return true;
+            return true
         }
     }
 

@@ -48,7 +48,7 @@ function initializePlayerState(player) {
             enter() {
                 // play animation then do function on callback
                 player.playAnimation('player-reap', () => {
-                    if (player.gameManager.plantManager.removePlant(player.position)){
+                    if (player.gameManager.plantManager.removePlant(player.position)) {
                         document.dispatchEvent(player.gameManager.worldUpdated)
                     }
                     player.sm.changeState('idle')
@@ -62,7 +62,7 @@ function initializePlayerState(player) {
             enter() {
                 // play animation then do function on callback
                 player.playAnimation('player-sow', () => {
-                    if (player.gameManager.plantManager.addPlant(player.position) ) {
+                    if (player.gameManager.plantManager.addPlant(player.position)) {
                         document.dispatchEvent(player.gameManager.worldUpdated)
                     }
                     player.sm.changeState('idle')

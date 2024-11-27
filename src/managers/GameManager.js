@@ -1,44 +1,41 @@
-
-
-class WorldStates  {
-    constructor(gameManager){
+class WorldStates {
+    constructor(gameManager) {
         this.gameManager = gameManager
         this.formerStates = []
         this.undoneStates = []
-        this.currentAction;
+        this.currentAction
     }
-    undo(){
-        if ( this.formerStates.length < 1 ){
-            console.log("cannot undo")
+    undo() {
+        if (this.formerStates.length < 1) {
+            console.log('cannot undo')
         } else {
-            this.undoneStates.push(this.currentAction);
-            this.currentAction = this.formerStates.pop();
+            this.undoneStates.push(this.currentAction)
+            this.currentAction = this.formerStates.pop()
             this.gameManager.world.loadWorldInstance(this.currentAction)
         }
     }
-    redo(){
-        if (this.undoneStates.length < 1){
-            console.log("cannot redo")
+    redo() {
+        if (this.undoneStates.length < 1) {
+            console.log('cannot redo')
         } else {
             this.formerStates.push(this.currentAction)
-            this.currentAction = this.undoneStates.pop();
+            this.currentAction = this.undoneStates.pop()
             this.gameManager.world.loadWorldInstance(this.currentAction)
         }
     }
-    addState(){
-        this.undoneStates = [];
+    addState() {
+        this.undoneStates = []
         this.formerStates.push(this.currentAction)
         this.currentAction = this.gameManager.world.exportWorldInstance()
         this.gameManager.world.loadWorldInstance(this.currentAction)
     }
-
 }
 
 class GameManager {
     constructor(scene, gridSize, tileSize, saveData = defaultSaveData) {
         this.scene = scene
         this.tileSize = tileSize
-        this.time = { hour: 0, day: 0}
+        this.time = { hour: 0, day: 0 }
         // Instantiate key modules
         this.world = new World(this, gridSize, tileSize)
 
@@ -46,42 +43,40 @@ class GameManager {
         this.winManager = new WinConManager(this)
 
         this.player = new Player(this, new Vector(0, 0))
-        
-        this.worldStates = new WorldStates(this);
-        
+
+        this.worldStates = new WorldStates(this)
 
         this.loadGame(saveData)
         this.world.loadWorldInstance(this.worldStates.currentAction)
 
-        this.worldUpdated = new CustomEvent("world-updated", {});
-        document.addEventListener("world-updated", () => {
-            this.gameStateUpdated();
+        this.worldUpdated = new CustomEvent('world-updated', {})
+        document.addEventListener('world-updated', () => {
+            this.gameStateUpdated()
         })
     }
 
-    exportGame(){
+    exportGame() {
         const gameManager = this
-        return (JSON.stringify({
+        return JSON.stringify({
             currentAction: gameManager.worldStates.currentAction,
             formerStates: gameManager.worldStates.formerStates,
-            undoneStates: gameManager.worldStates.undoneStates
-        }))
+            undoneStates: gameManager.worldStates.undoneStates,
+        })
     }
 
-    loadGame(data){
-        const sampleStates= JSON.parse(data)
+    loadGame(data) {
+        const sampleStates = JSON.parse(data)
         this.worldStates.currentAction = sampleStates.currentAction
         this.worldStates.formerStates = sampleStates.formerStates
         this.worldStates.undoneStates = sampleStates.undoneStates
     }
 
-    gameStateUpdated(){
+    gameStateUpdated() {
         //save the game state
-        //add state to worldStates 
-        const state = this.world.exportWorldInstance();
+        //add state to worldStates
+        const state = this.world.exportWorldInstance()
         this.worldStates.addState(state)
     }
-
 
     update(time, delta) {
         this.player.update(time, delta)

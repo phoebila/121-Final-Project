@@ -5,16 +5,14 @@ class WinConManager {
     static WINNING_GROWTH_LEVEL = 3
 
     constructor(gameManager) {
-        this.gameManager=gameManager
+        this.gameManager = gameManager
     }
-
-    
 
     // Returns true or false based on whether the game has been completed or not.
     checkWinCondition() {
-        const ripePlants = Array.from(this.gameManager.plantManager.plantCollection.values()).filter(
-            plant => plant.growthLevel >= WinConManager.WINNING_GROWTH_LEVEL,
-        )
+        const ripePlants = Array.from(
+            this.gameManager.plantManager.plantCollection.values(),
+        ).filter(plant => plant.growthLevel >= WinConManager.WINNING_GROWTH_LEVEL)
         return ripePlants.length >= WinConManager.WINNING_PLANT_COUNT
     }
 }

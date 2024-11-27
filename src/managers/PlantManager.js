@@ -34,7 +34,7 @@ class PlantManager {
 
     removePlant(pos) {
         this.plantCollection.delete(this.generatePlantKey(pos))
-        return (this.world.removePlant(pos))
+        return this.world.removePlant(pos)
     }
 
     configurePlantDB() {
