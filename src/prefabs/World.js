@@ -67,6 +67,18 @@ class GridObj extends Phaser.GameObjects.Sprite {
         this.scene.add.existing(this)
         this.setOrigin(0)
     }
+
+    teleport(target){
+        if (!this.world.checkEnterable(target)) {
+            return false
+        }
+        this.position = target
+        this.x = this.position.x * this.world.tileSize
+        this.y = this.position.y * this.world.tileSize
+        return true
+    }
+
+
 }
 
 class World {
@@ -94,45 +106,47 @@ class World {
         }
     }
 
-    saveAsString() {
-        let output = {
-            tileData: [],
-            playerPos: new Vector(0, 0),
-            time: { hour: 0, day: 0 },
-        }
+    exportWorldInstance() {
+        const bytesForTime = 2;
+        const bytesForPos = 1;
+        let requiredbytes = (this.width * this.height) //+ bytesForTime + bytesForPos;
 
+        const byteAr = new Uint16Array(requiredbytes)
+        let visitedTiles = 0;
         for (let i = 0; i < this.width; i++) {
             for (let j = 0; j < this.height; j++) {
-                output.tileData.push(this.grid[i][j].saveTile())
+                byteAr[visitedTiles] = this.grid[i][j].saveTile()
+                visitedTiles++;
             }
         }
+        
+        // const playerPos = this.gameManager.player.position;
+        // const currentTime = this.gameManager.time;
 
-        output.playerPos = this.gameManager.player.position
-        output.time = this.gameManager.time
-
-        return JSON.stringify(output)
+        // const posBytes = (playerPos.x << 8) | (playerPos.y)
+        // const timeBytes =  (currentTime.hour << 8) | currentTime.day
+        
+        // const extraBytes = [posBytes, timeBytes]
+        // for ( let i = 0; i < extraBytes.length; i++){
+        //     byteAr[visitedTiles + i] =  extraBytes[i]
+        // }
+        console.log(JSON.stringify(byteAr))
+        return byteAr
     }
 
-    loadFromString(input) {
-        return JSON.parse(input)
-    }
+    // const data = JSON.parse(input)
 
-    assembleWorld(input) {
-        let saveData = {
-            tileData: input.tileData,
-            playerPos: input.playerPos,
-            time: input.time,
-        }
-        let tilePos = 0
+    loadWorldInstance(data) {
+        
+        let visitedTiles = 0
         for (let i = 0; i < this.width; i++) {
             for (let j = 0; j < this.height; j++) {
-                this.grid[i][j].loadTile(saveData.tileData[tilePos], new Vector(i, j), this.scene)
-                tilePos++
+                this.grid[i][j].loadTile(data.tileData[visitedTiles], new Vector(i, j), this.scene)
+                visitedTiles++
             }
         }
-
-        this.playerPos = saveData.playerPos
-        this.time = saveData.time
+        this.gameManager.player.teleport(new Vector(data.playerPos.x, data.playerPos.y))
+        this.time = data.time
     }
 
     checkEnterable(pos) {

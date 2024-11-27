@@ -21,6 +21,11 @@ function calculateMask(bits) {
     return (1 << bits) - 1
 }
 
+function bitsRequired(n) {
+    if (n === 0) return 1; // Special case: 0 still needs 1 bit for representation
+    return Math.floor(Math.log2(n)) + 1;
+}
+
 // modifies the bit layout to include attribute shift + mask
 let shift = 0
 bitLayout.forEach(bitInfo => {

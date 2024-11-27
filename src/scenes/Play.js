@@ -65,16 +65,12 @@ class Play extends Phaser.Scene {
             const key = saveNames.find(element => element == this.SAVE_NAME)
             const index = saveNames.indexOf(key)
 
-            console.log(localStorage.getItem('saveFiles'))
-
             if (index > -1) {
-                const newData = this.gameManager.world.saveAsString()
+                const newData = this.gameManager.saveGame()
                 saveFiles[index] = newData
 
                 localStorage.setItem('saveFiles', saveFiles.join(' '))
             }
-
-            console.log(localStorage.getItem('saveFiles'))
         } else {
             console.log('there is no save file under that name')
             console.log(saveNames)
