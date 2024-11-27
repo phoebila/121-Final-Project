@@ -30,7 +30,7 @@ class Tile {
         if (decoded[bitDetailsIndex.SPECIES] > 0) {
             this.plant = this.gameManager.plantManager.addPlant(
                 position,
-                [bitDetailsIndex.SPECIES],
+                decoded[bitDetailsIndex.SPECIES],
                 decoded[bitDetailsIndex.GROWTH_LEVEL],
             )
         }

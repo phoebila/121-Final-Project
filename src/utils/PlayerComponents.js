@@ -45,7 +45,7 @@ function initializePlayerState(player) {
         {
             name: 'reap',
             enter() {
-                console.log("world", player.gameManager.world.grid)
+                console.log('world', player.gameManager.world.grid)
                 // play animation then do function on callback
                 player.playAnimation('player-reap', () => {
                     player.gameManager.plantManager.removePlant(player.position)
@@ -124,7 +124,7 @@ class MoveComp extends Componenet {
 
     moveRoutine(time, delta) {
         for (let axis of ['x', 'y']) {
-            this.parent[axis] += this.speedVector[axis] * delta/5
+            this.parent[axis] += (this.speedVector[axis] * delta) / 5
             if (
                 (this.parent[axis] > this.trueTargetPosition[axis] &&
                     this.parent.direction[axis] > 0) ||

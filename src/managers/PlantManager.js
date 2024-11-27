@@ -23,16 +23,13 @@ class PlantManager {
         return pos.x.toString + ':' + pos.y.toString()
     }
 
-    addPlant(pos, species, growthLevel = 0) {
+    addPlant(pos, species = Math.floor(Math.random() * 3) + 1, growthLevel = 0) {
         if (!this.world.checkPlantable(pos)) return false
-        const newPlant = new Plant(
-            this.gameManager,
-            pos,
-            species ? species : Math.floor(Math.random() * 3) + 1,
-        )
+        const newPlant = new Plant(this.gameManager, pos, species)
         newPlant.setGrowth(growthLevel)
         this.world.addPlant(pos, newPlant)
         this.plantCollection.set(this.generatePlantKey(pos), newPlant)
+        return newPlant
     }
 
     removePlant(pos) {
