@@ -123,9 +123,6 @@ class World {
             playerPos: input.playerPos,
             time: input.time,
         }
-
-        console.log(saveData)
-
         let tilePos = 0
         for (let i = 0; i < this.width; i++) {
             for (let j = 0; j < this.height; j++) {

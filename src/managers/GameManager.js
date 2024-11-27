@@ -13,7 +13,6 @@ class GameManager {
         this.world.assembleWorld(this.world.loadFromString(saveData))
 
         this.time = saveData.time
-        this.player.position = saveData.playerPos
     }
 
     update(time, delta) {

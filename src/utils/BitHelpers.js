@@ -6,11 +6,16 @@ const bitDetailsIndex = {
     WATER_LEVEL: 1,
     SPECIES: 2,
     GROWTH_LEVEL: 3,
+    EXTRA: 4
 }
 
 // amount bits per attribute
-const bitLayout = [{ bits: 2 }, { bits: 2 }, { bits: 3 }, { bits: 2 }]
-
+const bitLayout = [{ bits: 2 }, { bits: 2 }, { bits: 3 }, { bits: 2 }, { bits: 7}]
+let tileBitSize = 0;
+for (let i of bitLayout){
+    tileBitSize += i.bits
+}
+const wholeTileMask = calculateMask(tileBitSize);
 // helper function for masking bits in a given file
 function calculateMask(bits) {
     return (1 << bits) - 1
