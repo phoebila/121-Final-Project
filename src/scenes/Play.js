@@ -59,8 +59,8 @@ class Play extends Phaser.Scene {
     }
 
     save() {
-        let saveNames = localStorage.getItem('saveNames').split('/').map(Number)
-        let saveFiles = localStorage.getItem('saveFiles').split('/').map(Number)
+        let saveNames = localStorage.getItem('saveNames').split('/')
+        let saveFiles = localStorage.getItem('saveFiles').split('/')
         if (saveNames.find(element => element == this.SAVE_NAME)) {
             const key = saveNames.find(element => element == this.SAVE_NAME)
             const index = saveNames.indexOf(key)
