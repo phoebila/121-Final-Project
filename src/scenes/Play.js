@@ -59,8 +59,8 @@ class Play extends Phaser.Scene {
     }
 
     save() {
-        let saveNames = localStorage.getItem('saveNames').split(' ').map(Number)
-        let saveFiles = localStorage.getItem('saveFiles').split(' ').map(Number)
+        let saveNames = localStorage.getItem('saveNames').split('/').map(Number)
+        let saveFiles = localStorage.getItem('saveFiles').split('/').map(Number)
         if (saveNames.find(element => element == this.SAVE_NAME)) {
             const key = saveNames.find(element => element == this.SAVE_NAME)
             const index = saveNames.indexOf(key)
@@ -68,7 +68,7 @@ class Play extends Phaser.Scene {
             if (index > -1) {
                 const newData = this.gameManager.exportGame()
                 saveFiles[index] = newData
-                localStorage.setItem('saveFiles', saveFiles.join(' '))
+                localStorage.setItem('saveFiles', saveFiles.join('/'))
             }
         } else {
             console.log('there is no save file under that name')

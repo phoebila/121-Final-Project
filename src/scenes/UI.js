@@ -49,6 +49,7 @@ class UI extends Phaser.Scene {
 
     tick() {
         this.scene.get('playScene').gameManager.tick()
+        this.save()
     }
 
     save() {
