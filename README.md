@@ -17,7 +17,9 @@ For this week, Jack, James, and Rozy all came through and revamped the byte arra
     - Implemented a Menu scene in phaser, allowing the player to load and create saves. Using local storage players can load their save based on the save name, this passes all the need information to the play scene.
 - [x] [F1.c] The game must implement an implicit auto-save system to support recovery from unexpected quits. (For example, when the game is launched, if an auto-save entry is present, the game might ask the player "do you want to continue where you left off?" The auto-save entry might or might not be visible among the list of manual save entries available for the player to load as part of F1.b.)
     - Implemented a savePrompt function that allows for automatic creation of a save file for the player. The save file is connected to a randomized string of numbers that can be used for the information passed to the play scene.
-- [] [F1.d] The player must be able to undo every major choice (all the way back to the start of play), even from a saved game. They should be able to redo (undo of undo operations) multiple times.
+    - The game also "auto-saves" the entire state of the game whenever the player ticks time forward during gameplay.
+- [x] [F1.d] The player must be able to undo every major choice (all the way back to the start of play), even from a saved game. They should be able to redo (undo of undo operations) multiple times.
+    - Implemented multiple arrays to keep track of the player's undone and former states, as well as their current state in the GameManager file. These states are stored as arrays of objects called WorldStates and are named formerStates and undoneStates and currentAction is stored as a single WorldState which keeps track of the player's present state. When the player wants to undo or redo an action, the WorldState function undo() or redo() will be called on the currentAction WorldState.
 
 ## Devlog Entry = [11/22/2024]
 
