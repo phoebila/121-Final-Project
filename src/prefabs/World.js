@@ -17,6 +17,7 @@ class Tile {
 
     cleanTile() {
         this.plant && this.plant.destroy()
+        this.plant = null
         this.sunLvl = 0
         this.waterLvl = 0
     }
@@ -30,10 +31,12 @@ class Tile {
         // Map back to your plant system if necessary
         if (decoded[bitDetailsIndex.SPECIES] > 0) {
             this.plant = this.gameManager.plantManager.addPlant(
+                
                 position,
                 decoded[bitDetailsIndex.SPECIES],
                 decoded[bitDetailsIndex.GROWTH_LEVEL],
             )
+            //console.log(this.plant, position, decoded[bitDetailsIndex.SPECIES],decoded[bitDetailsIndex.GROWTH_LEVEL])
         }
     }
 

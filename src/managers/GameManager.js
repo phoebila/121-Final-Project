@@ -1,3 +1,5 @@
+
+
 class WorldStates  {
     constructor(gameManager){
         this.gameManager = gameManager
@@ -11,7 +13,6 @@ class WorldStates  {
         } else {
             this.undoneStates.push(this.currentAction);
             this.currentAction = this.formerStates.pop();
-            console.log(this.currentAction)
             this.gameManager.world.loadWorldInstance(this.currentAction)
         }
     }
@@ -27,9 +28,7 @@ class WorldStates  {
     addState(){
         this.formerStates.push(this.currentAction)
         this.currentAction = this.gameManager.world.exportWorldInstance()
-        console.log(this)
-        //this.gameManager.world.loadWorldInstance(this.currentAction)
-        console.log(this)
+        this.gameManager.world.loadWorldInstance(this.currentAction)
     }
 
 }
