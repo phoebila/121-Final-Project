@@ -4,6 +4,7 @@ class Tile {
         this.waterLvl = waterLvl
         this.sunLvl = sunLvl
     }
+    
 
     // Encode the current state into a bitfield
     saveMe() {
@@ -12,10 +13,16 @@ class Tile {
         return this.encodeTileData(this.sunLvl, this.waterLvl, species, growthLevel)
     }
 
+
+    cleanMe(){
+        this.plant && this.plant.destroy()
+        this.sunLvl = 0;
+        this.waterLvl = 0;
+    }
+
     // Restore state from a bitfield
     loadMe(memento, position, scene) {
-        this.plant && this.plant.destroy()
-        console.log(memento.toString(2))
+        this.cleanMe();
 
         const decoded = this.decodeTileData(memento)
         this.sunLvl = decoded[bitDetailsIndex.LIGHT_LEVEL]
@@ -47,130 +54,71 @@ class Tile {
 }
 
 class GridObj extends Phaser.GameObjects.Sprite {
-    constructor(scene, position, world, texture) {
-        const trueX = position.x * world.tileSize
-        const trueY = position.y * world.tileSize
-        super(scene, trueX, trueY, texture)
+    constructor(gameManager, position, texture) {
+        
+        const trueX = position.x * gameManager.tileSize
+        const trueY = position.y * gameManager.tileSize
+        super(gameManager.scene, trueX, trueY, texture)
 
+        this.gameManager = gameManager;
+        this.world = gameManager.world;
+        this.scene = gameManager.scene;
         this.position = position.copy()
-        this.world = world
-        this.tags = []
-        this.world.popTile(this.position, this)
-        this.walking = false
-
-        scene.add.existing(this)
-
+        this.scene.add.existing(this)
         this.setOrigin(0)
-    }
-
-    move(dir) {
-        const target = this.position.add(dir)
-        if (!this.world.checkEnterable(target, this)) {
-            return false
-        }
-
-        this.walking = true
-        const startingPosition = this.position.copy()
-        this.world.popTile(target, this)
-        this.position = target
-        this.x = this.position.x * this.world.tileSize
-        this.y = this.position.y * this.world.tileSize
-        this.world.dePopTile(startingPosition, this)
-        this.walking = false
-        return true
     }
 }
 
 class World {
-    constructor(scene, height, width, tileSize) {
-        this.height = height
-        this.width = width
+    constructor(scene, gridSize, tileSize) {
+        this.height = gridSize.height
+        this.width = gridSize.width
         this.tileSize = tileSize
-        this.gridSize = new Vector(width, height)
+        this.gridSize = gridSize
         this.scene = scene
         this.grid = []
-        this.gameState = new GameState()
+        this.gameState = new WinConManager()
 
-        for (let x = 0; x < this.gridSize.x; x++) {
+        for (let x = 0; x < this.gridSize.width; x++) {
             this.grid[x] = []
-            for (let y = 0; y < this.gridSize.y; y++) {
+            for (let y = 0; y < this.gridSize.height; y++) {
                 this.grid[x][y] = new Tile()
 
                 const index = this.getRandomIndex()
                 this.renderTile(x, y, index)
             }
         }
-
-        this.time = {
-            day: 0,
-            hour: 0,
-        }
-
-        //this.lightState
     }
 
-    tick(hour, day) {
-        // do not allow a time incrament of more than a day (in hours)
-        assert(hour < 24)
-
-        this.time.hour += hour
-        if (this.time.hour >= 24) {
-            const newTime = { day: 0, hour: 0 }
-            newTime.hour = this.time.hour % 24
-            newTime.day = this.time.day + Math.floor(this.time.hour / 24)
-            this.time = newTime
-        }
-        this.time.day += day
-
-        this.printTime()
-
-        console.log(this.grid[0][0].waterLvl)
-        this.generateRandomWeather()
-
-        // update light state
-        this.gameState.totalPlants.forEach(value => {
-            value.tick()
-        })
-        if (this.gameState.checkWinCondition()) {
-            console.log('GAME WON')
-        }
-    }
-
-    getTime() {
-        return this.time
-    }
-
-    printTime() {
-        console.log(`day: ${this.time.day}, hour: ${this.time.hour}`)
-    }
 
     // PUBLIC FUNCTIONS
-
-    popTile(pos, obj) {
-        if (obj instanceof Player && this.checkEnterable(pos, obj)) {
-            this.getTile(pos).character = obj
-        } else if (obj instanceof Plant && this.checkEnterable(pos, obj)) {
-            this.getTile(pos).plant = obj
-        }
+    checkEnterable(pos){
+        const tile = this.getTile(pos)
+        return (tile != null)
     }
 
-    dePopTile(pos, obj) {
-        if (obj instanceof Player) {
-            const tile = this.getTile(pos)
-            if (tile) {
-                tile.character = null
-            }
-        } else if (obj instanceof Plant) {
-            const tile = this.getTile(pos)
-            if (tile) {
-                tile.plant = null
-            }
+    checkPlantable(pos){
+        const tile = this.getTile(pos)
+        return(tile && !tile.plant);
+    }
+
+    addPlant(pos,obj){
+        const tile = this.getTile(pos);
+        tile && !tile.plant && (tile.plant = obj);
+    }
+
+    removePlant(pos){
+        const tile = this.getTile(pos)
+        
+        if (tile && tile.plant){
+            tile.plant.destroy();
+            tile.plant = null
         }
     }
 
     generateRandomWeather() {
-        for (let x = 0; x < this.gridSize.x; x++) {
-            for (let y = 0; y < this.gridSize.y; y++) {
+        for (let x = 0; x < this.gridSize.width; x++) {
+            for (let y = 0; y < this.gridSize.height; y++) {
                 const tile = this.getTile(new Vector(x, y))
                 //water level can be stored up, sun level cannot per F0.d
                 tile.waterLvl = tile.waterLvl + Math.floor(Math.random() * 3)
@@ -179,6 +127,11 @@ class World {
         }
     }
 
+
+
+
+    
+    // PRIVATE FUNCTIONS
     getRandomIndex(key = 'grass-spritesheet') {
         const texture = this.scene.textures.get(key)
 
@@ -195,34 +148,9 @@ class World {
         tileSprite.setDisplaySize(this.tileSize, this.tileSize).setOrigin(0.5)
     }
 
-    // PRIVATE FUNCTIONS
     getTile(pos) {
         const grid = this.grid
         return (grid && this.grid[pos.x] && this.grid[pos.x][pos.y]) || null
     }
 
-    checkEnterable(pos, obj) {
-        if (obj instanceof Player && this.checkCharacterEnter(pos, obj)) {
-            return true
-        } else if (obj instanceof Plant && this.checkPlantable(pos, obj)) {
-            return true
-        }
-        return false
-    }
-
-    checkPlantable(pos) {
-        const tile = this.getTile(pos)
-        if (tile && !tile.plant) {
-            return true
-        }
-        return false
-    }
-
-    checkCharacterEnter(pos, obj) {
-        const tile = this.getTile(pos)
-        if (tile && !tile.character) {
-            return true
-        }
-        return false
-    }
 }

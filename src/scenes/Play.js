@@ -22,19 +22,15 @@ class Play extends Phaser.Scene {
         this.scene.get('uiScene').displayPlayUI()
 
         // Add grid and player to the scene
-        this.world = new World(this, worldDimensions.height, worldDimensions.width, 8) // Assuming you have a World class that handles the grid
-        this.player = new Player(this, new Vector(0, 0), 'player') // Create the player at grid position (0, 0)
+        this.gameManager = new GameManager( this, worldDimensions, this.TILE_SIZE);
         this.cameras.main.centerOn(
             centerX - this.TILE_SIZE,
             centerY - this.TILE_SIZE * worldPadding - this.TILE_SIZE * 2,
         )
-
-        // Input handling
     }
 
     update(time, delta) {
-        // Update the player and handle their movement
-        this.player.update(time, delta)
+        this.gameManager.update(time,delta);
     }
 
     constructButton(x, y, textSize, padding, text = 'default text', result) {
@@ -63,10 +59,7 @@ class Play extends Phaser.Scene {
         return button
     }
 
-    moveTime(hour = 1, day = 0, world = this.world) {
-        world.tick(hour, day)
-        world.gameState.debugState()
-    }
+    
 
     savePrompt() {
         // eventually, allow for save as link

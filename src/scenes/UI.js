@@ -13,7 +13,7 @@ class UI extends Phaser.Scene {
 
     displayPlayUI() {
         this.tickButton = this.constructButton(tileSize, tileSize, 10, 6, 'tick time', () =>
-            this.moveTime(),
+            this.tick(),
         )
 
         this.saveButton = this.constructButton(9 * tileSize, tileSize, 10, 6, 'save', () =>
@@ -44,8 +44,8 @@ class UI extends Phaser.Scene {
         return button
     }
 
-    moveTime() {
-        this.scene.get('playScene').moveTime()
+    tick() {
+        this.scene.get('playScene').gameManager.tick()
     }
 
     save() {
