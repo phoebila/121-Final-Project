@@ -112,8 +112,8 @@ class Menu extends Phaser.Scene {
 
         const saveName = prompt('enter your save name')
 
-        let saveNames = localStorage.getItem('saveNames').split(THIS.SPLIT).map(Number)
-        let saveFiles = localStorage.getItem('saveFiles').split(THIS.SPLIT)
+        let saveNames = localStorage.getItem('saveNames').split(this.SPLIT).map(Number)
+        let saveFiles = localStorage.getItem('saveFiles').split(this.SPLIT)
         if (saveNames.find(element => element == saveName)) {
             const key = saveNames.find(element => element == saveName)
             const index = saveNames.indexOf(key)
