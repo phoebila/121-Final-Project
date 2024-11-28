@@ -8,12 +8,6 @@ class WinConManager {
         this.gameManager = gameManager
     }
 
-    tick(){
-        if (this.checkWinCondition()){
-            console.log('🔥 YOU WIN! 🔥')
-        }
-    }
-
     // Returns true or false based on whether the game has been completed or not.
     checkWinCondition() {
         const ripePlants = Array.from(
