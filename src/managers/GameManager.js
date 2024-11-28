@@ -1,36 +1,3 @@
-class WorldStates {
-    constructor(gameManager) {
-        this.gameManager = gameManager
-        this.formerStates = []
-        this.undoneStates = []
-        this.currentAction
-    }
-    undo() {
-        if (this.formerStates.length < 1) {
-            console.log('cannot undo')
-        } else {
-            this.undoneStates.push(this.currentAction)
-            this.currentAction = this.formerStates.pop()
-            this.gameManager.world.loadWorldInstance(this.currentAction)
-        }
-    }
-    redo() {
-        if (this.undoneStates.length < 1) {
-            console.log('cannot redo')
-        } else {
-            this.formerStates.push(this.currentAction)
-            this.currentAction = this.undoneStates.pop()
-            this.gameManager.world.loadWorldInstance(this.currentAction)
-        }
-    }
-    addState() {
-        this.undoneStates = []
-        this.formerStates.push(this.currentAction)
-        this.currentAction = this.gameManager.world.exportWorldInstance()
-        this.gameManager.world.loadWorldInstance(this.currentAction)
-    }
-}
-
 class GameManager {
     constructor(scene, gridSize, tileSize, saveData = defaultSaveData) {
         this.scene = scene
@@ -44,7 +11,7 @@ class GameManager {
 
         this.player = new Player(this, new Vector(0, 0))
 
-        this.worldStates = new WorldStates(this)
+        this.worldStates = new worldTimeLine(this)
 
         this.loadGame(saveData)
         this.world.loadWorldInstance(this.worldStates.currentAction)
@@ -96,7 +63,6 @@ class GameManager {
 
         // Trigger world/weather updates and plant mechanics
         this.world.generateRandomWeather()
-
         // Check win condition
         if (this.winManager.checkWinCondition()) {
             console.log('🔥 YOU WIN! 🔥')
