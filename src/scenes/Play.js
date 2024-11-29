@@ -8,20 +8,17 @@ class Play extends Phaser.Scene {
         this.TILE_SIZE = tileSize
 
         this.SAVE_NAME = data.SAVE_NAME
-        this.SAVE_FILE = data.SAVE_FILE
     }
 
     create() {
         // Initialize the world and player
         console.log('%cPLAY SCENE :^)', testColor)
-
         console.log(`SAVE NAME = ${this.SAVE_NAME}`)
-        console.log(`SAVE FILE = ${this.SAVE_FILE}`)
 
         this.scene.get('uiScene').displayPlayUI()
 
         // Add grid and player to the scene
-        this.gameManager = new GameManager(this, worldDimensions, this.TILE_SIZE, this.SAVE_FILE)
+        this.gameManager = new GameManager(this, worldDimensions, this.TILE_SIZE, this.SAVE_NAME)
         this.cameras.main.centerOn(
             centerX - this.TILE_SIZE,
             centerY - this.TILE_SIZE * worldPadding - this.TILE_SIZE * 2,

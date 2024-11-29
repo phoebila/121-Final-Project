@@ -29,5 +29,23 @@ class worldTimeLine {
         this.currentAction = this.gameManager.world.exportWorldInstance()
         this.gameManager.world.loadWorldInstance(this.currentAction)
     }
+
+    exportState(){
+        const gameManager = this
+        return JSON.stringify({
+            currentAction: this.currentAction,
+            formerStates: this.formerStates,
+            undoneStates: this.undoneStates,
+        })
+    }
+
+    loadGame(data) {
+
+        console.log(data)
+        const sampleStates = JSON.parse(data)
+        this.currentAction = sampleStates.currentAction
+        this.formerStates = sampleStates.formerStates
+        this.undoneStates = sampleStates.undoneStates
+    }
 }
 

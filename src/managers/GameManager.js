@@ -1,8 +1,9 @@
 class GameManager {
-    constructor(scene, gridSize, tileSize, saveData = defaultSaveData) {
+    constructor(scene, gridSize, tileSize, saveName = 'Slot:1') {
         this.scene = scene
         this.tileSize = tileSize
         this.time = { hour: 0, day: 0 }
+        this.saveName = saveName;
         // Instantiate key modules
         this.world = new World(this, gridSize, tileSize)
 
@@ -11,10 +12,10 @@ class GameManager {
 
         this.player = new Player(this, new Vector(0, 0))
 
-        this.worldStates = new worldTimeLine(this)
+        this.timeLine = new worldTimeLine(this)
 
-        this.loadGame(saveData)
-        this.world.loadWorldInstance(this.worldStates.currentAction)
+        this.load()
+        this.world.loadWorldInstance(this.timeLine.currentAction)
 
         this.worldUpdated = new CustomEvent('world-updated', {})
         document.addEventListener('world-updated', () => {
@@ -22,27 +23,21 @@ class GameManager {
         })
     }
 
-    exportGame() {
-        const gameManager = this
-        return JSON.stringify({
-            currentAction: gameManager.worldStates.currentAction,
-            formerStates: gameManager.worldStates.formerStates,
-            undoneStates: gameManager.worldStates.undoneStates,
-        })
+    save(){
+        localStorage.setItem(this.saveName, this.timeLine.exportState());
     }
 
-    loadGame(data) {
-        const sampleStates = JSON.parse(data)
-        this.worldStates.currentAction = sampleStates.currentAction
-        this.worldStates.formerStates = sampleStates.formerStates
-        this.worldStates.undoneStates = sampleStates.undoneStates
+    load(){
+        console.log(localStorage.getItem(this.saveName))
+        const file = (localStorage.getItem(this.saveName));
+        this.timeLine.loadGame(file)
     }
 
     gameStateUpdated() {
         //save the game state
         //add state to worldStates
         const state = this.world.exportWorldInstance()
-        this.worldStates.addState(state)
+        this.timeLine.addState(state)
     }
 
     update(time, delta) {

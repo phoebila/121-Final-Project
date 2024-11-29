@@ -11,29 +11,41 @@ class Menu extends Phaser.Scene {
         // running checks
         console.log('%cMENU SCENE :^)', testColor)
 
-        this.saveName = -1
+        const saveSlotCount = 3;
 
-        const menuButtons = [
-            { text: 'start', function: this.startScene.bind(this) },
-            { text: 'new save', function: this.newSave.bind(this) },
-            { text: 'load save', function: this.loadSave.bind(this) },
-            { text: 'clear', function: this.clearSave.bind(this) },
-            { text: 'clear all', function: this.clearAll.bind(this) },
-        ]
+        const LoadFileHeight = 2 * tileSize;
+        const deleteFileHeight = 4 * tileSize;
+        for (let i = 1; i <= saveSlotCount; i++){
+            const x = i * (tileSize * 10) - tileSize * 9;
+            this.constructButton( x, LoadFileHeight, 10, 6, "Load Slot " + (i).toString(), ()=>{
+                this.loadSave(i)
+            })
+            this.constructButton( x, deleteFileHeight, 10 ,6, " Delete Slot " + (i).toString(), () => {
+                this.deleteSave(i)
+            })
+        }
 
-        let posY = -tileSize * 2
-        menuButtons.forEach(element => {
-            if (element.text == 'new save') {
-                this.constructButton(tileSize * 6, posY, 10, 6, element.text, element.function)
-            } else if (element.text == 'clear') {
-                this.constructButton(tileSize * 9, posY, 10, 6, element.text, element.function)
-            } else {
-                posY += tileSize * 3
-                this.constructButton(tileSize, posY, 10, 6, element.text, element.function)
-            }
-        })
 
         this.scene.get('loadScene').initializeData()
+    }
+
+    deleteSave(fileNum){
+        const fileName = "Slot:" + fileNum.toString()
+        localStorage.removeItem(fileName);
+    }
+
+    loadSave(fileNum){
+        const fileName = "Slot:" + fileNum.toString()
+        let file = localStorage.getItem(fileName)
+        console.log(defaultSaveData);
+        console.log(file)
+        if ( !file ) {
+            console.log(JSON.stringify(defaultSaveData))
+            localStorage.setItem(fileName, JSON.stringify(defaultSaveData))
+        }
+        this.scene.start('playScene', {
+            SAVE_NAME: fileName
+        })
     }
 
     constructButton(x, y, textSize, padding, text = 'default text', result) {
@@ -59,74 +71,6 @@ class Menu extends Phaser.Scene {
         return button
     }
 
-    startScene() {
-        if (this.saveName == -1) {
-            console.log('select save name')
-        } else {
-            this.scene.start('playScene', {
-                SAVE_NAME: this.saveName,
-                SAVE_FILE: this.saveFile,
-            })
-        }
-    }
-
-    newSave() {
-        if (localStorage.getItem('saveNames') == 'null') {
-            localStorage.setItem('saveNames', '1')
-
-            const saveNames = localStorage.getItem('saveNames').split(this.SPLIT)
-
-            console.log(`your new save data is under ${localStorage.getItem('saveNames')}`)
-
-            const newData = JSON.stringify(defaultSaveData)
-            localStorage.setItem('saveFiles', `${newData}`)
-
-            console.log(JSON.parse(newData))
-
-            console.log(`the assciociated game data is ${localStorage.getItem('saveFiles')}`)
-        } else {
-            let saveNames = localStorage.getItem('saveNames').split(this.SPLIT).map(Number)
-            const newSaveNumber = saveNames.length > 0 ? saveNames[saveNames.length - 1] + 1 : 1
-            saveNames.push(newSaveNumber)
-
-            localStorage.setItem('saveNames', saveNames.join(this.SPLIT))
-
-            console.log(`your new save data is under ${saveNames[saveNames.length - 1]}`)
-
-            let saveFiles = localStorage.getItem('saveFiles').split(this.SPLIT)
-
-            const newData = JSON.stringify(defaultSaveData)
-            saveFiles.push(newData)
-
-            localStorage.setItem('saveFiles', saveFiles.join(this.SPLIT))
-
-            console.log(`the assciociated game data is ${saveFiles[saveFiles.length - 1]}`)
-        }
-    }
-
-    loadSave() {
-        if (localStorage.getItem('saveNames') == 'null') {
-            console.log('no saves to load')
-            return
-        }
-
-        const saveName = prompt('enter your save name')
-
-        let saveNames = localStorage.getItem('saveNames').split(this.SPLIT).map(Number)
-        let saveFiles = localStorage.getItem('saveFiles').split(this.SPLIT)
-        if (saveNames.find(element => element == saveName)) {
-            const key = saveNames.find(element => element == saveName)
-            const index = saveNames.indexOf(key)
-
-            if (index > -1) {
-                this.saveName = saveNames[index]
-                this.saveFile = saveFiles[index]
-            }
-        } else {
-            console.log('there is no save file under that name')
-            console.log(saveNames)
-        }
-    }
 
     clearSave() {
         if (localStorage.getItem('saveNames') == 'null') {
