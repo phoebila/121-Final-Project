@@ -2,6 +2,29 @@
 
 This is the CMPM121 final project repository
 
+## Devlog Entry = [12/2/2024]
+
+## Reflection
+
+## How we satisfied the software requirements
+- [x] [F2.a] External DSL for scenario designs: In separate text file or text block, designers should be able to express the design of different gameplay scenarios, e.g. starting conditions, weather randomization policy, and victory conditions.
+    - 
+- [x] [F2.b] Internal DSL for plant types and growth conditions: Within the main programming language used for the rest of your game, you should implement and use a domain-specific language for defining your different types of plants and the unique growth rules that apply to each.
+    - With our switch over to Typescript, James 
+- [x] [F2.c] Switch to an alternate platform: Change either your project's primary programming language or your primary user interface library/engine/framework.
+    - James, Jack, and a little bit of Phoebe's work, we changed our primary language to TypeScript instead of our previous JavaScript. We took all day ensuring that the TypeScript conversion still allowed all of our features to be implemented correctly.
+
+### F0+F1
+- No major changes made to the F0 and F1 requirements.
+
+### External DSL for Scenario Design
+
+### Internal DSL for Plants and Growth Conditions
+
+### Switch to Alternate Platform
+
+
+
 ## Devlog Entry = [11/26/2024]
 
 ### F1 Reflection
